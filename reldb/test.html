@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script>
+			quests = [
+					{"text":'Хочу гулять', "id":"12"}, 
+					{"text":'Прийду домой', "id":"12"} 				
+				];
+				function script() {
+					var buttonscode = '';
+
+				for (var i=0, n=quests.length;i<n;i++) { 
+						 buttonscode = buttonscode + '		<div class="qbutton"> <div class="column-l"><a href="#">НЕТ</a></div><div class="column-center">'+quests[i].text+'</div><div class="column-r"> <a href="#">ДА</a></div> </div>';
+				  }
+				  
+				 // console.log(buttonscode);
+				  
+				  document.getElementById("contener").innerHTML = buttonscode;
+			
+			}
+		</script>
+		<style>
+			.qbutton { border: 1px solid silver; margin: 4px 0; padding: 8px 2px; background-color: #fff7e9; font-size: 20pt}
+			.column-l{ float: left; width: 40px; text-align: center}
+			.column-r{ float: right; width: 40px; text-align: center}
+			.column-center{ display: inline-block; width: 360px; text-align: center}
+
+		</style>
+	</head>
+
+<body onload="script();" style="padding: 0; margin: 0; background-color: gray; font-family: sans-serif">
+<div style=" background-color: white; padding: 0 40px 30px; width: 1000px; margin: 0 auto">
+	<div style="width: 1020px; padding: 20px; margin: 0 auto">Тут какой-то хеадер с полезной инфой и линком на первое</div>
+	<div id=contener style=" background-color: #caffd1; width: 850px; margin: 0 auto">
+
+	</div>
+</div>
+</body></html>
