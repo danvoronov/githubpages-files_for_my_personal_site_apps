@@ -394,16 +394,31 @@ export class UIManager {
         const mobileMessage = document.getElementById('mobileMessage');
         const map = document.getElementById('map');
         const dateFilter = document.querySelector('.date-filter');
+        const detailsPanel = document.getElementById('detailsPanel');
+        const filtersPanel = document.getElementById('filtersPanel');
+        const infoPanel = document.getElementById('infoPanel');
+        const resetZoomBtn = document.getElementById('resetZoomBtn');
+        const disclaimer = document.querySelector('.disclaimer');
 
         function checkScreenSize() {
             if (window.innerWidth < 768) {
                 mobileMessage.style.display = 'block';
                 map.style.display = 'none';
                 dateFilter.style.display = 'none';
+                if (detailsPanel) detailsPanel.style.display = 'none';
+                if (filtersPanel) filtersPanel.style.display = 'none';
+                if (infoPanel) infoPanel.style.display = 'none';
+                if (resetZoomBtn) resetZoomBtn.style.display = 'none';
+                if (disclaimer) disclaimer.style.display = 'none';
             } else {
                 mobileMessage.style.display = 'none';
                 map.style.display = 'block';
                 dateFilter.style.display = 'block';
+                if (detailsPanel) detailsPanel.style.display = 'block';
+                if (filtersPanel) filtersPanel.style.display = 'block';
+                if (infoPanel) infoPanel.style.display = 'block';
+                if (resetZoomBtn) resetZoomBtn.style.display = 'block';
+                if (disclaimer) disclaimer.style.display = 'block';
             }
         }
 
