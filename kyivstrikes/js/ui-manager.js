@@ -91,6 +91,24 @@ export class UIManager {
         minDateLabel.textContent = this.formatDate(this.dateRange.min);
         maxDateLabel.textContent = this.formatDate(this.dateRange.max);
 
+        // Клик по левой метке — сброс в начало
+        minDateLabel.addEventListener('click', () => {
+            if (this.dateRange.start.getTime() !== this.dateRange.min.getTime()) {
+                this.dateRange.start = new Date(this.dateRange.min.getTime());
+                this.updateDateFilter();
+                this.onDateRangeChange(this.dateRange.start, this.dateRange.end);
+            }
+        });
+
+        // Клик по правой метке — сброс в конец
+        maxDateLabel.addEventListener('click', () => {
+            if (this.dateRange.end.getTime() !== this.dateRange.max.getTime()) {
+                this.dateRange.end = new Date(this.dateRange.max.getTime());
+                this.updateDateFilter();
+                this.onDateRangeChange(this.dateRange.start, this.dateRange.end);
+            }
+        });
+
         this.updateDateFilter();
         this.createYearMarks();
 
@@ -102,6 +120,9 @@ export class UIManager {
         document.addEventListener('mouseup', () => this.endDrag());
 
         container.addEventListener('selectstart', (e) => e.preventDefault());
+
+        // Обновляем положение ползунков и длину выбранного диапазона при изменении розміру вікна
+        window.addEventListener('resize', () => this.updateDateFilter());
     }
 
     startDrag(e, target) {
@@ -232,6 +253,26 @@ export class UIManager {
                 label.textContent = year;
                 yearMarksContainer.appendChild(label);
             }
+
+            // Подсечки внутри года с равным шагом 1/5 года. Для последнего (неполного) года выводятся только те, что помещаются.
+            const nextYearStart = new Date(year + 1, 0, 1);
+            const fullYearMs = nextYearStart - yearStart; // длительность полного года
+            const segmentMs = fullYearMs / 4;             // шаг 25 % года
+
+            for (let i = 1; i <= 3; i++) {
+                const subTime = yearStart.getTime() + segmentMs * i;
+                if (subTime > this.dateRange.max.getTime()) break; // не рисуем, если вышли за диапазон
+
+                const daysSinceStartSub = (subTime - this.dateRange.min.getTime()) / (1000 * 60 * 60 * 24);
+                const percentSub = (daysSinceStartSub / totalDays) * 100;
+
+                if (percentSub >= 0 && percentSub <= 100) {
+                    const subMark = document.createElement('div');
+                    subMark.className = 'year-submark';
+                    subMark.style.left = percentSub + '%';
+                    yearMarksContainer.appendChild(subMark);
+                }
+            }
         }
 
         const trackEl = document.querySelector('.date-range-track');
@@ -288,7 +329,7 @@ export class UIManager {
         const infoDetails = document.getElementById('infoDetails');
         
         if (infoTitle && infoDetails) {
-            infoTitle.textContent = `Показано ${visibleWithCoords} з ${totalWithCoords} точок`;
+            infoTitle.textContent = `На мапі ${visibleWithCoords} з ${totalWithCoords} точок`;
             if (withoutCoords > 0) {
                 infoTitle.title = `Не враховано ${withoutCoords} записів через відсутність координат.`;
             } else {
@@ -381,6 +422,18 @@ export class UIManager {
     showDetails(item) {
         if (this.detailsPanel) {
             this.detailsPanel.innerHTML = this.createDetailsContent(item);
+
+            // Reveal the zoom icon only after the corresponding image has fully loaded
+            this.detailsPanel.querySelectorAll('.popup-image').forEach(img => {
+                const revealIcon = () => img.classList.add('loaded');
+                if (img.complete) {
+                    // The image was pulled from cache and has already completed loading
+                    revealIcon();
+                } else {
+                    // Wait for the load event if the image is still loading
+                    img.addEventListener('load', revealIcon, { once: true });
+                }
+            });
         }
     }
 

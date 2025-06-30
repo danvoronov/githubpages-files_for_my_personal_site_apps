@@ -68,8 +68,8 @@
     </div>
 
     <div class="info-panel" id="infoPanel">
-        <div class="info-title" id="infoTitle" title="Завантаження даних...">Показано точок на карті</div>
         <div class="info-details" id="infoDetails">Завантаження...</div>
+        <div class="info-title" id="infoTitle" title="Завантаження даних..."></div>
     </div>
 
     <div class="reset-zoom-btn" id="resetZoomBtn" title="Скинути масштаб: показати весь Київ">
@@ -78,6 +78,7 @@
 
     <div class="date-filter">
         <div class="filter-container">
+            <span id="minDateLabel" class="date-label"></span>
             <div class="date-range-container">
                 <div class="date-range-track">
                     <div class="date-range-selected" id="selectedRange"></div>
@@ -90,10 +91,7 @@
                     <div class="handle-tooltip" id="endHandleTooltip"></div>
                 </div>
             </div>
-            <div class="date-labels">
-                <span id="minDateLabel"></span>
-                <span id="maxDateLabel"></span>
-            </div>
+            <span id="maxDateLabel" class="date-label"></span>
         </div>
     </div>
 

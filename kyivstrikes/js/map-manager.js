@@ -85,6 +85,13 @@ export class MapManager {
                 if (this.uiManager) {
                     this.uiManager.showDetails(item);
                 }
+                
+                // Center and zoom in when the map is at the default overview level
+                const currentZoom = this.map.getZoom();
+                if (currentZoom === 11) {
+                    const targetZoom = Math.min(currentZoom + 3, 18);
+                    this.map.flyTo([item.lat, item.lng], targetZoom, { duration: 0.5 });
+                }
             });
 
             this.markers.push(marker);
