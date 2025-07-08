@@ -46,6 +46,8 @@ var temasave = false;
  		if (selectedElement !== null) {
  			$('.graph-element').removeClass('selected');
  			selectedElement = null;
+ 			hideConnectionHints();
+ 			hidePhantomConnection();
  		}
  	});
  
@@ -448,12 +450,29 @@ function createElementDOM(element) {
     
     // Добавляем drag для перемещения
     elementDiv.draggable({
+        distance: 5,
+        delay: 100,
+        cancel: false,
+        start: function(event, ui) {
+            // Если элемент выбран для создания связи, отменяем перетаскивание
+            if (selectedElement !== null) {
+                return false;
+            }
+            // Отключаем анимации только для позиционирования
+            $(this).css('transition', 'box-shadow 0.3s ease, transform 0.3s ease');
+        },
         drag: function(event, ui) {
+            // Обновляем позицию элемента в реальном времени
             element.x = ui.position.left;
             element.y = ui.position.top;
-            updateConnections();
+            
+            // Мгновенно обновляем стрелки без задержек
+            updateConnectionsInstant();
         },
         stop: function(event, ui) {
+            // Возвращаем все анимации
+            $(this).css('transition', 'all 0.3s ease');
+            
             element.x = ui.position.left;
             element.y = ui.position.top;
             updateConnections();
@@ -463,23 +482,44 @@ function createElementDOM(element) {
     // Клик для создания связей
     elementDiv.click(function(e) {
         e.stopPropagation();
+        e.preventDefault();
+        
+        console.log('Click on element', element.id, 'Selected:', selectedElement ? selectedElement.id : 'none');
         
         if (selectedElement === null) {
             // Первый клик - выбираем элемент
             selectedElement = element;
             $('.graph-element').removeClass('selected');
             $(this).addClass('selected');
+            showConnectionHints();
+            console.log('Selected element', element.id);
         } else if (selectedElement.id === element.id) {
             // Клик по тому же элементу - отменяем выбор
             selectedElement = null;
             $(this).removeClass('selected');
+            hideConnectionHints();
+            console.log('Deselected element', element.id);
         } else {
             // Второй клик - создаем связь
+            console.log('Creating connection from', selectedElement.id, 'to', element.id);
             addConnection(selectedElement.id, element.id);
             $('.graph-element').removeClass('selected');
             selectedElement = null;
+            hideConnectionHints();
         }
     });
+    
+    // Hover для фантомной стрелки
+    elementDiv.hover(
+        function() {
+            if (selectedElement && selectedElement.id !== element.id) {
+                drawPhantomConnection(selectedElement, element);
+            }
+        },
+        function() {
+            hidePhantomConnection();
+        }
+    );
     
     // Двойной клик для удаления
     elementDiv.dblclick(function(e) {
@@ -604,13 +644,34 @@ function updateElementStates() {
             elementDiv.addClass('no-connection');
         }
     });
+    
+    // Проверяем, все ли элементы соединены
+    checkAllElementsConnected();
+}
+
+function checkAllElementsConnected() {
+    if (elements.length >= 3) {
+        var allConnected = elements.every(function(element) {
+            return connections.some(function(conn) {
+                return conn.from === element.id;
+            });
+        });
+        
+        if (allConnected) {
+            $('#analysis_legend').fadeIn(500);
+        } else {
+            $('#analysis_legend').fadeOut(300);
+        }
+    } else {
+        $('#analysis_legend').fadeOut(300);
+    }
 }
 
 function updateConnections() {
     var svg = $('#connections_svg');
     
-    // Очищаем все линии кроме определений
-    svg.find('line, path').remove();
+    // Очищаем все линии кроме определений, но оставляем фантомные
+    svg.find('line:not(.phantom), path:not(.phantom)').remove();
     
     connections.forEach(function(conn) {
         var fromElement = elements.find(function(el) { return el.id === conn.from; });
@@ -620,6 +681,136 @@ function updateConnections() {
             drawSmartConnection(fromElement, toElement);
         }
     });
+}
+
+function updateConnectionsInstant() {
+    // Быстрое обновление без очистки DOM - только изменение атрибутов
+    connections.forEach(function(conn) {
+        var fromElement = elements.find(function(el) { return el.id === conn.from; });
+        var toElement = elements.find(function(el) { return el.id === conn.to; });
+        
+        if (fromElement && toElement) {
+            updateExistingConnection(fromElement, toElement, conn);
+        }
+    });
+}
+
+function updateExistingConnection(fromElement, toElement, connection) {
+    var svg = $('#connections_svg');
+    
+    // Ищем существующий путь для этого соединения
+    var existingPath = svg.find('path[data-connection="' + connection.from + '-' + connection.to + '"]')[0];
+    
+    if (existingPath) {
+        // Пересчитываем путь
+        var fromCenterX = fromElement.x + (fromElement.width || 100) / 2;
+        var fromCenterY = fromElement.y + (fromElement.height || 40) / 2;
+        var toCenterX = toElement.x + (toElement.width || 100) / 2;
+        var toCenterY = toElement.y + (toElement.height || 40) / 2;
+        
+        var fromPoint = getConnectionPoint(fromElement, toCenterX, toCenterY, true);
+        var toPoint = getConnectionPoint(toElement, fromCenterX, fromCenterY, false);
+        var pathData = createSmartPath(fromPoint, toPoint);
+        
+        // Обновляем только атрибут d
+        existingPath.setAttribute('d', pathData);
+    } else {
+        // Если путь не найден, создаем новый
+        drawSmartConnection(fromElement, toElement);
+    }
+}
+
+function showConnectionHints() {
+    $('.graph-element').not('.selected').addClass('connection-hint');
+}
+
+function hideConnectionHints() {
+    $('.graph-element').removeClass('connection-hint');
+}
+
+function drawPhantomConnection(fromElement, toElement) {
+    hidePhantomConnection();
+    
+    var svg = $('#connections_svg');
+    
+    // Вычисляем центры элементов
+    var fromCenterX = fromElement.x + (fromElement.width || 100) / 2;
+    var fromCenterY = fromElement.y + (fromElement.height || 40) / 2;
+    var toCenterX = toElement.x + (toElement.width || 100) / 2;
+    var toCenterY = toElement.y + (toElement.height || 40) / 2;
+    
+    // Определяем точки выхода и входа
+    var fromPoint = getConnectionPoint(fromElement, toCenterX, toCenterY, true);
+    var toPoint = getConnectionPoint(toElement, fromCenterX, fromCenterY, false);
+    
+    // Создаем улучшенный путь
+    var pathData = createSmartPath(fromPoint, toPoint);
+    
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathData);
+    path.setAttribute('class', 'phantom-connection');
+    path.setAttribute('stroke', '#999');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('stroke-dasharray', '5,5');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('opacity', '0.6');
+    
+    svg.append(path);
+}
+
+function hidePhantomConnection() {
+    $('#connections_svg .phantom-connection').remove();
+}
+
+function createSmartPath(fromPoint, toPoint) {
+    var dx = toPoint.x - fromPoint.x;
+    var dy = toPoint.y - fromPoint.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Для коротких расстояний используем прямую линию
+    if (distance < 100) {
+        return 'M ' + fromPoint.x + ' ' + fromPoint.y + ' L ' + toPoint.x + ' ' + toPoint.y;
+    }
+    
+    // Определяем промежуточные точки на основе сторон выхода
+    var midX1, midY1, midX2, midY2;
+    var offset = Math.min(50, distance / 3);
+    
+    // Первая промежуточная точка - отходим от элемента
+    if (fromPoint.side === 'right') {
+        midX1 = fromPoint.x + offset;
+        midY1 = fromPoint.y;
+    } else if (fromPoint.side === 'left') {
+        midX1 = fromPoint.x - offset;
+        midY1 = fromPoint.y;
+    } else if (fromPoint.side === 'bottom') {
+        midX1 = fromPoint.x;
+        midY1 = fromPoint.y + offset;
+    } else { // top
+        midX1 = fromPoint.x;
+        midY1 = fromPoint.y - offset;
+    }
+    
+    // Вторая промежуточная точка - подходим к элементу
+    if (toPoint.side === 'right') {
+        midX2 = toPoint.x + offset;
+        midY2 = toPoint.y;
+    } else if (toPoint.side === 'left') {
+        midX2 = toPoint.x - offset;
+        midY2 = toPoint.y;
+    } else if (toPoint.side === 'bottom') {
+        midX2 = toPoint.x;
+        midY2 = toPoint.y + offset;
+    } else { // top
+        midX2 = toPoint.x;
+        midY2 = toPoint.y - offset;
+    }
+    
+    // Создаем плавный путь
+    return 'M ' + fromPoint.x + ' ' + fromPoint.y + 
+           ' L ' + midX1 + ' ' + midY1 + 
+           ' L ' + midX2 + ' ' + midY2 + 
+           ' L ' + toPoint.x + ' ' + toPoint.y;
 }
 
 function drawSmartConnection(fromElement, toElement) {
@@ -635,28 +826,13 @@ function drawSmartConnection(fromElement, toElement) {
     var fromPoint = getConnectionPoint(fromElement, toCenterX, toCenterY, true);
     var toPoint = getConnectionPoint(toElement, fromCenterX, fromCenterY, false);
     
-    // Создаем путь с двумя линиями (L-образный)
-    var midX, midY;
-    
-    // Определяем промежуточную точку для L-образного соединения
-    if (Math.abs(fromPoint.x - toPoint.x) > Math.abs(fromPoint.y - toPoint.y)) {
-        // Горизонтальное соединение преобладает
-        midX = toPoint.x;
-        midY = fromPoint.y;
-    } else {
-        // Вертикальное соединение преобладает
-        midX = fromPoint.x;
-        midY = toPoint.y;
-    }
-    
-    // Создаем путь
-    var pathData = 'M ' + fromPoint.x + ' ' + fromPoint.y + 
-                   ' L ' + midX + ' ' + midY + 
-                   ' L ' + toPoint.x + ' ' + toPoint.y;
+    // Создаем умный путь
+    var pathData = createSmartPath(fromPoint, toPoint);
     
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', pathData);
     path.setAttribute('class', 'connection-path');
+    path.setAttribute('data-connection', fromElement.id + '-' + toElement.id);
     
     svg.append(path);
 }
@@ -668,30 +844,48 @@ function getConnectionPoint(element, targetX, targetY, isStart) {
     var height = element.height || 40;
     
     // Отступ от границы элемента
-    var offset = isStart ? 15 : 10; // Больше отступ для начала стрелки
+    var offset = isStart ? 8 : 5;
     
     // Вычисляем направление к цели
     var dx = targetX - centerX;
     var dy = targetY - centerY;
     
-    // Определяем, с какой стороны выходить
-    var absX = Math.abs(dx);
-    var absY = Math.abs(dy);
+    // Определяем ближайшую сторону элемента к цели
+    var distToRight = Math.abs((element.x + width) - targetX) + Math.abs(centerY - targetY);
+    var distToLeft = Math.abs(element.x - targetX) + Math.abs(centerY - targetY);
+    var distToBottom = Math.abs(centerX - targetX) + Math.abs((element.y + height) - targetY);
+    var distToTop = Math.abs(centerX - targetX) + Math.abs(element.y - targetY);
     
-    if (absX > absY) {
-        // Выход справа или слева
-        if (dx > 0) {
-            return { x: element.x + width + offset, y: centerY };
-        } else {
-            return { x: element.x - offset, y: centerY };
-        }
+    var minDist = Math.min(distToRight, distToLeft, distToBottom, distToTop);
+    
+    if (minDist === distToRight) {
+        // Выход справа
+        return { 
+            x: element.x + width + (isStart ? offset : -offset), 
+            y: centerY,
+            side: 'right'
+        };
+    } else if (minDist === distToLeft) {
+        // Выход слева
+        return { 
+            x: element.x - (isStart ? offset : -offset), 
+            y: centerY,
+            side: 'left'
+        };
+    } else if (minDist === distToBottom) {
+        // Выход снизу
+        return { 
+            x: centerX, 
+            y: element.y + height + (isStart ? offset : -offset),
+            side: 'bottom'
+        };
     } else {
-        // Выход сверху или снизу
-        if (dy > 0) {
-            return { x: centerX, y: element.y + height + offset };
-        } else {
-            return { x: centerX, y: element.y - offset };
-        }
+        // Выход сверху
+        return { 
+            x: centerX, 
+            y: element.y - (isStart ? offset : -offset),
+            side: 'top'
+        };
     }
 }
 

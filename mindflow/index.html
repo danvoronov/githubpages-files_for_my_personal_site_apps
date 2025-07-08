@@ -56,10 +56,30 @@
 			<div id="status_counter">
 				Elements: <span id="element_count">0</span> | Connections: <span id="connections_count">0</span>
 			</div>
+			<div id="analysis_legend" style="display: none;">
+				<div class="legend-header">Analysis</div>
+				<div class="legend-content">
+					<div class="legend-item">
+						<span class="legend-color" style="background: #ff6b6b;"></span>
+						<strong>Edge Elements</strong> — Triggers that can initiate processes. Influencing them is often ineffective as changes are quickly dampened by the system.
+					</div>
+					<div class="legend-item">
+						<span class="legend-color" style="background: #4ecdc4;"></span>
+						<strong>Cyclic Elements</strong> — Elements where the situation eventually arrives and what stabilizes it. Usually there's at least one cycle in the flow. Breaking it transforms the situation into something else.
+					</div>
+					<div class="legend-item">
+						<span class="legend-color" style="background: #45b7d1;"></span>
+						<strong>Hub Elements (with multiplier)</strong> — Connected to multiple flows, often becoming the problem because they're very difficult to change. The more connections they have, the more stable and resistant to change they become.
+					</div>
+					<div class="legend-item">
+						<span class="legend-color" style="background: #96ceb4;"></span>
+						<strong>Bridge Elements</strong> — Can become the weakest link. They have only one incoming connection, which is relatively easy to weaken. Focus here when planning to change the situation, especially bridges in stabilizing loops.
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<!-- Существующий интерфейс для создания связей (скрыт изначально) -->
 	<div id="flowin" style="display: none;">
 		<div id="list_area">
 			<div id="stcol1" class="stcol ui-corner-all">		<img src="img/pozSmiley.png" alt="позитив" width="24" height="24" /><ul id="sort_poz" class="connectedSortable"></ul></div>
@@ -75,14 +95,6 @@
 		</div>
 	</div>
 		
-	<!-- Старый интерфейс ввода (скрыт) -->
-	<div id="block_inp" class="ui-corner-all" style="display: none;">
-			<div style="float:left; width: 38px; margin-left: 16%"><a style="text-decoration: none;" id='old_tooltip' title='<b>Базовый перечень потока сознания:</b><br/>одна строка = ОДНА мысль/идея/стейкхолдер<br/><br/>Если элемент позитивный можно пометить его смайликом, либо поставть в конце строки "+" или ")" - для негативных тоже смайлик или в конце "-", "("<br/><br/>Для окончания введить ='><img src="img/question-icon.png" alt="[?]" width="32" height="33" /></a></div>
-			
-			<div style="float:left"><form><textarea id="in_list" style=" font-size: 12pt;" placeholder="Клавиши нажимать здесь..." ></textarea></form></div>	
-			<div id="list_cnt" style="clear: both; margin-left: 16%; padding-left: 36px;"></div>		
-	</div> 
-	
 </div>
 
 <div id="dialog-legend" title="Graph Analysis Legend">
