@@ -106,6 +106,7 @@ var temasave = false;
 
    // Инициализируем подсказки
    $('#help_tooltip').tipsy({gravity: 'w', fade: true, html: true });
+   $('#legend_tooltip').tipsy({gravity: 'w', fade: true, html: true });
 
    // Фокус на новое поле ввода
    $('#element_input').focus();
@@ -328,15 +329,14 @@ function addElementToWorkspace(text) {
     elementCounter++;
     var cleanText = text.trim();
     
-    // Случайная позиция для нового элемента
-    var x = Math.random() * (workspaceWidth - 150) + 50;
-    var y = Math.random() * (workspaceHeight - 100) + 50;
+    // Умное размещение нового элемента
+    var position = getSmartPosition();
     
     var element = {
         id: elementCounter,
         text: cleanText,
-        x: x,
-        y: y
+        x: position.x,
+        y: position.y
     };
     
     elements.push(element);
@@ -348,6 +348,66 @@ function addElementToWorkspace(text) {
     if (elements.length >= 3) {
         $('#arrange_graph').show();
     }
+}
+
+function getSmartPosition() {
+    var centerX = workspaceWidth / 2;
+    var centerY = workspaceHeight / 2;
+    var margin = 100; // Отступ от краев
+    
+    // Если это первый элемент, размещаем в центре
+    if (elements.length === 0) {
+        return {
+            x: centerX - 50,
+            y: centerY - 25
+        };
+    }
+    
+    // Для последующих элементов используем спиральное размещение
+    var attempts = 0;
+    var maxAttempts = 50;
+    var minDistance = 120; // Минимальное расстояние между элементами
+    
+    while (attempts < maxAttempts) {
+        var angle = (elements.length * 2.4) + (Math.random() * 1.5); // Спиральный угол с небольшой случайностью
+        var radius = 80 + (elements.length * 30) + (Math.random() * 40); // Увеличивающийся радиус
+        
+        var x = centerX + radius * Math.cos(angle) - 50;
+        var y = centerY + radius * Math.sin(angle) - 25;
+        
+        // Проверяем границы
+        if (x < margin) x = margin;
+        if (y < margin) y = margin;
+        if (x > workspaceWidth - margin - 100) x = workspaceWidth - margin - 100;
+        if (y > workspaceHeight - margin - 50) y = workspaceHeight - margin - 50;
+        
+        // Проверяем, не слишком ли близко к существующим элементам
+        var tooClose = false;
+        for (var i = 0; i < elements.length; i++) {
+            var existingElement = elements[i];
+            var distance = Math.sqrt(
+                Math.pow(x - existingElement.x, 2) + 
+                Math.pow(y - existingElement.y, 2)
+            );
+            
+            if (distance < minDistance) {
+                tooClose = true;
+                break;
+            }
+        }
+        
+        if (!tooClose) {
+            return { x: x, y: y };
+        }
+        
+        attempts++;
+    }
+    
+    // Если не удалось найти хорошую позицию, используем случайную
+    return {
+        x: Math.random() * (workspaceWidth - 200) + margin,
+        y: Math.random() * (workspaceHeight - 100) + margin
+    };
 }
 
 function createElementDOM(element) {
@@ -424,7 +484,7 @@ function createElementDOM(element) {
     // Двойной клик для удаления
     elementDiv.dblclick(function(e) {
         e.stopPropagation();
-        if (confirm('Удалить элемент "' + element.text + '"?')) {
+        if (confirm('Delete element "' + element.text + '"?')) {
             removeElement(element.id);
         }
     });

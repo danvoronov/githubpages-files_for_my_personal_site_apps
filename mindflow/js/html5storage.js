@@ -36,7 +36,7 @@ function resumeMindData() {
 }
 
 function renew() {
- if (window.confirm("Точно всё сбросить?")) {
+ if (window.confirm("Are you sure you want to reset everything?")) {
 	clearMindData();
 	javascript:location.reload(true)
 	}
