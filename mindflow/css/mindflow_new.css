@@ -476,14 +476,6 @@ svg {
 	box-shadow: 0 6px 16px rgba(0,0,0,0.2);
 }
 
-.save-button {
-	background: #2196F3 !important;
-	bottom: 80px !important;
-}
-
-.save-button:hover {
-	background: #1976D2 !important;
-}
 
 #status_counter {
 	position: absolute;
@@ -548,37 +540,3 @@ svg {
 	color: #333;
 }
 
-/* Старые стили для второй стадии */
-#block_inp{
- font-size: 12pt;
-background-color: #E8FFD1; color: grey; padding: 6px; 
-position: absolute; top: 40px; width: 98%; min-height: 90%;
-}
-
-#canvas {visibility:hidden; }
-
-.elem {
-	border: 1px solid silver; 
-	-moz-box-shadow: 0 0 3px #B8B8B8;
-	-webkit-box-shadow: 0 0 3px#B8B8B8;
-	box-shadow: 0 0 3px #B8B8B8;
-}
-
-.stcol {float: left; margin: 2px; padding: 5px; }
-#stcol3 { background: #C3D9FF; margin-left: 4px;}
-#stcol2 { background: #eee; margin-left: 4px;} 
-#stcol1 {  background: #FFFF88; }
-
-#sort_neg, #sort_norm, #sort_poz {list-style-type: none; margin: 0; padding: 0; min-height: 20px;}
-#sort_neg li, #sort_norm li, #sort_poz li { margin: 5px; padding: 5px; font-weight: normal; font-size: 12pt; color:black; text-align: right; min-height: 24px;}
-
-#footer{
- border-top-left-radius: 5px;
-position:fixed; 
-text-align:right; padding-right: 5px;
-bottom: 0px; right: 0px;
-background-color: #A4B396;
- width:205px; color: black; font-size: 10pt
-}
-
-#footer a{ color: black; }

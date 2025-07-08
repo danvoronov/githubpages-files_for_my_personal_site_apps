@@ -63,11 +63,7 @@ var temasave = false;
 		}
 	});
 
-	// Обработчики для кнопок
-	$("#arrange_graph").click(function() {
-		arrangeGraph();
-	});
-	
+	// Обработчик для кнопки сохранения
 	$("#save_image").click(function() {
 		saveGraphAsImage();
 	});
@@ -350,9 +346,9 @@ function addElementToWorkspace(text) {
     updateCounters();
     updateElementStates();
     
-    // Показываем кнопку выравнивания если элементов больше 2
+    // Показываем кнопку сохранения если элементов больше 2
     if (elements.length >= 3) {
-        $('#arrange_graph').show();
+        $('#save_image').show();
     }
 }
 
@@ -557,7 +553,7 @@ function removeElement(id) {
     
     // Скрываем кнопку если элементов меньше 3
     if (elements.length < 3) {
-        $('#arrange_graph').hide();
+        $('#save_image').hide();
     }
 }
 
@@ -667,13 +663,11 @@ function checkAllElementsConnected() {
             $('#analysis_legend').fadeOut(300);
         }
         
-        // Показываем кнопки если есть элементы
-        $('#arrange_graph').show();
+        // Показываем кнопку сохранения если есть элементы
         $('#save_image').show();
     } else {
         $('#analysis_legend').fadeOut(300);
         if (elements.length < 3) {
-            $('#arrange_graph').hide();
             $('#save_image').hide();
         }
     }
@@ -901,55 +895,6 @@ function getConnectionPoint(element, targetX, targetY, isStart) {
     }
 }
 
-function arrangeGraph() {
-    if (elements.length < 2) return;
-    
-    // Обновляем размеры рабочей области
-    workspaceWidth = $('#workspace').width();
-    workspaceHeight = $('#workspace').height();
-    
-    // Круговое расположение с учетом размеров элементов
-    var centerX = workspaceWidth / 2;
-    var centerY = workspaceHeight / 2;
-    var radius = Math.min(workspaceWidth, workspaceHeight) / 3;
-    
-    // Находим максимальный размер элемента для корректировки радиуса
-    var maxElementSize = 0;
-    elements.forEach(function(element) {
-        var size = Math.max(element.width || 100, element.height || 40);
-        if (size > maxElementSize) maxElementSize = size;
-    });
-    
-    // Корректируем радиус с учетом размеров элементов
-    radius = Math.max(radius, maxElementSize * elements.length / (2 * Math.PI) + 50);
-    
-    elements.forEach(function(element, index) {
-        var angle = (2 * Math.PI * index) / elements.length;
-        var elementWidth = element.width || 100;
-        var elementHeight = element.height || 40;
-        
-        element.x = centerX + radius * Math.cos(angle) - elementWidth / 2;
-        element.y = centerY + radius * Math.sin(angle) - elementHeight / 2;
-        
-        // Проверяем границы экрана
-        if (element.x < 20) element.x = 20;
-        if (element.y < 20) element.y = 20;
-        if (element.x + elementWidth > workspaceWidth - 20) {
-            element.x = workspaceWidth - elementWidth - 20;
-        }
-        if (element.y + elementHeight > workspaceHeight - 20) {
-            element.y = workspaceHeight - elementHeight - 20;
-        }
-        
-        // Обновляем позицию DOM элемента
-        $('.graph-element[data-element-id="' + element.id + '"]').css({
-            left: element.x + 'px',
-            top: element.y + 'px'
-        });
-    });
-    
-    updateConnections();
-}
 
 function saveGraphAsImage() {
     // Получаем размеры рабочей области
