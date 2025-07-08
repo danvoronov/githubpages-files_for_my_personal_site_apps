@@ -67,6 +67,10 @@ var temasave = false;
 	$("#arrange_graph").click(function() {
 		arrangeGraph();
 	});
+	
+	$("#save_image").click(function() {
+		saveGraphAsImage();
+	});
  
 	$("#in_list").keyup(function(event) {
 		var key = event.which; 
@@ -662,8 +666,16 @@ function checkAllElementsConnected() {
         } else {
             $('#analysis_legend').fadeOut(300);
         }
+        
+        // Показываем кнопки если есть элементы
+        $('#arrange_graph').show();
+        $('#save_image').show();
     } else {
         $('#analysis_legend').fadeOut(300);
+        if (elements.length < 3) {
+            $('#arrange_graph').hide();
+            $('#save_image').hide();
+        }
     }
 }
 
@@ -937,6 +949,154 @@ function arrangeGraph() {
     });
     
     updateConnections();
+}
+
+function saveGraphAsImage() {
+    // Получаем размеры рабочей области
+    var workspace = document.getElementById('workspace');
+    var rect = workspace.getBoundingClientRect();
+    
+    // Создаем canvas
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    // Устанавливаем размеры canvas
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    // Заливаем фон
+    ctx.fillStyle = '#f8f9fa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Добавляем тему вверху
+    var topic = $('#tema').text() || 'Mind Flow';
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(topic, canvas.width / 2, 40);
+    
+    // Рисуем стрелки
+    drawConnectionsOnCanvas(ctx);
+    
+    // Рисуем элементы
+    drawElementsOnCanvas(ctx);
+    
+    // Сохраняем изображение
+    var link = document.createElement('a');
+    link.download = (topic.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'mindflow') + '_graph.png';
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+function drawConnectionsOnCanvas(ctx) {
+    ctx.strokeStyle = '#28a745';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    
+    connections.forEach(function(conn) {
+        var fromElement = elements.find(function(el) { return el.id === conn.from; });
+        var toElement = elements.find(function(el) { return el.id === conn.to; });
+        
+        if (fromElement && toElement) {
+            var fromCenterX = fromElement.x + (fromElement.width || 100) / 2;
+            var fromCenterY = fromElement.y + (fromElement.height || 40) / 2;
+            var toCenterX = toElement.x + (toElement.width || 100) / 2;
+            var toCenterY = toElement.y + (toElement.height || 40) / 2;
+            
+            var fromPoint = getConnectionPoint(fromElement, toCenterX, toCenterY, true);
+            var toPoint = getConnectionPoint(toElement, fromCenterX, fromCenterY, false);
+            
+            // Рисуем путь
+            ctx.beginPath();
+            ctx.moveTo(fromPoint.x, fromPoint.y);
+            
+            var pathData = createSmartPath(fromPoint, toPoint);
+            var commands = pathData.split(' ');
+            
+            for (var i = 0; i < commands.length; i += 3) {
+                if (commands[i] === 'L' && commands[i + 1] && commands[i + 2]) {
+                    ctx.lineTo(parseFloat(commands[i + 1]), parseFloat(commands[i + 2]));
+                }
+            }
+            
+            ctx.stroke();
+            
+            // Рисуем стрелку
+            drawArrowHead(ctx, toPoint.x, toPoint.y, fromPoint.x, fromPoint.y);
+        }
+    });
+}
+
+function drawArrowHead(ctx, toX, toY, fromX, fromY) {
+    var angle = Math.atan2(toY - fromY, toX - fromX);
+    var arrowLength = 10;
+    var arrowAngle = Math.PI / 6;
+    
+    ctx.fillStyle = '#28a745';
+    ctx.beginPath();
+    ctx.moveTo(toX, toY);
+    ctx.lineTo(
+        toX - arrowLength * Math.cos(angle - arrowAngle),
+        toY - arrowLength * Math.sin(angle - arrowAngle)
+    );
+    ctx.lineTo(
+        toX - arrowLength * Math.cos(angle + arrowAngle),
+        toY - arrowLength * Math.sin(angle + arrowAngle)
+    );
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawElementsOnCanvas(ctx) {
+    elements.forEach(function(element) {
+        var x = element.x;
+        var y = element.y;
+        var width = element.width || 100;
+        var height = element.height || 40;
+        
+        // Определяем цвет рамки
+        var hasConnection = connections.some(function(conn) {
+            return conn.from === element.id;
+        });
+        
+        var borderColor = hasConnection ? '#007bff' : '#dc3545';
+        
+        // Рисуем элемент
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        
+        // Рисуем прямоугольник с закругленными углами
+        drawRoundedRect(ctx, x, y, width, height, 8);
+        ctx.fill();
+        ctx.stroke();
+        
+        // Рисуем текст
+        ctx.fillStyle = '#333';
+        ctx.font = '13px Arial';
+        ctx.textAlign = 'left';
+        
+        var text = element.id + '. ' + element.text;
+        var textX = x + 12;
+        var textY = y + height / 2 + 5;
+        
+        ctx.fillText(text, textX, textY);
+    });
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
 }
 
 function removeConnection(fromId) {

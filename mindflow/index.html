@@ -34,14 +34,12 @@
 			</div>
 			<div id="control_center">
 				<input type="text" id="element_input" placeholder="Enter element and press Enter to add to workspace..." />
-			</div>
-			<div id="control_right">
-				<a id='legend_tooltip' title='<b>Graph Legend:</b><br/>🔴 <b>Red border:</b> Elements without outgoing connections<br/>🟡 <b>Yellow border:</b> Selected element<br/>🔵 <b>Blue border:</b> Regular elements<br/>➡️ <b>Green arrows:</b> Flow connections between elements'>
-					<span style="font-size: 16px;">📊</span>
-				</a>
-				<a id='help_tooltip' title='<b>Mind Flow Creation:</b><br/>1. Enter element and press Enter - it appears on workspace<br/>2. Click on elements to create connections<br/>3. Use "Arrange Graph" for automatic layout'>
+				&nbsp;
+				<a id='help_tooltip' title='<b>Mind Flow Creation:</b><br/>1. Enter element and press Enter - it appears on workspace<br/>2. Click on elements to create connections<br/>3. Use "Arrange Graph" for automatic layout<br/><br/><br/><b>Graph Legend:</b><br/>🔴 <b>Red border:</b> Elements without outgoing connections<br/>🟡 <b>Yellow border:</b> Selected element<br/>🔵 <b>Blue border:</b> Regular elements<br/>➡️ <b>Green arrows:</b> Flow connections between elements'>
 					<img src="img/question-icon.png" alt="[?]" width="20" height="20" />
 				</a>
+			</div>
+			<div id="control_right">
 				<button onclick="renew();" class="reset-btn">RESET</button>
 			</div>
 		</div>
@@ -52,6 +50,9 @@
 			<div id="elements_container"></div>
 			<button id="arrange_graph" class="floating-button" style="display: none;">
 				Arrange Graph
+			</button>
+			<button id="save_image" class="floating-button save-button" style="display: none;">
+				💾 Save as Image
 			</button>
 			<div id="status_counter">
 				Elements: <span id="element_count">0</span> | Connections: <span id="connections_count">0</span>
@@ -97,18 +98,5 @@
 		
 </div>
 
-<div id="dialog-legend" title="Graph Analysis Legend">
-<b>Mind Flow Graph Analysis:</b>
-<br/><br/><span style="color: red;">🔴 Red Border Elements</span> — Elements without outgoing connections. These are endpoints or elements that need connections to complete the flow.
-<br/><br/><span style="color: blue;">🔵 Blue Border Elements</span> — Regular elements with proper connections. These form the main flow of your mind map.
-<br/><br/><span style="color: #ffc107;">🟡 Yellow Border Elements</span> — Currently selected element for creating connections.
-<br/><br/><span style="color: green;">➡️ Green Arrows</span> — Flow connections showing the relationship and direction between elements. Each element can have only one outgoing connection (1:1 relationship).
-<br/><br/><b>Usage Tips:</b>
-<br/>• Click elements to create connections
-<br/>• Red borders indicate incomplete flows
-<br/>• Use "Arrange Graph" for better layout
-<br/>• Double-click to delete elements
-</div>
-</div>
 </body>
 </html>
