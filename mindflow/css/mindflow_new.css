@@ -1,0 +1,499 @@
+@font-face {
+	font-family: chalk;
+	src: url('img/chalk.ttf');
+}
+
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow-x: hidden;
+	background-color: #E8FFD1; 
+}
+svg {
+	background-color: #fff; 
+	width: 100%;
+	height: 100%;
+}
+
+#canvas {
+	width: 100%;
+	height: calc(100% - 60px);
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+#maket {
+	padding: 0;
+	height: 100vh;
+}
+
+.temaclass{
+	font-weight: bold; 
+	font-size:14pt; 
+	height:26px;
+	width: 80%;
+}
+
+/* Новый интерфейс с рабочей областью */
+#main_interface {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+#control_panel {
+	background: white;
+	padding: 8px 20px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	z-index: 1000;
+	position: relative;
+	min-height: 50px;
+}
+
+#control_left {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+#control_center {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	flex: 1;
+	justify-content: center;
+}
+
+#control_right {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.control-section {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#workspace {
+	flex: 1;
+	position: relative;
+	background: #f8f9fa;
+	overflow: hidden;
+}
+
+#connections_svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+#elements_container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+}
+
+.column {
+	width: 600px;
+	max-width: 90vw;
+	background: white;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	overflow-y: auto;
+}
+
+.column-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	border-bottom: 2px solid #eee;
+	padding-bottom: 10px;
+}
+
+.column-header h3 {
+	margin: 0;
+	color: #333;
+	font-size: 18px;
+}
+
+.tema-section {
+	margin-bottom: 10px;
+	font-size: 14px;
+	color: #666;
+}
+
+.temaclass {
+	font-weight: bold;
+	font-size: 14pt;
+	color: #333;
+	border-bottom: 1px dashed #ccc;
+	padding: 2px 4px;
+	min-width: 150px;
+	display: inline-block;
+}
+
+.header-controls {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.reset-btn {
+	background: #dc3545;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.reset-btn:hover {
+	background: #c82333;
+}
+
+#input_area {
+	margin-bottom: 20px;
+}
+
+#element_input {
+	width: 400px;
+	padding: 8px 12px;
+	font-size: 14px;
+	border: 2px solid #ddd;
+	border-radius: 6px;
+	transition: border-color 0.3s;
+	box-sizing: border-box;
+}
+
+#element_input:focus {
+	outline: none;
+	border-color: #4CAF50;
+}
+
+/* Стили для элементов на рабочей области */
+.graph-element {
+	position: absolute;
+	background: white;
+	border: 2px solid #007bff;
+	border-radius: 8px;
+	padding: 8px 12px;
+	cursor: move;
+	user-select: none;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+	transition: all 0.3s ease;
+	text-align: center;
+	font-size: 13px;
+	font-weight: bold;
+	white-space: nowrap;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.graph-element:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.graph-element.dragging {
+	opacity: 0.7;
+	transform: rotate(3deg);
+	z-index: 1000;
+}
+
+.graph-element.drop-target {
+	border-color: #28a745;
+	background: #d4edda;
+}
+
+.graph-element.no-connection {
+	border-color: #dc3545;
+	border-width: 3px;
+}
+
+.graph-element.selected {
+	border-color: #ffc107;
+	background: #fff3cd;
+	box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+.graph-element .element-id {
+	color: #007bff;
+	font-weight: bold;
+	margin-right: 8px;
+	font-size: 12px;
+}
+
+.graph-element .connection-arrow {
+	position: absolute;
+	right: -25px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #28a745;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+/* Стили для SVG связей */
+.connection-path {
+	stroke: #28a745;
+	stroke-width: 2;
+	fill: none;
+	marker-end: url(#arrowhead);
+}
+
+.connection-path.highlighted {
+	stroke: #007bff;
+	stroke-width: 3;
+}
+
+.connection-line {
+	stroke: #28a745;
+	stroke-width: 2;
+}
+
+#input_counter {
+	color: #666;
+	font-size: 12px;
+	text-align: right;
+}
+
+.preview-section {
+	margin-bottom: 20px;
+}
+
+.preview-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 6px;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+
+.preview-header.positive {
+	background: #FFFF88;
+	color: #333;
+}
+
+.preview-header.neutral {
+	background: #eee;
+	color: #333;
+}
+
+.preview-header.negative {
+	background: #C3D9FF;
+	color: #333;
+}
+
+.preview-section ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.preview-section li {
+	background: #f9f9f9;
+	margin: 4px 0;
+	padding: 8px 12px;
+	border-radius: 4px;
+	border-left: 3px solid #ddd;
+	font-size: 13px;
+	position: relative;
+	cursor: move;
+	transition: all 0.3s ease;
+}
+
+.preview-section li:hover {
+	background: #e9e9e9;
+	transform: translateY(-1px);
+	box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.preview-section li.dragging {
+	opacity: 0.5;
+	transform: rotate(5deg);
+}
+
+.preview-section li.drop-target {
+	background: #d4edda;
+	border-left-color: #28a745;
+}
+
+.sortable-list {
+	min-height: 50px;
+}
+
+.preview-section li .element-number {
+	color: #666;
+	font-weight: bold;
+	margin-right: 8px;
+}
+
+.preview-section li .connection-indicator {
+	color: #28a745;
+	font-weight: bold;
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+.preview-section li .remove-btn {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: #ff4444;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	font-size: 12px;
+	cursor: pointer;
+	display: none;
+}
+
+.preview-section li:hover .remove-btn {
+	display: block;
+}
+
+#proceed_button_container {
+	text-align: center;
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 2px solid #eee;
+}
+
+#connections_area {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 2px solid #eee;
+}
+
+#connections_list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#connections_list li {
+	background: #e8f5e8;
+	margin: 4px 0;
+	padding: 8px 12px;
+	border-radius: 4px;
+	border-left: 3px solid #28a745;
+	font-size: 13px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#connections_list li .connection-text {
+	flex: 1;
+}
+
+#connections_list li .remove-connection {
+	background: #dc3545;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+#build_graph_container {
+	text-align: center;
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 2px solid #eee;
+}
+
+#build_graph {
+	background: #4CAF50;
+	color: white;
+	padding: 12px 24px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#back_to_input {
+	background: #2196F3;
+	color: white;
+}
+
+.floating-button {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	background: #4CAF50;
+	color: white;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 25px;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+	transition: all 0.3s ease;
+	z-index: 100;
+}
+
+.floating-button:hover {
+	background: #45a049;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* Старые стили для второй стадии */
+#block_inp{
+ font-size: 12pt;
+background-color: #E8FFD1; color: grey; padding: 6px; 
+position: absolute; top: 40px; width: 98%; min-height: 90%;
+}
+
+#canvas {visibility:hidden; }
+
+.elem {
+	border: 1px solid silver; 
+	-moz-box-shadow: 0 0 3px #B8B8B8;
+	-webkit-box-shadow: 0 0 3px#B8B8B8;
+	box-shadow: 0 0 3px #B8B8B8;
+}
+
+.stcol {float: left; margin: 2px; padding: 5px; }
+#stcol3 { background: #C3D9FF; margin-left: 4px;}
+#stcol2 { background: #eee; margin-left: 4px;} 
+#stcol1 {  background: #FFFF88; }
+
+#sort_neg, #sort_norm, #sort_poz {list-style-type: none; margin: 0; padding: 0; min-height: 20px;}
+#sort_neg li, #sort_norm li, #sort_poz li { margin: 5px; padding: 5px; font-weight: normal; font-size: 12pt; color:black; text-align: right; min-height: 24px;}
+
+#footer{
+ border-top-left-radius: 5px;
+position:fixed; 
+text-align:right; padding-right: 5px;
+bottom: 0px; right: 0px;
+background-color: #A4B396;
+ width:205px; color: black; font-size: 10pt
+}
+
+#footer a{ color: black; }

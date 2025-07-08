@@ -1,0 +1,91 @@
+<!DOCTYPE html>  
+<html lang="ru"><head><title>MindFlow</title>
+<meta charset="utf-8">
+
+<link type="text/css" href="css/trontastic/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />	
+<link type="text/css" href="css/jquery.tipsy.css" rel="stylesheet" />	
+<link type="text/css" href="css/mindflow_new.css" rel="stylesheet" />	
+
+<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+    	
+<script type="text/javascript" src="js/raphael-min.js"></script>
+<script type="text/javascript" src="js/dracula_graffle.js"></script>
+<script type="text/javascript" src="js/dracula_graph.js"></script>
+<script type="text/javascript" src="js/dracula_algorithms.js"></script>
+	
+<script type="text/javascript" src="js/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="js/jquery.tipsy.min.js"></script>
+
+	<script type="text/javascript" src="js/html5storage.js"></script>
+	<script type="text/javascript" src="mindflow.js"></script>
+</head> 
+<body><div>
+
+<div id="maket">
+	<!-- Новый интерфейс с рабочей областью -->
+	<div id="main_interface">
+		<!-- Панель управления сверху -->
+		<div id="control_panel">
+			<div id="control_left">
+				<div class="control-section">
+					<div class="tema-section">ТЕМА: <span id="tema" class="editabletm temaclass">тему писать сюда</span></div>
+				</div>
+			</div>
+			<div id="control_center">
+				<input type="text" id="element_input" placeholder="Введите элемент и нажмите Enter для добавления на рабочую область..." />
+				<span id="input_counter">Элементов: <span id="element_count">0</span> | Связей: <span id="connections_count">0</span></span>
+			</div>
+			<div id="control_right">
+				<a id='help_tooltip' title='<b>Создание потока сознания:</b><br/>1. Введите элемент и нажмите Enter - он появится на рабочей области<br/>2. Кликните на элементы для создания связей<br/>3. Используйте "Выровнять граф" для автоматической расстановки'>
+					<img src="img/question-icon.png" alt="[?]" width="20" height="20" />
+				</a>
+				<button onclick="renew();" class="reset-btn">СБРОС</button>
+			</div>
+		</div>
+		
+		<!-- Рабочая область для графа -->
+		<div id="workspace">
+			<svg id="connections_svg"></svg>
+			<div id="elements_container"></div>
+			<button id="arrange_graph" class="floating-button" style="display: none;">
+				Выровнять граф
+			</button>
+		</div>
+	</div>
+
+	<!-- Существующий интерфейс для создания связей (скрыт изначально) -->
+	<div id="flowin" style="display: none;">
+		<div id="list_area">
+			<div id="stcol1" class="stcol ui-corner-all">		<img src="img/pozSmiley.png" alt="позитив" width="24" height="24" /><ul id="sort_poz" class="connectedSortable"></ul></div>
+			<div id="stcol2" class="stcol ui-corner-all"><ul id="sort_norm" class="connectedSortable"></ul></div>
+			<div id="stcol3" class="stcol ui-corner-all">		<div style="text-align: right;"><img src="img/negSmiley.png" alt="негатив" width="22" height="22" /></div><ul id="sort_neg"	class="connectedSortable"></ul></div>
+			<div style="clear: both;"></div>
+		</div>
+		<div id="makeflbt" style="margin-top: 10px;">
+			<a onclick="$('#dialog-legend').dialog('open');" href="#" style="visibility:hidden;" id="legend-link">описание значений</a>
+			<button id="back_to_input" class="ui-button ui-widget ui-corner-all" style="margin-left: 20px;">
+				Вернуться к вводу элементов
+			</button>
+		</div>
+	</div>
+		
+	<!-- Старый интерфейс ввода (скрыт) -->
+	<div id="block_inp" class="ui-corner-all" style="display: none;">
+			<div style="float:left; width: 38px; margin-left: 16%"><a style="text-decoration: none;" id='old_tooltip' title='<b>Базовый перечень потока сознания:</b><br/>одна строка = ОДНА мысль/идея/стейкхолдер<br/><br/>Если элемент позитивный можно пометить его смайликом, либо поставть в конце строки "+" или ")" - для негативных тоже смайлик или в конце "-", "("<br/><br/>Для окончания введить ='><img src="img/question-icon.png" alt="[?]" width="32" height="33" /></a></div>
+			
+			<div style="float:left"><form><textarea id="in_list" style=" font-size: 12pt;" placeholder="Клавиши нажимать здесь..." ></textarea></form></div>	
+			<div id="list_cnt" style="clear: both; margin-left: 16%; padding-left: 36px;"></div>		
+	</div> 
+	
+</div>
+
+<div id="dialog-legend" title="Описание значений">
+Крайние элементы — тригеры, которые могут запускать что происходит. Воздействовать на них малоэффективно (!) так как изменение быстро погаситься системой.
+<br/><br/><span style="color: blue;">Зацикленые элементы</span> — те, к которым в итоге приходит ситуация и то, что её стабилизирует. Обычно в потокограмме есть хотя б один цикл. Если его разорвать, то эта ситауция преобразиться в что-то другое.
+<br/><br/><span style="color: red;">Стоковые элементы (с множителем)</span> — соеденены со потоками, обычно они и становяться проблемой, потому что с ними очень трудно что-либо сделать. Чем больше связей у них — тем они стабильнее и прочно сопротивляются каким-либо изменениям.
+<br/><br/><span style="color: green;">Связующие элементы</span> — могут стать самым слабым звеном. У них есть только одна входящая связь, которую относительно легко можно ослабить. Сюда и стоит думать, если планировать что либо изменить в ситуации. Особенно интересны связующие в стабилизирующей петле, цикле.
+</div>
+</div>
+</body>
+</html>
