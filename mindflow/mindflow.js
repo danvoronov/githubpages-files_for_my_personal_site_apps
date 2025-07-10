@@ -109,6 +109,7 @@ var temasave = false;
    // Инициализируем подсказки
    $('#help_tooltip').tipsy({gravity: 'w', fade: true, html: true });
    $('#legend_tooltip').tipsy({gravity: 'w', fade: true, html: true });
+   $('#analysis_tooltip').tipsy({gravity: 'w', fade: true, html: true });
 
    // Фокус на новое поле ввода
    $('#element_input').focus();
@@ -480,34 +481,101 @@ function createElementDOM(element) {
     });
     
     // Клик для создания связей
+    var clickCount = 0;
+    var clickTimer = null;
+    
     elementDiv.click(function(e) {
         e.stopPropagation();
         e.preventDefault();
         
-        console.log('Click on element', element.id, 'Selected:', selectedElement ? selectedElement.id : 'none');
+        clickCount++;
+        
+        if (clickCount === 1) {
+            clickTimer = setTimeout(function() {
+                // Одинарный клик
+                handleSingleClick(element, $(e.currentTarget));
+                clickCount = 0;
+            }, 250);
+        } else if (clickCount === 2) {
+            // Двойной клик
+            clearTimeout(clickTimer);
+            handleDoubleClick(element, $(e.currentTarget));
+            clickCount = 0;
+        }
+    });
+    
+    function handleSingleClick(element, elementDiv) {
+        console.log('Single click on element', element.id);
         
         if (selectedElement === null) {
-            // Первый клик - выбираем элемент
+            // Нет выбранного элемента - проверяем, можно ли выбрать этот элемент
+            var hasConnection = connections.some(function(conn) {
+                return conn.from === element.id;
+            });
+            
+            if (hasConnection) {
+                // У элемента есть связь - одинарный клик ничего не делает
+                console.log('Element has connection, single click ignored');
+                return;
+            }
+            
+            // У элемента нет связи - можно выбрать
             selectedElement = element;
             $('.graph-element').removeClass('selected');
-            $(this).addClass('selected');
+            elementDiv.addClass('selected');
             showConnectionHints();
             console.log('Selected element', element.id);
         } else if (selectedElement.id === element.id) {
-            // Клик по тому же элементу - отменяем выбор
+            // Клик на уже выбранный элемент - отменяем выбор
             selectedElement = null;
-            $(this).removeClass('selected');
+            elementDiv.removeClass('selected');
             hideConnectionHints();
             console.log('Deselected element', element.id);
         } else {
-            // Второй клик - создаем связь
+            // Есть выбранный элемент и кликнули на другой - создаем связь
             console.log('Creating connection from', selectedElement.id, 'to', element.id);
             addConnection(selectedElement.id, element.id);
             $('.graph-element').removeClass('selected');
             selectedElement = null;
             hideConnectionHints();
         }
-    });
+    }
+    
+    function handleDoubleClick(element, elementDiv) {
+        console.log('Double click on element', element.id);
+        
+        // Проверяем, есть ли у элемента исходящая связь
+        var hasConnection = connections.some(function(conn) {
+            return conn.from === element.id;
+        });
+        
+        if (hasConnection) {
+            // У элемента есть связь - двойной клик для изменения связи
+            if (selectedElement === null) {
+                selectedElement = element;
+                $('.graph-element').removeClass('selected');
+                elementDiv.addClass('selected');
+                showConnectionHints();
+                console.log('Selected element with connection for change', element.id);
+            } else if (selectedElement.id === element.id) {
+                selectedElement = null;
+                elementDiv.removeClass('selected');
+                hideConnectionHints();
+                console.log('Deselected element', element.id);
+            } else {
+                console.log('Changing connection from', selectedElement.id, 'to', element.id);
+                addConnection(selectedElement.id, element.id);
+                $('.graph-element').removeClass('selected');
+                selectedElement = null;
+                hideConnectionHints();
+            }
+        } else {
+            // У элемента нет связи - двойной клик для удаления
+            if (confirm('Delete element "' + element.text + '"?')) {
+                removeElement(element.id);
+            }
+        }
+    }
     
     // Hover для фантомной стрелки
     elementDiv.hover(
@@ -521,13 +589,6 @@ function createElementDOM(element) {
         }
     );
     
-    // Двойной клик для удаления
-    elementDiv.dblclick(function(e) {
-        e.stopPropagation();
-        if (confirm('Delete element "' + element.text + '"?')) {
-            removeElement(element.id);
-        }
-    });
 }
 
 function removeElement(id) {
@@ -658,15 +719,15 @@ function checkAllElementsConnected() {
         });
         
         if (allConnected) {
-            $('#analysis_legend').fadeIn(500);
+            $('#analysis_icon').fadeIn(500);
         } else {
-            $('#analysis_legend').fadeOut(300);
+            $('#analysis_icon').fadeOut(300);
         }
         
         // Показываем кнопку сохранения если есть элементы
         $('#save_image').show();
     } else {
-        $('#analysis_legend').fadeOut(300);
+        $('#analysis_icon').fadeOut(300);
         if (elements.length < 3) {
             $('#save_image').hide();
         }
@@ -943,38 +1004,134 @@ function drawConnectionsOnCanvas(ctx) {
         var toElement = elements.find(function(el) { return el.id === conn.to; });
         
         if (fromElement && toElement) {
+            // Вычисляем центры элементов для определения направления
             var fromCenterX = fromElement.x + (fromElement.width || 100) / 2;
             var fromCenterY = fromElement.y + (fromElement.height || 40) / 2;
             var toCenterX = toElement.x + (toElement.width || 100) / 2;
             var toCenterY = toElement.y + (toElement.height || 40) / 2;
             
+            // Получаем правильные точки подключения с отступами
             var fromPoint = getConnectionPoint(fromElement, toCenterX, toCenterY, true);
             var toPoint = getConnectionPoint(toElement, fromCenterX, fromCenterY, false);
             
-            // Рисуем путь
-            ctx.beginPath();
-            ctx.moveTo(fromPoint.x, fromPoint.y);
+            // Рисуем умный путь
+            drawSmartPathOnCanvas(ctx, fromPoint, toPoint);
             
-            var pathData = createSmartPath(fromPoint, toPoint);
-            var commands = pathData.split(' ');
-            
-            for (var i = 0; i < commands.length; i += 3) {
-                if (commands[i] === 'L' && commands[i + 1] && commands[i + 2]) {
-                    ctx.lineTo(parseFloat(commands[i + 1]), parseFloat(commands[i + 2]));
-                }
-            }
-            
-            ctx.stroke();
-            
-            // Рисуем стрелку
-            drawArrowHead(ctx, toPoint.x, toPoint.y, fromPoint.x, fromPoint.y);
+            // Рисуем стрелку в конечной точке с правильным направлением
+            drawArrowHeadSmart(ctx, fromPoint, toPoint);
         }
     });
 }
 
+function drawSmartPathOnCanvas(ctx, fromPoint, toPoint) {
+    var dx = toPoint.x - fromPoint.x;
+    var dy = toPoint.y - fromPoint.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    
+    ctx.beginPath();
+    ctx.moveTo(fromPoint.x, fromPoint.y);
+    
+    // Для коротких расстояний используем прямую линию
+    if (distance < 100) {
+        ctx.lineTo(toPoint.x, toPoint.y);
+    } else {
+        // Определяем промежуточные точки на основе сторон выхода
+        var offset = Math.min(50, distance / 3);
+        
+        // Первая промежуточная точка - отходим от элемента
+        var midX1, midY1;
+        if (fromPoint.side === 'right') {
+            midX1 = fromPoint.x + offset;
+            midY1 = fromPoint.y;
+        } else if (fromPoint.side === 'left') {
+            midX1 = fromPoint.x - offset;
+            midY1 = fromPoint.y;
+        } else if (fromPoint.side === 'bottom') {
+            midX1 = fromPoint.x;
+            midY1 = fromPoint.y + offset;
+        } else { // top
+            midX1 = fromPoint.x;
+            midY1 = fromPoint.y - offset;
+        }
+        
+        // Вторая промежуточная точка - подходим к элементу
+        var midX2, midY2;
+        if (toPoint.side === 'right') {
+            midX2 = toPoint.x + offset;
+            midY2 = toPoint.y;
+        } else if (toPoint.side === 'left') {
+            midX2 = toPoint.x - offset;
+            midY2 = toPoint.y;
+        } else if (toPoint.side === 'bottom') {
+            midX2 = toPoint.x;
+            midY2 = toPoint.y + offset;
+        } else { // top
+            midX2 = toPoint.x;
+            midY2 = toPoint.y - offset;
+        }
+        
+        // Рисуем плавный путь через промежуточные точки
+        ctx.lineTo(midX1, midY1);
+        ctx.lineTo(midX2, midY2);
+        ctx.lineTo(toPoint.x, toPoint.y);
+    }
+    
+    ctx.stroke();
+}
+
+function drawArrowHeadSmart(ctx, fromPoint, toPoint) {
+    var dx = toPoint.x - fromPoint.x;
+    var dy = toPoint.y - fromPoint.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Определяем направление стрелки на основе последнего сегмента
+    var arrowFromX, arrowFromY;
+    
+    if (distance < 100) {
+        // Для коротких расстояний используем прямое направление
+        arrowFromX = fromPoint.x;
+        arrowFromY = fromPoint.y;
+    } else {
+        // Для длинных путей вычисляем направление от предпоследней точки
+        var offset = Math.min(50, distance / 3);
+        
+        if (toPoint.side === 'right') {
+            arrowFromX = toPoint.x + offset;
+            arrowFromY = toPoint.y;
+        } else if (toPoint.side === 'left') {
+            arrowFromX = toPoint.x - offset;
+            arrowFromY = toPoint.y;
+        } else if (toPoint.side === 'bottom') {
+            arrowFromX = toPoint.x;
+            arrowFromY = toPoint.y + offset;
+        } else { // top
+            arrowFromX = toPoint.x;
+            arrowFromY = toPoint.y - offset;
+        }
+    }
+    
+    var angle = Math.atan2(toPoint.y - arrowFromY, toPoint.x - arrowFromX);
+    var arrowLength = 12;
+    var arrowAngle = Math.PI / 6;
+    
+    ctx.fillStyle = '#28a745';
+    ctx.beginPath();
+    ctx.moveTo(toPoint.x, toPoint.y);
+    ctx.lineTo(
+        toPoint.x - arrowLength * Math.cos(angle - arrowAngle),
+        toPoint.y - arrowLength * Math.sin(angle - arrowAngle)
+    );
+    ctx.lineTo(
+        toPoint.x - arrowLength * Math.cos(angle + arrowAngle),
+        toPoint.y - arrowLength * Math.sin(angle + arrowAngle)
+    );
+    ctx.closePath();
+    ctx.fill();
+}
+
 function drawArrowHead(ctx, toX, toY, fromX, fromY) {
     var angle = Math.atan2(toY - fromY, toX - fromX);
-    var arrowLength = 10;
+    var arrowLength = 12;
     var arrowAngle = Math.PI / 6;
     
     ctx.fillStyle = '#28a745';

@@ -35,11 +35,14 @@
 			<div id="control_center">
 				<input type="text" id="element_input" placeholder="Enter element and press Enter to add to workspace..." />
 				&nbsp;
-				<a id='help_tooltip' title='<b>Mind Flow Creation:</b><br/>1. Enter element and press Enter - it appears on workspace<br/>2. Click on elements to create connections<br/>3. Use "Arrange Graph" for automatic layout<br/><br/><br/><b>Graph Legend:</b><br/>🔴 <b>Red border:</b> Elements without outgoing connections<br/>🟡 <b>Yellow border:</b> Selected element<br/>🔵 <b>Blue border:</b> Regular elements<br/>➡️ <b>Green arrows:</b> Flow connections between elements'>
+				<a id='help_tooltip' title='<b>Mind Flow Creation:</b><br/>1. Enter element and press Enter - it appears on workspace<br/>2. Click on elements to create connections<br/>3. Dblclick to delete.<br/><br/><br/><b>Graph Legend:</b><br/>🔴 <b>Red border:</b> Elements without outgoing connections<br/>🟡 <b>Yellow border:</b> Selected element<br/>🔵 <b>Blue border:</b> Regular elements'>
 					<img src="img/question-icon.png" alt="[?]" width="20" height="20" />
 				</a>
 			</div>
 			<div id="control_right">
+				<button id="save_image" class="save-btn" style="display: none;">
+					💾 Save as Image
+				</button>
 				<button onclick="renew();" class="reset-btn">RESET</button>
 			</div>
 		</div>
@@ -48,32 +51,13 @@
 		<div id="workspace">
 			<svg id="connections_svg"></svg>
 			<div id="elements_container"></div>
-			<button id="save_image" class="floating-button" style="display: none;">
-				💾 Save as Image
-			</button>
 			<div id="status_counter">
 				Elements: <span id="element_count">0</span> | Connections: <span id="connections_count">0</span>
 			</div>
-			<div id="analysis_legend" style="display: none;">
-				<div class="legend-header">Analysis</div>
-				<div class="legend-content">
-					<div class="legend-item">
-						<span class="legend-color" style="background: #ff6b6b;"></span>
-						<strong>Edge Elements</strong> — Triggers that can initiate processes. Influencing them is often ineffective as changes are quickly dampened by the system.
-					</div>
-					<div class="legend-item">
-						<span class="legend-color" style="background: #4ecdc4;"></span>
-						<strong>Cyclic Elements</strong> — Elements where the situation eventually arrives and what stabilizes it. Usually there's at least one cycle in the flow. Breaking it transforms the situation into something else.
-					</div>
-					<div class="legend-item">
-						<span class="legend-color" style="background: #45b7d1;"></span>
-						<strong>Hub Elements (with multiplier)</strong> — Connected to multiple flows, often becoming the problem because they're very difficult to change. The more connections they have, the more stable and resistant to change they become.
-					</div>
-					<div class="legend-item">
-						<span class="legend-color" style="background: #96ceb4;"></span>
-						<strong>Bridge Elements</strong> — Can become the weakest link. They have only one incoming connection, which is relatively easy to weaken. Focus here when planning to change the situation, especially bridges in stabilizing loops.
-					</div>
-				</div>
+			<div id="analysis_icon" style="display: none;">
+				<a id='analysis_tooltip' title='<b>📊 Flow Analysis:</b><br/><br/>🔴 <b>Edge Elements</b> — Triggers that initiate processes. Influencing them is often ineffective.<br/><br/>🔵 <b>Cyclic Elements</b> — Where situation arrives and stabilizes. Breaking cycles transforms the situation.<br/><br/>🟡 <b>Hub Elements</b> — Connected to multiple flows, resistant to change. More connections = more stability.<br/><br/>🟢 <b>Bridge Elements</b> — Weakest links with one connection. Focus here for changes.'>
+					<span style="font-size: 24px;">📊</span>
+				</a>
 			</div>
 		</div>
 	</div>
