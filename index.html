@@ -1,28 +1,112 @@
-<html>
-	<head>
-		<title>Программы от Дан Воронов</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	</head>
-	<body>
-	<h1>Дан Воронов - Программы</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dan Voronov - Programs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-	<a href="kyivstrikes">Мапа влучань у Києві</a> 
-	<br/><br/><br/>
-	<a href="kievfalafel">Карта фалафеля в Киеве</a> (работала в 2016-2017 года, сейчас не обновляеться)
-	<br/><br/>Статья на Хмарачос:
-	<a href="https://hmarochos.kiev.ua/2016/09/14/kiyanin-stvoriv-kartu-mists-stolitsi-de-mozhna-skushtuvati-falafel/">Киянин створив карту місць столиці, де можна скуштувати фалафель</a>	
-	<br/><br/><br/>
-	=<br/>
-	Онлайн сервис позволяющий строить <a href="mindflow">потоковые диаграммы мышления по Эдварду деБоно</a>.
-	<br/><br/><br/>
-	Игра "<a href="alpattern">Алфавит-паттерн</a>".
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8; /* Очень светлый серый фон */
+            padding: 20px; /* Отступ от краев окна */
+        }
 
-	<br/><br/><br/>
-	Игра "<a href="reldb">Шкалы разных видов отношений</a>".
-	
-	<h1>Про автора</h1>
-	
-		<a href="https://danvoronov.com/">Дан Воронов - основной сайт</a>
-	
-	</body>
+        .container {
+            max-width: 800px; /* Максимальная ширина контента */
+            margin: 40px auto; /* Центрирование по горизонтали и отступы сверху/снизу */
+            background-color: #fff; /* Белый фон для контента */
+            padding: 40px; /* Внутренние отступы */
+            border-radius: 8px; /* Скругленные углы */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Легкая тень для объема */
+        }
+
+        /* Заголовки */
+        h1 {
+            font-size: 2.2em;
+            color: #2c3e50; /* Темно-синий/серый для заголовков */
+            margin-bottom: 30px;
+            text-align: center; /* Центрирование заголовков */
+            font-weight: 600; /* Более жирный шрифт для заголовков */
+        }
+
+        /* Отступы для секций программ */
+        .program-section {
+            margin-bottom: 25px;
+        }
+
+        .program-section p {
+            margin-bottom: 10px; /* Отступ между отдельными строками/параграфами */
+        }
+
+        .program-section p:last-child {
+            margin-bottom: 0; /* Убираем лишний отступ у последнего элемента в секции */
+        }
+
+        /* Ссылки */
+        a {
+            color: #3498db; /* Стандартный синий цвет ссылок */
+            text-decoration: none; /* Убираем подчеркивание по умолчанию */
+            transition: color 0.3s ease, text-decoration 0.3s ease; /* Плавный переход при наведении */
+        }
+
+        a:hover {
+            color: #2980b9; /* Более темный синий при наведении */
+            text-decoration: underline; /* Появляется подчеркивание при наведении */
+        }
+
+        /* Стиль для дополнительного текста (например, "Article on Hmarochos:") */
+        .secondary-text {
+            font-size: 0.9em;
+            color: #666;
+            padding-left: 20px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* Разделитель */
+        .divider {
+            border-top: 1px solid #eee; /* Тонкая светлая линия */
+            margin: 30px 0; /* Отступы вокруг разделителя */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dan Voronov - Mini Apps</h1>
+
+        <div class="program-section">
+            <p><a href="kyivstrikes">Map of Strikes in Kyiv</a> (2025 year)</p>
+        </div>
+
+        <div class="program-section">
+            <p><a href="kievfalafel">Falafel Map in Kyiv</a> (active in 2016-2017, no longer updated)</p>
+            <p class="secondary-text">Article on Hmarochos (ua): <a href="https://hmarochos.kiev.ua/2016/09/14/kiyanin-stvoriv-kartu-mists-stolitsi-de-mozhna-skushtuvati-falafel/">Киянин створив карту місць столиці, де можна скуштувати фалафель</a>.</p>
+        </div>
+
+        <div class="divider"></div> 
+
+        <div class="program-section">
+            <p>Online service for building <a href="mindflow">mind flow diagrams by Edward de Bono</a></p>
+                        <br/>
+            <p>Calculator "<a href="reldb">Scales of Different Types of Relationships</a>".</p>
+            <p class="secondary-text">Article on Medium (ru): <a href="https://medium.com/@dan.voronov/rel-compare-f4b4b6a91e26">Сравнение типов отношений</a>.</p>
+            <br/>
+            <p>Game "<a href="alpattern">Alphabet-Pattern</a>" (not working anymore)</p>
+        </div>
+
+        <div class="divider"></div> 
+      
+        <div class="program-section">
+            <p><a href="https://danvoronov.com/">Dan Voronov - Main Website</a></p>
+        </div>
+    </div>
+</body>
 </html>
