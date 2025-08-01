@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Alphabet Pattern Game</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="js/jquery-1.6.2.min.js"></script>
+	<script src="js/jquery-ui-1.8.16.custom.min.js"></script>
+	<script src="words.js"></script>
+	<script src="consts.js"></script>
+	<script src="alpcore.js"></script>
+	<script src="alpattern-func.js"></script>
+	<script src="alpattern.js"></script>
+	
+	<link type="text/css" href="js/css/aristo/Aristo.css" rel="stylesheet" />	
+	<link type="text/css" href="alpattern.css" rel="stylesheet" />	
+	</head>
+<body>
+<div id="pokazovcont"><div id="pauseind" class="pausefon"><b id=tiker>56</b> more</div>
+</div>
+<div id="startcount"></div>
+<div id="ingametime">00:00</div>
+<div id="maincont"></div>
+<div id="botpanel" class="gradround">
+	<div id="panelhead" class="gradround">	
+		<div id="indicatori">
+			<span id="levelind">Level: <b id="level">0</b></span>
+			&nbsp; <span id=patternhide>Pattern: &nbsp;&nbsp; <span style="font-size: 10px;">more less</span></span>
+			<div id="sliderpattern"></div>
+		</div>
+		<div id="begendbut"><a id="slide" class="gamebutton">Play</a></div>
+		<div id="indicatori2"><div id="slideri"><div id="sliderspeed"></div></div><span id="speedind">Speed: <b id="speed">4</b></span></div> 						
+	</div>
+	<div id="panelcont" style="clear:both;">		
+		<div id="alplocl" style="float: left;"><h1 style="margin: 6px;">Alphabet</h1>
+		<p style="margin: 6px; text-align: center ">NLP New Code</p>
+		<p style="margin: 10px; margin-top: 26px;">A game-process that continuously improves your brain's awareness and abilities</p>
+		</div>
+		<div id="alplocr" style="float: left;">
+		<div id="exptimecont">experience <a id="exptime" title='Total game time. Saved in browser.'>1:60:33</a></div>
+		<div id="tabs-container" class="tabcont">
+		<div id="showpravila">Rules</div>
+		<div id="alptabs">
+			<ul>
+				<li><a href="#tabs-0" id="tablink0">0</a></li>
+				<li><a href="#tabs-1" id="tablink1">1</a></li>
+				<li><a href="#tabs-2" id="tablink2">2</a></li>
+				<li><a href="#tabs-3" id="tablink3">3</a></li>
+				<li><a href="#tabs-4" id="tablink4">4</a></li>
+				<li><a href="#tabs-5" id="tablink5">5</a></li>
+				<li><a href="#tabs-6" id="tablink6">6</a></li>
+				<li><a href="#tabs-7" id="tablink7">7</a></li>
+				<li><a href="#tabs-8" id="tablink8">8</a></li>
+				<li><a href="#tabs-9" id="tablink9">9</a></li>
+			</ul>
+	<div id="tabs-0" class="tabcont">	
+		<div style="margin: 0; font-size: 40px;">Classic</div>	
+		<p>Creates an alphabet table on screen similar to print format, with hand letters displayed under each letter. Goes through all alphabet letters sequentially.</p>		
+	</div>
+	<div id="tabs-1" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Electronic</div>
+		<p>The "electronic" version of the Alphabet is optimized for computers: instead of displaying an alphabet table, random letters appear in random places on screen.</p>
+	</div>
+	<div id="tabs-2" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Flowing</div>
+		<p>Adds smoothness to the random letter version by moving letters. Now your gaze should not just search for letters on screen, but glide with them and catch them in motion.</p>
+	</div>
+	<div id="tabs-3" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Rotating</div>
+		<p>Now in addition to movement, the letter showing right-left-both can also be positioned at the top of the pair.</p>
+	</div>
+	<div id="tabs-4" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Positional</div>
+		<p>The position of one letter on screen is fixed. The task is to find this letter.</p>
+	</div>
+	<div id="tabs-5" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Colored</div>
+		<p>There are warm and cold colors. There are vowels and consonants. All vowels and consonants are displayed in their own shade. Except for one letter, which is displayed in the opposite shade. The task is to find this letter.</p>
+	</div>
+	<div id="tabs-6" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Sequences</div>	
+		<p>Find a fixed sequence of letters from</p>
+		<div id="radioblock6">
+			<input type="radio" id="radio4" value="4" name="radioblock6"  checked="checked" />
+			<label for="radio4">Four</label>
+			<input type="radio" id="radio3" value="3" name="radioblock6" />
+			<label for="radio3">Three</label>
+			<input type="radio" id="radio2" value="2" name="radioblock6" />
+			<label for="radio2">Two</label>	
+		</div>	
+	</div>
+	<div id="tabs-7" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Anagrams</div>
+		<p>Find a sequence that is rearranged letters of some word from</p>
+		<div id="radioblock7">
+			<input type="radio" id="radio74" value="4" name="radioblock7" />
+			<label for="radio74">Four</label>
+			<input type="radio" id="radio73" value="3" name="radioblock7" checked="checked" /><label for="radio73">Three</label>
+		</div>			
+	</div>
+	<div id="tabs-8" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Spaced</div>
+		<p>Three letters, but there can be other letters between each one.</p>
+		<div id="radioblock8">
+			<input type="radio" id="radio81" value="1" name="radioblock8"  checked="checked" />
+			<label for="radio81">One</label>
+			<input type="radio" id="radio82" value="2" name="radioblock8" />
+			<label for="radio82">Two</label>
+			<input type="radio" id="radio80" value="0" name="radioblock8" />
+			<label for="radio80">One or two</label>				
+		</div>			
+	</div>
+	<div id="tabs-9" class="tabcont">
+		<div style="margin: 0; font-size: 40px;">Pattern</div>	
+		<p>fix letters number</p>
+		<div id="patternt9">
+			<input type="checkbox" id="check8" /><label for="check8">1</label>
+			<input type="checkbox" id="check7" /><label for="check7">2</label>
+			<input type="checkbox" id="check6" /><label for="check6">3</label>
+			<input type="checkbox" id="check5" /><label for="check5">4</label>
+			<input type="checkbox" id="check4" /><label for="check4">5</label>
+			<input type="checkbox" id="check3" /><label for="check3">6</label>
+			<input type="checkbox" id="check2" /><label for="check2">7</label>
+			<input type="checkbox" id="check1" /><label for="check1">8</label>
+		</div>
+	</div>
+</div>
+</div>
+
+		</div>		
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div id="credits">ALPHABET<br/>PATTERN<div style="font-size: .6em">2012, Dan</div></div>
+		
+<div id="dialog-modal-cnt" title="PAUSE">
+	<div style="float: left; width: 120px;">Shows until auto-pause: <input type='text' id='cntalp' size="4" onClick='this.select();' style="width: 96px;" /><div id="3minin" onClick='setwtbytm(3);' class="minbut">⬆ 3 min</div><div id="5minin"  onClick='setwtbytm(5);'  class="minbut">⬆ 5 min</div><div id="10minin" class="minbut" onClick='setwtbytm(10);' >⬆ 10 min</div><div id="15minin"  onClick='setwtbytm(15);'  class="minbut">⬆ 15 min</div></div>
+	<div style="float: left; width: 180px;"><center>At speed</center><div id=timefrom></div></div>
+	<div style="float: left; width: 160px;" id="pzotvet"></div>
+	<div style="clear:both;"></div>
+</div>
+<div id="dialog-pravila" title="Alphabet Game Basics">
+	<div id="tabs-container2"> 		
+		<div id="alfopistabs">
+			<ul>
+				<li><a href="#tabs-cel">Goal</a></li>
+				<li><a href="#tabs-prav">Rules</a></li>
+				<li><a href="#tabs-mis">Important: about mistakes</a></li>
+				<li><a href="#tabs-more">More information</a></li>
+			</ul>
+			<div id="tabs-cel">
+				<p style="margin: 0; font-size: 24px;">Train to achieve a specific <b>(HPS) state of process coordination</b> of your body, in which you feel energy and flow. This is the state in which you use your full potential.</p>
+				 <p style="margin: 0; margin-top: 16px; font-size: 20px;">The feeling of lightness "it carries me" - just before a letter appears, you already know what it will be. Muscle tone, active relaxation, "dance-like" grace and smooth movements. Enthusiasm, inspiration, positive attitude towards mistakes, etc.</p>
+			</div>
+			<div id="tabs-prav">
+				   <p style="margin: 0; font-size: 22px;">Two letters appear on screen in sequence. For each pair <b>simultaneously</b>:</p>
+				 <ul style="margin: 0; font-size: 22px;"><li>read the <b>upper</b> letter aloud;</li>
+				   <li>guided by the <b>lower</b> letter, raise your arm, bending at the elbow at a 90-degree angle: <br/>  <b>R</b>ight, <b>L</b>eft or <b>B</b>oth.</li>
+				   </ul>
+				   <p style="margin: 0; margin-top: 16px; font-size: 22px;">Arms should be raised to a <b>comfortable</b> height with minimal muscle tension. For convenience, turn on background rhythmic music.</p>
+				  <p style="margin: 0; margin-top: 20px; font-size: 18px;">You can use the <b>opposite</b> leg along with your arm or other paired organs. (B = squat, jump)</p>			  
+			</div>
+			<div id="tabs-mis">
+				   <p style="margin: 0; font-size: 22px;">In case of a mistake, just continue playing! as if nothing happened.</p>
+				   <p style="margin: 0; margin-top: 16px; font-size: 22px;">If mistakes become more frequent, it means you've made the task too difficult - <b>simplify</b> it.</p>		   
+				   <p style="margin: 0; margin-top: 16px; font-size: 22px;">Choose a speed at which you can currently play without mistakes. From this rhythm you can accelerate very smoothly and gradually.</p>
+				   <p style="margin: 0; margin-top: 20px;  font-size: 22px;">In the HPS state, mistakes evoke a positive attitude, like "wow, what a mistake :)".</p>				   
+			</div>
+			<div id="tabs-more">
+				<p style="margin: 0; font-size: 22px;">The classic version of the game was created by John Grinder as part of NLP New Coding.</p>		
+			
+			
+				<p style="margin: 0; font-size: 24px;">Technique description <a href="http://www.newcode.ru/doku.php/alphabet-game" target="_blank" style="color: #1E458F;">on the Moscow New Code laboratory website</a>, <a
+				href="http://nlping.ru/?id=D07A644F-F45C6-85EAD3D8" target="_blank" style="color: #1E458F;">on nlping.ru</a>.<br/><br/>
+				Brain performance indicators on tomograph: <a href="http://www.newcode.ru/media/NewCode.Research.2006.pdf" target="_blank" style="color: #1E458F;">research (pdf)</a></p>
+			</div>			
+			
+		</div> 
+	</div>
+</div>
+</body></html>
