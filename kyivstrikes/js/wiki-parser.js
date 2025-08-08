@@ -695,7 +695,12 @@ export class WikiParser {
     }
 
     extractLocation(text) {
-        return this.removeWikiMarkup(text).trim();
+        if (!text) return '';
+        // First, remove all <ref> tags completely, as they can contain complex templates.
+        let cleanedText = text.replace(/<ref[^>]*>[\s\S]*?<\/ref>/gi, '');
+        cleanedText = cleanedText.replace(/<ref[^\/>]*\/>/gi, '');
+
+        return this.removeWikiMarkup(cleanedText).trim();
     }
 
     extractTime(text) {
@@ -727,16 +732,25 @@ export class WikiParser {
 
     removeWikiMarkup(text) {
         if (!text) return '';
-        return text
-            .replace(/\[\[([^\]|]+)(\|[^\]]+)?\]\]/g, '$1')
-            .replace(/\{\{[^}]+\}\}/g, '')
-            .replace(/'''([^']+)'''/g, '$1')
-            .replace(/''([^']+)''/g, '$1')
-            .replace(/\[[^\]]*\]/g, '')
-            .replace(/<[^>]*>/g, '')
-            .replace(/\}\}/g, '')
-            .replace(/\{\{/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
+        let result = text;
+
+        // [[Page|Display]] -> Display, [[Page]] -> Page
+        result = result.replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g, '$1');
+
+        // Remove templates like {{template|...}} or {{template}}
+        result = result.replace(/\{\{[\s\S]*?\}\}/g, '');
+
+        // Clean up common wiki formatting
+        result = result.replace(/'''([^']+)'''/g, '$1'); // Bold
+        result = result.replace(/''([^']+)''/g, '$1');   // Italic
+
+        // Remove any remaining HTML tags like <br>, <small>, etc.
+        result = result.replace(/<[^>]+>/g, '');
+
+        // Clean up any remaining external links like [http://...]
+        result = result.replace(/\[[^\]]*\]/g, '');
+
+        // Normalize whitespace
+        return result.replace(/\s+/g, ' ').trim();
     }
-} 
+}

@@ -158,11 +158,11 @@ export class MapManager {
     calculateMarkerSize(casualties, wounded) {
         const baseSize = 14;
         const minSize = 10;
-        const maxSize = 30;
+        const maxSize = 35;
         
         const casualtiesNum = parseInt(casualties) || 0;
         const woundedNum = parseInt(wounded) || 0;
-        const total = casualtiesNum + woundedNum;
+        const total = casualtiesNum*1.5 + woundedNum;
         
         if (total === 0) {
             return baseSize;
