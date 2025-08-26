@@ -22,6 +22,9 @@ class KyivAttacksMap {
             this.mapManager.getYearColor,
             this.onFilterChange.bind(this)
         );
+
+        // Expose date range for mobile date pickers (read-only)
+        window.__getDateRange = () => ({...this.dateRange});
         this.mapManager.setUIManager(this.uiManager);
 
         this.init(savedSettings);
@@ -39,6 +42,9 @@ class KyivAttacksMap {
             this.uiManager.init(this.dateRange, savedSettings.filters);
             
             this.filterAndDisplayData();
+
+            // Notify mobile UI that date range is ready (after data loaded)
+            window.dispatchEvent(new CustomEvent('date-range-ready', { detail: { dateRange: this.dateRange } }));
 
         } catch (error) {
             this.uiManager.showError('Помилка: ' + error.message);
@@ -68,6 +74,11 @@ class KyivAttacksMap {
         this.dateRange.end = newEnd;
         this.filterAndDisplayData();
         this.saveCurrentState();
+    }
+
+    // Bridge for mobile date pickers
+    onMobileDateChange(start, end) {
+        this.onDateRangeChange(start, end);
     }
 
     onFilterChange(newFilters) {
@@ -167,5 +178,12 @@ class KyivAttacksMap {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new KyivAttacksMap();
+    const app = new KyivAttacksMap();
+    // Listen to mobile date change events and forward to app
+    window.addEventListener('mobile-date-change', (e) => {
+        const { start, end } = e.detail || {};
+        if (start && end) {
+            app.onMobileDateChange(start, end);
+        }
+    });
 });

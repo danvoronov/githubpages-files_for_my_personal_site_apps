@@ -344,6 +344,12 @@ export class UIManager {
         if (counterElement) {
             counterElement.textContent = `Діапазон дат`;
         }
+
+        // Mobile filters summary (bottom bar in Filters card)
+        const mobileSummary = document.getElementById('mobileFiltersSummary');
+        if (mobileSummary) {
+            mobileSummary.textContent = `Відібрано на мапі: ${visibleWithCoords} з ${totalWithCoords}. Дата: ${this.formatDate(dateRange.start)} — ${this.formatDate(dateRange.end)}`;
+        }
     }
 
     updateLegend(filteredData, allData) {
@@ -513,13 +519,17 @@ export class UIManager {
     }
 
     initImagePreview() {
+        const isTouch = () => window.matchMedia('(max-width: 767px)').matches;
+
         this.detailsPanel.addEventListener('mouseover', (event) => {
+            if (isTouch()) return; // disable hover preview on mobile
             if (event.target.classList.contains('popup-image')) {
                 this.showImagePreview(event.target.src);
             }
         });
 
         this.detailsPanel.addEventListener('mouseout', (event) => {
+            if (isTouch()) return; // disable hover preview on mobile
             if (event.target.classList.contains('popup-image')) {
                 this.hideImagePreview();
             }

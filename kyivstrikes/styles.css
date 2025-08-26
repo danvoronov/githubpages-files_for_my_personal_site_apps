@@ -617,6 +617,12 @@ body {
     text-decoration: none;
 }
 
+/* Hide mobile-only UI on desktop by default */
+.mobile-nav,
+.mobile-topbar,
+#mobileDatePickers,
+#mobileFiltersSummary { display: none; }
+
 /* мітки з датами по краях */
 .date-label {
     font-size: 11px;
