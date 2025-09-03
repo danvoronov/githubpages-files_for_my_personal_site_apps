@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Обстріли Києва - Інтерактивна карта</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
     <link rel="stylesheet" href="styles.css">
     <!-- mobile-only additions -->
     <link rel="stylesheet" href="styles.mobile.css?v=2">
@@ -101,8 +102,6 @@
         <img src="img/reset_zoom.png" alt="Скинути масштаб" width="20" height="20">
     </div>
 
-    <!-- Mobile location button (visible only on mobile Map card) -->
-    <button class="mobile-location-btn" id="mobileLocationBtn" title="Моя позиція">📍</button>
 
     <div class="date-filter">
         <div class="filter-container">
@@ -132,6 +131,7 @@
     <!-- Leaflet JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js"></script>
     <script type="module" src="app.js"></script>
   <!-- Mobile UI module: only adds mobile behavior; desktop unaffected -->
   <script type="module" src="js/mobile-ui.js"></script>

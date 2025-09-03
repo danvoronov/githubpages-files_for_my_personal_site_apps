@@ -154,23 +154,12 @@
   body.mobile-enabled.mobile-card-filters #mobileDatePickers { display: block !important; }
   body.mobile-enabled.mobile-card-filters .date-filter { display: none !important; }
 
-  /* Mobile location button */
-  .mobile-location-btn {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    background: rgba(255,255,255,0.95);
-    border: none;
-    border-radius: 50%;
-    font-size: 20px;
-    color: #007bff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1500;
-    display: none;
+  /* Show Leaflet location control only on mobile map card and position it above bottom nav */
+  body.mobile-enabled.mobile-card-map .leaflet-control-locate { 
+    display: block !important; 
+    margin-bottom: 70px !important; /* above bottom nav (56px) + extra margin */
   }
-  body.mobile-enabled.mobile-card-map .mobile-location-btn { display: block !important; }
+  body.mobile-enabled:not(.mobile-card-map) .leaflet-control-locate { display: none !important; }
   body.mobile-enabled.mobile-card-filters #map,
   body.mobile-enabled.mobile-card-filters .date-filter,
   body.mobile-enabled.mobile-card-filters .details-panel { display: none !important; }
