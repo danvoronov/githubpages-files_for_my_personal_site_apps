@@ -39,6 +39,14 @@ export class MapManager {
             });
         }
 
+        // Mobile location button
+        const locationBtn = document.getElementById('mobileLocationBtn');
+        if (locationBtn) {
+            locationBtn.addEventListener('click', () => {
+                this.locateUser();
+            });
+        }
+
         this.map.on('click', () => {
             if (this.uiManager) {
                 this.uiManager.clearDetails();
@@ -180,5 +188,78 @@ export class MapManager {
         const finalSize = Math.max(minSize, Math.min(maxSize, Math.round(size)));
         
         return finalSize;
+    }
+
+    locateUser() {
+        if (!navigator.geolocation) {
+            alert('Геолокація недоступна в цьому браузері');
+            return;
+        }
+
+        const locationBtn = document.getElementById('mobileLocationBtn');
+        if (locationBtn) {
+            locationBtn.style.opacity = '0.6'; // visual feedback
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const accuracy = position.coords.accuracy;
+                
+                // Center map on user location with appropriate zoom
+                const zoom = accuracy < 100 ? 16 : accuracy < 500 ? 14 : 12;
+                this.map.setView([latitude, longitude], zoom);
+                
+                // Add user location marker if within reasonable bounds (Ukraine area)
+                if (latitude > 44 && latitude < 53 && longitude > 22 && longitude < 41) {
+                    // Remove existing user marker if any
+                    if (this.userLocationMarker) {
+                        this.map.removeLayer(this.userLocationMarker);
+                    }
+                    
+                    // Create custom user location icon
+                    const userIcon = L.divIcon({
+                        className: 'user-location-marker',
+                        html: '<div style="background: #007bff; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 6px rgba(0,123,255,0.6);"></div>',
+                        iconSize: [18, 18],
+                        iconAnchor: [9, 9]
+                    });
+                    
+                    this.userLocationMarker = L.marker([latitude, longitude], {
+                        icon: userIcon
+                    }).addTo(this.map);
+                    
+                    this.userLocationMarker.bindTooltip('Ваша позиція', { 
+                        direction: 'top', 
+                        offset: [0, -10] 
+                    });
+                }
+                
+                if (locationBtn) {
+                    locationBtn.style.opacity = '1';
+                }
+            },
+            (error) => {
+                console.error('Geolocation error:', error);
+                let message = 'Не вдалося визначити позицію';
+                if (error.code === error.PERMISSION_DENIED) {
+                    message = 'Доступ до геолокації заборонено';
+                } else if (error.code === error.POSITION_UNAVAILABLE) {
+                    message = 'Позиція недоступна';
+                } else if (error.code === error.TIMEOUT) {
+                    message = 'Час очікування геолокації вичерпано';
+                }
+                alert(message);
+                
+                if (locationBtn) {
+                    locationBtn.style.opacity = '1';
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minutes
+            }
+        );
     }
 }

@@ -621,7 +621,8 @@ body {
 .mobile-nav,
 .mobile-topbar,
 #mobileDatePickers,
-#mobileFiltersSummary { display: none; }
+#mobileFiltersSummary,
+.mobile-location-btn { display: none; }
 
 /* мітки з датами по краях */
 .date-label {
