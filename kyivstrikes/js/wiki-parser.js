@@ -707,10 +707,22 @@ export class WikiParser {
         if (!text) return null;
         const cleanedText = text.replace(/&nbsp;/g, ' ');
 
-        // Match "12:49—16" or "12:49—16:03"
+        // Match "12:49—16" or "12:49—16:03" (direct time ranges)
         const rangeMatch = cleanedText.match(/(\d{1,2}:\d{2})\s*(?:—|–|-)\s*(\d{1,2}(?::\d{2})?)/);
         if (rangeMatch) {
             return `${rangeMatch[1]}—${rangeMatch[2]}`; // Standardize dash
+        }
+
+        // Match time ranges with DTS templates like "{{dts|2025|09|06}} 21:47 – {{dts|2025|09|07}} 05:19"
+        const dtsRangeMatch = cleanedText.match(/\{\{dts\|\d{4}\|\d{1,2}\|\d{1,2}\}\}\s+(\d{1,2}:\d{2})\s*(?:—|–|-)\s*\{\{dts\|\d{4}\|\d{1,2}\|\d{1,2}\}\}\s+(\d{1,2}:\d{2})/);
+        if (dtsRangeMatch) {
+            return `${dtsRangeMatch[1]}—${dtsRangeMatch[2]}`;
+        }
+
+        // Match time ranges separated by dates like "6 вересня 2025 21:47  7 вересня 2025 05:19"
+        const dateTimeRangeMatch = cleanedText.match(/(\d{1,2}:\d{2})\s+\d+\s+(?:січня|лютого|березня|квітня|травня|червня|липня|серпня|вересня|жовтня|листопада|грудня)\s+\d{4}\s+(\d{1,2}:\d{2})/);
+        if (dateTimeRangeMatch) {
+            return `${dateTimeRangeMatch[1]}—${dateTimeRangeMatch[2]}`;
         }
 
         // Match single time, possibly with tilde
