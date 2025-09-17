@@ -148,7 +148,7 @@ class KyivAttacksMap {
             return true;
         });
 
-        this.mapManager.displayMarkers(this.filteredData);
+        this.mapManager.displayMarkers(this.filteredData, this.filters.autoZoom);
         this.uiManager.updatePointsCounter(this.filteredData, this.allData, this.dateRange, this.parser.pointsWithoutCoords);
         this.uiManager.updateLegend(this.filteredData, this.allData);
     }

@@ -36,12 +36,14 @@ export class UIManager {
         document.querySelector(`#timeOfDayFilter button[value="${initialFilters.timeOfDay}"]`).classList.add('active');
         document.getElementById('killedFilter').value = initialFilters.killed;
         document.getElementById('woundedFilter').value = initialFilters.wounded;
+        document.getElementById('autoZoomFilter').checked = initialFilters.autoZoom !== false; // Default to true if undefined
 
         // Add event listeners
         document.getElementById('weaponFilter').addEventListener('click', (e) => this.handleButtonGroupClick(e));
         document.getElementById('timeOfDayFilter').addEventListener('click', (e) => this.handleButtonGroupClick(e));
         document.getElementById('killedFilter').addEventListener('input', () => this.handleFilterChange());
         document.getElementById('woundedFilter').addEventListener('input', () => this.handleFilterChange());
+        document.getElementById('autoZoomFilter').addEventListener('change', () => this.handleFilterChange());
 
         document.querySelectorAll('.reset-btn').forEach(button => {
             button.addEventListener('click', (e) => this.handleResetClick(e));
@@ -63,7 +65,8 @@ export class UIManager {
             weaponType: document.querySelector('#weaponFilter .active').value,
             timeOfDay: document.querySelector('#timeOfDayFilter .active').value,
             killed: parseInt(document.getElementById('killedFilter').value, 10) || 0,
-            wounded: parseInt(document.getElementById('woundedFilter').value, 10) || 0
+            wounded: parseInt(document.getElementById('woundedFilter').value, 10) || 0,
+            autoZoom: document.getElementById('autoZoomFilter').checked
         };
         this.onFilterChange(filters);
     }

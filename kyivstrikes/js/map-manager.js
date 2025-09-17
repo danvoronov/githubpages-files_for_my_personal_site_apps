@@ -85,7 +85,7 @@ export class MapManager {
         }
     }
 
-    displayMarkers(data) {
+    displayMarkers(data, autoZoom = true) {
         this.markers.forEach(marker => this.map.removeLayer(marker));
         this.markers = [];
 
@@ -118,7 +118,8 @@ export class MapManager {
             this.markers.push(marker);
         });
 
-        if (this.markers.length > 0) {
+        // Auto-zoom to fit all markers only if autoZoom is enabled
+        if (autoZoom && this.markers.length > 0) {
             const group = new L.featureGroup(this.markers);
             this.map.fitBounds(group.getBounds().pad(0.1));
         }

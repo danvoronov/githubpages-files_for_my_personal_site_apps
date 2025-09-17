@@ -573,6 +573,36 @@ body {
     background: #e0e0e0;
 }
 
+/* Auto-zoom checkbox styling */
+.auto-zoom-group {
+    margin: 2px -10px 0 -10px;
+    padding: 12px 10px 0 10px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+}
+
+#autoZoomFilter {
+    width: 26px;
+}
+
+.auto-zoom-label {
+    display: flex;
+    
+    gap: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    user-select: none;
+}
+
+.auto-zoom-label input[type="checkbox"] {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transform: scale(0.9);
+}
+
 .mobile-message {
     display: none;
     position: fixed;

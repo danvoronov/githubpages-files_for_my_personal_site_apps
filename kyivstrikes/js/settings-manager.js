@@ -19,7 +19,8 @@ export class SettingsManager {
                 weaponType: 'all',
                 timeOfDay: 'all',
                 killed: 0,
-                wounded: 0
+                wounded: 0,
+                autoZoom: true // Default to enabled
             },
             map: {
                 zoom: 11,
