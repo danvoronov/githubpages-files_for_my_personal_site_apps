@@ -97,10 +97,7 @@ class KyivAttacksMap {
         if (dates.length === 0) return;
         
         this.dateRange.min = dates[0];
-        const lastDataDate = dates[dates.length - 1];
-        const today = new Date();
-
-        this.dateRange.max = today > lastDataDate ? today : lastDataDate;
+        this.dateRange.max = dates[dates.length - 1];
 
         if (savedDateRange && savedDateRange.start && savedDateRange.end) {
             this.dateRange.start = new Date(savedDateRange.start);
