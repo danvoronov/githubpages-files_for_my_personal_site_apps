@@ -186,6 +186,7 @@ export class WikiParser {
         const columns = [];
         const columnKeys = ['number', 'date', 'location', 'coords', 'weapon', 'killed', 'wounded', 'damage', 'image'];
         let rawIdx = 0;
+        let colspanSkip = 0;
 
         for (const key of columnKeys) {
             if (this.rowspanState[key] && this.rowspanState[key].remaining > 0) {
@@ -201,20 +202,34 @@ export class WikiParser {
                 continue;
             }
 
+            if (colspanSkip > 0) {
+                columns.push('');
+                colspanSkip--;
+                continue;
+            }
+
             if (rawIdx >= raw_columns.length) {
                 columns.push('');
                 continue;
             }
 
             const cellContent = raw_columns[rawIdx];
-            const rowspanMatch = cellContent.match(/rowspan\s*=\s*(\d+)\s*\|\s*(.*)/i);
+            const rowspanMatch = cellContent.match(/rowspan\s*=\s*"?(\d+)"?/i);
+            const colspanMatch = cellContent.match(/colspan\s*=\s*"?(\d+)"?/i);
+            let cellValue = cellContent;
+            if (rowspanMatch || colspanMatch) {
+                const pipeIndex = cellContent.indexOf('|');
+                if (pipeIndex !== -1) {
+                    cellValue = cellContent.slice(pipeIndex + 1).trim();
+                }
+            }
+            const colSpan = colspanMatch ? parseInt(colspanMatch[1], 10) : 1;
 
             if (rowspanMatch) {
-                const span = parseInt(rowspanMatch[1]);
-                const value = rowspanMatch[2].trim();
+                const span = parseInt(rowspanMatch[1], 10);
+                const cleanedValue = key === 'image' ? cellValue : this.extractDescription(cellValue);
 
                 if (span > 1) {
-                    const cleanedValue = this.extractDescription(value);
                     this.rowspanState[key] = {
                         remaining: span - 1,
                         value: cleanedValue,
@@ -233,7 +248,7 @@ export class WikiParser {
                         const selfValue = perRowBase + (remainder > 0 ? 1 : 0);
                         if (remainder > 0) remainder--;
                         columns.push(selfValue.toString());
-                        
+
                         const remainingValues = [];
                         for(let i = 0; i < span - 1; i++) {
                             const val = perRowBase + (remainder > 0 ? 1 : 0);
@@ -247,7 +262,16 @@ export class WikiParser {
                         columns.push(cleanedValue);
                     }
                 } else {
-                    columns.push(this.extractDescription(cellContent));
+                    columns.push(cleanedValue);
+                }
+                if (colSpan > 1) {
+                    colspanSkip = colSpan - 1;
+                }
+            } else if (colspanMatch) {
+                const cleanedValue = key === 'image' ? cellValue : this.extractDescription(cellValue);
+                columns.push(cleanedValue);
+                if (colSpan > 1) {
+                    colspanSkip = colSpan - 1;
                 }
             } else {
                 columns.push(cellContent);
@@ -654,19 +678,40 @@ export class WikiParser {
 
     extractImages(text) {
         if (!text) return [];
-    
+
         const urls = [];
+
+        const pushImageName = (rawName) => {
+            if (!rawName) return;
+            let name = rawName.trim();
+            name = name.replace(/^(?:Файл|File):/i, '').trim();
+            if (!name) return;
+            const normalizedName = name.replace(/ /g, '_');
+            const encodedName = encodeURIComponent(normalizedName);
+            urls.push(`https://commons.wikimedia.org/wiki/Special:FilePath/${encodedName}`);
+        };
 
         // 1. Standard File links [[File:...]] or [[Файл:...]]
         const fileMatches = [...text.matchAll(/\[\[(?:Файл|File):([^|\]]+)/gi)];
         fileMatches.forEach(match => {
-            const imageName = match[1].trim();
-            const encodedName = imageName.replace(/ /g, '_');
-            const hash = this.getMd5Path(encodedName);
-            urls.push(`https://upload.wikimedia.org/wikipedia/commons/${hash}/${encodedName}`);
+            pushImageName(match[1]);
         });
 
-        // 2. Photomontage template handling
+        // 2. CSS image crop template (uses Image= without [[File:...]])
+        if (/\{\{\s*CSS\s+image\s+crop/i.test(text)) {
+            const cssImageMatches = [...text.matchAll(/\|\s*Image\s*=\s*([^|}]+)/gi)];
+            cssImageMatches.forEach(match => {
+                pushImageName(match[1]);
+            });
+        }
+
+        // 3. Bare File: references (e.g., inside galleries/templates)
+        const bareFileMatches = [...text.matchAll(/(?:^|[\s|])(?:Файл|File):([^\|\]\n]+\.(?:jpg|jpeg|png|webp|gif|tif|tiff))/gi)];
+        bareFileMatches.forEach(match => {
+            pushImageName(match[1]);
+        });
+
+        // 4. Photomontage template handling
         if (/\{\{\s*Photomontage/i.test(text)) {
             // Extract inside of the template braces to avoid trailing text
             const pmRegex = /\{\{\s*Photomontage([\s\S]*?)\}\}/i;
@@ -681,16 +726,14 @@ export class WikiParser {
                         // Remove possible File: prefix
                         name = name.replace(/^(?:Файл|File):/i, '').trim();
                         if (name) {
-                            const encodedName = name.replace(/ /g, '_');
-                            const hash = this.getMd5Path(encodedName);
-                            urls.push(`https://upload.wikimedia.org/wikipedia/commons/${hash}/${encodedName}`);
+                            pushImageName(name);
                         }
                     }
                 });
             }
         }
 
-        // 3. Deduplicate
+        // 5. Deduplicate
         return [...new Set(urls)];
     }
 
@@ -732,14 +775,6 @@ export class WikiParser {
         }
 
         return null;
-    }
-
-    // Note: This requires an MD5 library. For simplicity, this is a placeholder.
-    // In a real app, you'd use a library like crypto-js.
-    // This is a simplified stub. A proper implementation is needed.
-    getMd5Path(text) {
-        const hash = CryptoJS.MD5(text).toString(CryptoJS.enc.Hex);
-        return `${hash.substring(0, 1)}/${hash.substring(0, 2)}`;
     }
 
     removeWikiMarkup(text) {

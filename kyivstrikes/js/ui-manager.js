@@ -449,7 +449,11 @@ export class UIManager {
 
             // Reveal the zoom icon only after the corresponding image has fully loaded
             this.detailsPanel.querySelectorAll('.popup-image').forEach(img => {
-                const revealIcon = () => img.classList.add('loaded');
+                const revealIcon = () => {
+                    if (img.naturalWidth > 0) {
+                        img.classList.add('loaded');
+                    }
+                };
                 if (img.complete) {
                     // The image was pulled from cache and has already completed loading
                     revealIcon();
