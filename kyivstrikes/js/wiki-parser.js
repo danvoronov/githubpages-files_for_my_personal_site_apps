@@ -3,18 +3,60 @@ export class WikiParser {
         this.allData = [];
         this.rowspanState = {};
         this.pointsWithoutCoords = 0;
+        this.killedTotalsByYear = {};
     }
 
     parse(content) {
-        
         this.allData = [];
         this.pointsWithoutCoords = 0;
-        
-        const years = ['2022', '2023', '2024', '2025', '2026'];
-        
-        years.forEach(year => {
-            this.parseYearSection(content, year);
-        });
+        this.killedTotalsByYear = {};
+
+        const years = this.getYearsToParse();
+        const primaryContent = this.getPrimaryContentForTotals(content);
+        this.killedTotalsByYear = this.extractKilledTotalsByYear(primaryContent);
+
+        if (Array.isArray(content)) {
+            const yearPages = new Map();
+            const commonContents = [];
+
+            content.forEach(page => {
+                const pageContent = page?.content;
+                if (typeof pageContent !== 'string' || pageContent.length === 0) return;
+
+                const title = String(page?.title || '');
+                const yearMatch = title.match(/\((20\d{2})\)\s*$/);
+
+                if (yearMatch && years.includes(yearMatch[1])) {
+                    yearPages.set(yearMatch[1], pageContent);
+                } else {
+                    commonContents.push(pageContent);
+                }
+            });
+
+            const commonContent = commonContents.join('\n\n');
+
+            years.forEach(year => {
+                const yearPageContent = yearPages.get(year);
+                if (yearPageContent) {
+                    const foundSection = this.parseYearSection(yearPageContent, year);
+                    if (!foundSection) {
+                        // Fallback for dedicated year pages with changed heading format.
+                        this.parseTablesInSection(yearPageContent, year);
+                    }
+                }
+
+                if (commonContent) {
+                    this.parseYearSection(commonContent, year);
+                }
+            });
+        } else if (typeof content === 'string') {
+            years.forEach(year => {
+                this.parseYearSection(content, year);
+            });
+        } else {
+            console.warn('[WikiParser] Unsupported content format:', typeof content);
+            return [];
+        }
 
         this.allData = this.deduplicateData(this.allData);
         
@@ -30,28 +72,141 @@ export class WikiParser {
         return dataWithCoords;
     }
 
-    parseYearSection(content, year) {
-        const searchPhrase = `Список обстрілів Києва у ${year} році:`;
-        const startIndex = content.indexOf(searchPhrase);
-        
-        if (startIndex === -1) {
-            return;
+    getPrimaryContentForTotals(content) {
+        if (typeof content === 'string') {
+            return content;
         }
-        
-        
+
+        if (!Array.isArray(content)) {
+            return '';
+        }
+
+        const mainPage = content.find(page => String(page?.title || '').trim() === 'Обстріли Києва');
+        if (typeof mainPage?.content === 'string') {
+            return mainPage.content;
+        }
+
+        return content
+            .map(page => page?.content)
+            .filter(text => typeof text === 'string' && text.length > 0)
+            .join('\n\n');
+    }
+
+    extractKilledTotalsByYear(content) {
+        if (!content || typeof content !== 'string') {
+            return {};
+        }
+
+        const lines = content.split('\n');
+        const districtTableHeaderIndex = lines.findIndex(line => line.includes('Район') && line.includes('Період'));
+        const searchStart = districtTableHeaderIndex >= 0 ? districtTableHeaderIndex : 0;
+
+        for (let i = searchStart; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!/^[|!]\s*Усього/i.test(line)) {
+                continue;
+            }
+
+            const cells = line.split(/!!|\|\|/).map(cell => cell.trim()).filter(Boolean);
+            if (cells.length < 7) {
+                continue;
+            }
+
+            const values = cells.slice(1, 7)
+                .map(cell => this.extractApproxNumber(cell))
+                .filter(value => value !== null);
+
+            if (values.length < 6) {
+                continue;
+            }
+
+            const [y2022Part1, y2022Part2, y2023, y2024, y2025, y2026] = values;
+            return {
+                '2022': y2022Part1 + y2022Part2,
+                '2023': y2023,
+                '2024': y2024,
+                '2025': y2025,
+                '2026': y2026
+            };
+        }
+
+        return {};
+    }
+
+    extractApproxNumber(text) {
+        if (!text || typeof text !== 'string') return null;
+        const cleaned = text
+            .replace(/<ref[^>]*>[\s\S]*?<\/ref>/gi, ' ')
+            .replace(/<ref[^\/>]*\/>/gi, ' ')
+            .replace(/\{\{[^}]*\}\}/g, ' ')
+            .replace(/\[\[[^\]]+\]\]/g, ' ')
+            .replace(/\[[^\]]+\]/g, ' ')
+            .replace(/&nbsp;/gi, ' ')
+            .trim();
+
+        const match = cleaned.match(/~?\s*(\d+)/);
+        return match ? parseInt(match[1], 10) : null;
+    }
+
+    getYearsToParse() {
+        const startYear = 2022;
+        const endYear = new Date().getFullYear() + 1;
+        const years = [];
+
+        for (let year = startYear; year <= endYear; year++) {
+            years.push(String(year));
+        }
+
+        return years;
+    }
+
+    parseYearSection(content, year) {
+        const searchPhrases = [
+            `Список обстрілів Києва у ${year} році:`,
+            `Список обстрілів Києва у ${year} році`,
+            `Список обстрілів Києва за ${year} рік`,
+            `Обстріли Києва (${year})`
+        ];
+
+        let startIndex = -1;
+        for (const phrase of searchPhrases) {
+            const idx = content.indexOf(phrase);
+            if (idx !== -1 && (startIndex === -1 || idx < startIndex)) {
+                startIndex = idx;
+            }
+        }
+
+        if (startIndex === -1) {
+            return false;
+        }
+
         let endIndex = content.length;
         for (let nextYear = parseInt(year) + 1; nextYear <= 2030; nextYear++) {
-            const nextPhrase = `Список обстрілів Києва у ${nextYear} році:`;
-            const nextIndex = content.indexOf(nextPhrase, startIndex + 1);
+            const nextPhrases = [
+                `Список обстрілів Києва у ${nextYear} році:`,
+                `Список обстрілів Києва у ${nextYear} році`,
+                `Список обстрілів Києва за ${nextYear} рік`,
+                `Обстріли Києва (${nextYear})`
+            ];
+
+            let nextIndex = -1;
+            for (const phrase of nextPhrases) {
+                const idx = content.indexOf(phrase, startIndex + 1);
+                if (idx !== -1 && (nextIndex === -1 || idx < nextIndex)) {
+                    nextIndex = idx;
+                }
+            }
+
             if (nextIndex !== -1) {
                 endIndex = nextIndex;
                 break;
             }
         }
-        
+
         const sectionContent = content.substring(startIndex, endIndex);
-        
+
         this.parseTablesInSection(sectionContent, year);
+        return true;
     }
 
     parseTablesInSection(sectionContent, year) {

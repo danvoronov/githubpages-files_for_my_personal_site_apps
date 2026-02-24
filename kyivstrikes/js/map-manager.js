@@ -16,7 +16,7 @@ export class MapManager {
         }).setView(initialMapState.center, initialMapState.zoom);
 
         L.control.zoom({
-            position: 'topright'
+            position: 'bottomleft'
         }).addTo(this.map);
 
         // Add locate control for mobile (bottom right)
@@ -59,6 +59,9 @@ export class MapManager {
             });
         }
 
+        this.positionResetZoomButton();
+        window.addEventListener('resize', () => this.positionResetZoomButton());
+
 
         this.map.on('click', () => {
             if (this.uiManager) {
@@ -74,6 +77,16 @@ export class MapManager {
 
         this.map.on('zoomend', () => this.handleMapViewChange());
         this.map.on('moveend', () => this.handleMapViewChange());
+    }
+
+    positionResetZoomButton() {
+        const resetZoomBtn = document.getElementById('resetZoomBtn');
+        const filtersPanel = document.getElementById('filtersPanel');
+        if (!resetZoomBtn || !filtersPanel) return;
+
+        const panelRect = filtersPanel.getBoundingClientRect();
+        resetZoomBtn.style.left = `${Math.round(panelRect.left)}px`;
+        resetZoomBtn.style.top = `${Math.round(panelRect.bottom + 8)}px`;
     }
 
     handleMapViewChange() {
@@ -96,10 +109,11 @@ export class MapManager {
 
             const locationText = item.location
                 .replace(/^📍\s*/, '')
-                .replace(/\S+\s+район(\s*\(Київ\))?,\s*/i, '')
+                // Remove leading district prefix like "Солом'янський район, ..." or "Солом'янський р-н, ..."
+                .replace(/^\s*.*?(?:район|р[\s\-‑–—]?н)(?:\s*\(Київ\))?\s*[,;:—–-]?\s*/i, '')
                 .replace(/\s*\(Київ\),?/i, '')
                 .trim();
-            const tooltipContent = `<strong style="color: red;">${item.date}</strong> ${locationText}`;
+            const tooltipContent = `<strong class="map-tooltip-date">${item.date}</strong> ${locationText}`;
             marker.bindTooltip(tooltipContent, { direction: 'top', offset: [0, -15] });
 
             marker.on('click', () => {
@@ -137,9 +151,56 @@ export class MapManager {
         return colors[year] || '#6c757d';
     }
 
+    getHalfYearColor(year, half) {
+        const palette = {
+            '2022-H1': '#FFEAEA',
+            '2022-H2': '#FFD9D9',
+            '2023-H1': '#FFD2D2',
+            '2023-H2': '#FFC0C0',
+            '2024-H1': '#FFB3B3',
+            '2024-H2': '#FF9999',
+            '2025-H1': '#FF8080',
+            '2025-H2': '#FF6666',
+            '2026-H1': '#F25F5F',
+            '2026-H2': '#D00000',
+            '2027-H1': '#A31616',
+            '2027-H2': '#8B0000'
+        };
+
+        return palette[`${year}-${half}`] || this.getYearColor(year);
+    }
+
+    getDateColor(dateValue, fallbackYear) {
+        if (dateValue instanceof Date && !Number.isNaN(dateValue.getTime())) {
+            const year = String(dateValue.getFullYear());
+            const month = dateValue.getMonth() + 1;
+            const half = month <= 6 ? 'H1' : 'H2';
+            return this.getHalfYearColor(year, half);
+        }
+
+        const parts = typeof dateValue === 'string' ? dateValue.split('-') : [];
+        if (parts.length === 3) {
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = String(parseInt(parts[2], 10));
+
+            if (!Number.isNaN(day) && !Number.isNaN(month) && year !== 'NaN') {
+                const half = month <= 6 ? 'H1' : 'H2';
+                return this.getHalfYearColor(year, half);
+            }
+        }
+
+        const year = String(fallbackYear || '');
+        if (year) {
+            return this.getHalfYearColor(year, 'H2');
+        }
+
+        return '#6c757d';
+    }
+
     createCustomIcon(item) {
-        const { year, killed, wounded, weaponType } = item;
-        const color = this.getYearColor(year);
+        const { year, killed, wounded, weaponType, date } = item;
+        const color = this.getDateColor(date, year);
         const size = this.calculateMarkerSize(killed, wounded);
         
         let iconContent = '';

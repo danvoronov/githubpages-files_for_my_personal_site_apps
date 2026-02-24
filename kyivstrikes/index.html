@@ -90,6 +90,10 @@
         </div>
     </div>
 
+    <div class="reset-zoom-btn" id="resetZoomBtn" title="Скинути масштаб: показати весь Київ">
+        <img src="img/reset_zoom.png" alt="Скинути масштаб" width="20" height="20">
+    </div>
+
     <div id="detailsPanel" class="details-panel">
         <div class="details-placeholder">Клікніть по будь-якій точці для подробиць</div>
     </div>
@@ -105,11 +109,6 @@
         <div class="info-details" id="infoDetails">Завантаження...</div>
         <div class="info-title" id="infoTitle" title="Завантаження даних..."></div>
     </div>
-
-    <div class="reset-zoom-btn" id="resetZoomBtn" title="Скинути масштаб: показати весь Київ">
-        <img src="img/reset_zoom.png" alt="Скинути масштаб" width="20" height="20">
-    </div>
-
 
     <div class="date-filter">
         <div class="filter-container">
@@ -133,7 +132,11 @@
     <div class="mobile-filters-summary" id="mobileFiltersSummary"></div>
 
     <div class="disclaimer" id="disclaimer">
-        Дані агрегуються автоматично з <a href="https://uk.wikipedia.org/wiki/%D0%9E%D0%B1%D1%81%D1%82%D1%80%D1%96%D0%BB%D0%B8_%D0%9A%D0%B8%D1%94%D0%B2%D0%B0" target="_blank">Wikipedia</a>.<br>Можливі помилки та пропуски.
+        Дані агрегуються автоматично з <a href="https://uk.wikipedia.org/wiki/%D0%9E%D0%B1%D1%81%D1%82%D1%80%D1%96%D0%BB%D0%B8_%D0%9A%D0%B8%D1%94%D0%B2%D0%B0" target="_blank">Wikipedia</a>.
+        <div class="disclaimer-row">
+            <button type="button" id="refreshDataBtn" class="refresh-data-btn" title="Примусово оновити дані, оминаючи кеш">ОНОВИТИ</button>
+            <span>Можливі помилки та пропуски.</span>
+        </div>
     </div>
 
     <!-- Leaflet JS -->

@@ -8,6 +8,9 @@ class KyivAttacksMap {
     constructor() {
         this.settingsManager = new SettingsManager();
         const savedSettings = this.settingsManager.loadSettings();
+        this.parsedDataCacheKey = 'kyivAttacksParsedData:v1';
+        this.parsedDataCacheTtlMs = 12 * 60 * 60 * 1000; // 12 hours
+        this.isRefreshingData = false;
 
         this.allData = [];
         this.filteredData = [];
@@ -19,7 +22,8 @@ class KyivAttacksMap {
         this.mapManager = new MapManager('map', this.onMapViewChange.bind(this));
         this.uiManager = new UIManager(
             this.onDateRangeChange.bind(this),
-            this.mapManager.getYearColor,
+            this.mapManager.getYearColor.bind(this.mapManager),
+            this.mapManager.getDateColor.bind(this.mapManager),
             this.onFilterChange.bind(this)
         );
 
@@ -33,9 +37,7 @@ class KyivAttacksMap {
     async init(savedSettings) {
         try {
             this.mapManager.initMap('map', savedSettings.map);
-
-            const content = await fetchWikiContent();
-            this.allData = this.parser.parse(content);
+            await this.loadData({ bypassCache: false, allowStaleFallback: true });
             
             this.calculateDateRange(savedSettings.dateRange);
             
@@ -49,6 +51,140 @@ class KyivAttacksMap {
         } catch (error) {
             this.uiManager.showError('Помилка: ' + error.message);
             this.uiManager.hideLoading();
+        }
+    }
+
+    async loadData({ bypassCache = false, allowStaleFallback = true } = {}) {
+        if (!bypassCache) {
+            const freshCachedData = this.loadParsedDataFromCache({ allowStale: false });
+            if (freshCachedData) {
+                this.applyParsedData(freshCachedData);
+                return;
+            }
+        }
+
+        try {
+            const content = await fetchWikiContent();
+            this.allData = this.parser.parse(content);
+            this.saveParsedDataToCache({
+                allData: this.allData,
+                pointsWithoutCoords: this.parser.pointsWithoutCoords,
+                killedTotalsByYear: this.parser.killedTotalsByYear
+            });
+        } catch (fetchError) {
+            if (!bypassCache && allowStaleFallback) {
+                const staleCachedData = this.loadParsedDataFromCache({ allowStale: true });
+                if (staleCachedData) {
+                    this.applyParsedData(staleCachedData);
+                    return;
+                }
+            }
+            throw fetchError;
+        }
+    }
+
+    setLoadingState(message, isVisible) {
+        const loading = document.getElementById('loading');
+        if (!loading) return;
+
+        const textContainer = loading.querySelector('div');
+        if (textContainer && typeof message === 'string') {
+            textContainer.textContent = message;
+        }
+
+        loading.style.display = isVisible ? 'block' : 'none';
+    }
+
+    async refreshDataBypassCache() {
+        if (this.isRefreshingData) return;
+
+        const refreshBtn = document.getElementById('refreshDataBtn');
+        const previousLabel = refreshBtn ? refreshBtn.textContent : '';
+
+        try {
+            this.isRefreshingData = true;
+            if (refreshBtn) {
+                refreshBtn.disabled = true;
+                refreshBtn.textContent = '...';
+            }
+
+            this.setLoadingState('Оновлення даних...', true);
+
+            const currentDateRange = (this.dateRange.start && this.dateRange.end)
+                ? {
+                    start: this.dateRange.start.toISOString(),
+                    end: this.dateRange.end.toISOString()
+                }
+                : null;
+
+            await this.loadData({ bypassCache: true, allowStaleFallback: false });
+            this.calculateDateRange(currentDateRange);
+
+            if (this.uiManager && typeof this.uiManager.syncDateRangeUI === 'function') {
+                this.uiManager.syncDateRangeUI();
+            }
+
+            this.filterAndDisplayData();
+            this.saveCurrentState();
+
+            window.dispatchEvent(new CustomEvent('date-range-ready', { detail: { dateRange: this.dateRange } }));
+        } catch (error) {
+            this.uiManager.showError('Помилка оновлення: ' + error.message);
+        } finally {
+            if (refreshBtn) {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = previousLabel || 'ОНОВИТИ';
+            }
+            this.isRefreshingData = false;
+            this.uiManager.hideLoading();
+        }
+    }
+
+    applyParsedData(parsedData) {
+        this.allData = Array.isArray(parsedData.allData) ? parsedData.allData : [];
+        this.parser.allData = this.allData;
+        this.parser.pointsWithoutCoords = Number(parsedData.pointsWithoutCoords) || 0;
+        this.parser.killedTotalsByYear = parsedData.killedTotalsByYear || {};
+    }
+
+    loadParsedDataFromCache({ allowStale = false } = {}) {
+        try {
+            const raw = localStorage.getItem(this.parsedDataCacheKey);
+            if (!raw) return null;
+
+            const parsed = JSON.parse(raw);
+            if (!parsed || typeof parsed !== 'object') return null;
+            if (!Array.isArray(parsed.allData)) return null;
+            if (typeof parsed.cachedAt !== 'number') return null;
+
+            const age = Date.now() - parsed.cachedAt;
+            if (!allowStale && age > this.parsedDataCacheTtlMs) {
+                return null;
+            }
+
+            return {
+                allData: parsed.allData,
+                pointsWithoutCoords: Number(parsed.pointsWithoutCoords) || 0,
+                killedTotalsByYear: parsed.killedTotalsByYear || {},
+                cachedAt: parsed.cachedAt
+            };
+        } catch (error) {
+            console.warn('Failed to read parsed cache:', error);
+            return null;
+        }
+    }
+
+    saveParsedDataToCache(data) {
+        try {
+            const payload = {
+                cachedAt: Date.now(),
+                allData: Array.isArray(data?.allData) ? data.allData : [],
+                pointsWithoutCoords: Number(data?.pointsWithoutCoords) || 0,
+                killedTotalsByYear: data?.killedTotalsByYear || {}
+            };
+            localStorage.setItem(this.parsedDataCacheKey, JSON.stringify(payload));
+        } catch (error) {
+            console.warn('Failed to save parsed cache:', error);
         }
     }
 
@@ -145,9 +281,37 @@ class KyivAttacksMap {
             return true;
         });
 
+        const yearlyKilledOverride = this.shouldUseYearlyKilledOverride()
+            ? this.parser.killedTotalsByYear
+            : null;
+
         this.mapManager.displayMarkers(this.filteredData, this.filters.autoZoom);
-        this.uiManager.updatePointsCounter(this.filteredData, this.allData, this.dateRange, this.parser.pointsWithoutCoords);
+        this.uiManager.updatePointsCounter(
+            this.filteredData,
+            this.allData,
+            this.dateRange,
+            this.parser.pointsWithoutCoords,
+            yearlyKilledOverride
+        );
         this.uiManager.updateLegend(this.filteredData, this.allData);
+    }
+
+    shouldUseYearlyKilledOverride() {
+        if (!this.dateRange.min || !this.dateRange.max || !this.dateRange.start || !this.dateRange.end) {
+            return false;
+        }
+
+        const isFullDateRange =
+            this.dateRange.start.getTime() === this.dateRange.min.getTime() &&
+            this.dateRange.end.getTime() === this.dateRange.max.getTime();
+
+        const isDefaultFilters =
+            this.filters.weaponType === 'all' &&
+            this.filters.timeOfDay === 'all' &&
+            this.filters.killed === 0 &&
+            this.filters.wounded === 0;
+
+        return isFullDateRange && isDefaultFilters;
     }
 
     parseDate(dateStr) {
@@ -176,6 +340,13 @@ class KyivAttacksMap {
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = new KyivAttacksMap();
+    const refreshBtn = document.getElementById('refreshDataBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            app.refreshDataBypassCache();
+        });
+    }
+
     // Listen to mobile date change events and forward to app
     window.addEventListener('mobile-date-change', (e) => {
         const { start, end } = e.detail || {};
