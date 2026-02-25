@@ -2,6 +2,8 @@ export class MapManager {
     constructor(mapId, onMapViewChange) {
         this.map = null;
         this.markers = [];
+        this.selectedMarker = null;
+        this.selectedTooltip = null;
         this.onMapViewChange = onMapViewChange;
         this.uiManager = null;
     }
@@ -64,12 +66,14 @@ export class MapManager {
 
 
         this.map.on('click', () => {
+            this.clearSelectedMarker();
             if (this.uiManager) {
                 this.uiManager.clearDetails();
             }
         });
 
         this.map.on('dragstart', () => {
+            this.clearSelectedMarker();
             if (this.uiManager) {
                 this.uiManager.clearDetails();
             }
@@ -99,6 +103,7 @@ export class MapManager {
     }
 
     displayMarkers(data, autoZoom = true) {
+        this.clearSelectedMarker();
         this.markers.forEach(marker => this.map.removeLayer(marker));
         this.markers = [];
 
@@ -115,8 +120,14 @@ export class MapManager {
                 .trim();
             const tooltipContent = `<strong class="map-tooltip-date">${item.date}</strong> ${locationText}`;
             marker.bindTooltip(tooltipContent, { direction: 'top', offset: [0, -15] });
+            marker.__tooltipContent = tooltipContent;
+            marker.__tooltipOptions = { direction: 'top', offset: [0, -15] };
 
-            marker.on('click', () => {
+            marker.on('click', (event) => {
+                if (event?.originalEvent) {
+                    L.DomEvent.stopPropagation(event.originalEvent);
+                }
+                this.selectMarker(marker);
                 if (this.uiManager) {
                     this.uiManager.showDetails(item);
                 }
@@ -149,6 +160,70 @@ export class MapManager {
             '2027': '#8B0000'
         };
         return colors[year] || '#6c757d';
+    }
+
+    selectMarker(marker) {
+        if (!marker) return;
+
+        if (this.selectedMarker && this.selectedMarker !== marker) {
+            const previousElement = this.selectedMarker.getElement();
+            if (previousElement) {
+                previousElement.classList.remove('selected-map-marker');
+            }
+            this.selectedMarker.setZIndexOffset(0);
+        }
+
+        this.selectedMarker = marker;
+
+        const markerElement = marker.getElement();
+        if (markerElement) {
+            markerElement.classList.add('selected-map-marker');
+        }
+
+        this.showSelectedTooltip(marker);
+        marker.setZIndexOffset(1000);
+    }
+
+    clearSelectedMarker() {
+        if (!this.selectedMarker && !this.selectedTooltip) return;
+
+        const marker = this.selectedMarker;
+        this.selectedMarker = null;
+
+        if (marker) {
+            const markerElement = marker.getElement();
+            if (markerElement) {
+                markerElement.classList.remove('selected-map-marker');
+            }
+            marker.setZIndexOffset(0);
+        }
+
+        if (this.selectedTooltip && this.map) {
+            this.map.removeLayer(this.selectedTooltip);
+            this.selectedTooltip = null;
+        }
+    }
+
+    showSelectedTooltip(marker) {
+        if (!marker || !this.map) return;
+
+        if (this.selectedTooltip) {
+            this.map.removeLayer(this.selectedTooltip);
+            this.selectedTooltip = null;
+        }
+
+        const content = marker.__tooltipContent || marker.getTooltip()?.getContent();
+        if (!content) return;
+
+        const baseOptions = marker.__tooltipOptions || { direction: 'top', offset: [0, -15] };
+        this.selectedTooltip = L.tooltip({
+            ...baseOptions,
+            permanent: true,
+            interactive: false
+        })
+            .setLatLng(marker.getLatLng())
+            .setContent(content)
+            .addTo(this.map);
     }
 
     getHalfYearColor(year, half) {

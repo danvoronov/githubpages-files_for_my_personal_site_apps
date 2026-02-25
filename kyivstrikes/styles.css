@@ -273,6 +273,10 @@ body {
     color: var(--date-accent-color);
 }
 
+.custom-marker.selected-map-marker > div {
+    box-shadow: 0 0 0 6px var(--date-accent-color), 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
 .popup-time {
     color: #7f8c8d;
     font-weight: normal;
