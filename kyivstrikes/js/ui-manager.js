@@ -681,16 +681,16 @@ export class UIManager {
                             <div class="empty-stat-value">${stats.dateStart} — ${stats.dateEnd}</div>
                         </div>
                         <div class="empty-stat-card">
-                            <div class="empty-stat-label">Загиблі</div>
+                            <div class="empty-stat-label">Загиблі*</div>
                             <div class="empty-stat-value">${stats.killedTotal}</div>
                         </div>
                         <div class="empty-stat-card">
-                            <div class="empty-stat-label">Поранені</div>
+                            <div class="empty-stat-label">Поранені*</div>
                             <div class="empty-stat-value">${stats.woundedTotal}</div>
                         </div>
                     </div>
                     <div class="empty-chart-block">
-                        <div class="empty-chart-title">Загиблі</div>
+                        <div class="empty-chart-title">Загиблі &nbsp;&nbsp;&nbsp; (* ці цифри приблизні)</div>
                         ${yearRows}
                     </div>
                     <div class="empty-chart-block">
