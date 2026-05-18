@@ -115,7 +115,7 @@ export class MapManager {
             const locationText = item.location
                 .replace(/^📍\s*/, '')
                 // Remove leading district prefix like "Солом'янський район, ..." or "Солом'янський р-н, ..."
-                .replace(/^\s*.*?(?:район|р[\s\-‑–—]?н)(?:\s*\(Київ\))?\s*[,;:—–-]?\s*/i, '')
+                .replace(/^\s*.*?(?:\s+|^)(?:район|р[\s\-‑–—]?н)(?![а-яіїєґ])(?:\s*\(Київ\))?\s*[,;:—–-]?\s*/i, '')
                 .replace(/\s*\(Київ\),?/i, '')
                 .trim();
             const tooltipContent = `<strong class="map-tooltip-date">${item.date}</strong> ${locationText}`;
