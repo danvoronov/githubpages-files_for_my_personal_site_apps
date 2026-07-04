@@ -1,6 +1,6 @@
 export async function fetchWikiContent() {
     const baseTitle = 'Обстріли Києва';
-    const titles = [baseTitle, `${baseTitle} (2025)`];
+    const titles = [baseTitle, `${baseTitle} (2025)`, `${baseTitle} (2026)`];
     const apiUrl = `https://uk.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(titles.join('|'))}&prop=revisions&rvprop=content&format=json&formatversion=2&redirects&origin=*`;
 
     try {
