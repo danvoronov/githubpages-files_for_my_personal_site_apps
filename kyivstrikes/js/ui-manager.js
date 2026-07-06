@@ -693,6 +693,7 @@ export class UIManager {
                         <div class="empty-chart-title">Загиблі &nbsp;&nbsp;&nbsp; (* ці цифри приблизні)</div>
                         ${yearRows}
                     </div>
+                    <div class="empty-section-divider"></div>
                     <div class="empty-chart-block">
                         <div class="empty-chart-title">Структура за типом зброї</div>
                         <div class="empty-stacked-bar">${weaponSegments}</div>

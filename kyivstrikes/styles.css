@@ -586,6 +586,13 @@ body {
     font-weight: 600;
 }
 
+.empty-section-divider {
+    width: 60%;
+    height: 1px;
+    align-self: center;
+    background: rgba(140, 155, 170, 0.45);
+}
+
 .empty-stacked-bar {
     display: flex;
     width: 100%;
