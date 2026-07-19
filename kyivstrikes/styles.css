@@ -106,6 +106,27 @@ body {
     z-index: 10;
 }
 
+.date-handle--intro {
+    animation: date-handle-intro-glow 4s ease-in-out;
+}
+
+@keyframes date-handle-intro-glow {
+    0%, 100% {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(var(--accent-color-rgb), 0.18), 0 0 22px rgba(var(--accent-color-rgb), 0.75);
+        transform: translate(-50%, -50%) scale(1.18);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .date-handle--intro {
+        animation: none;
+    }
+}
+
 .handle-tooltip {
     position: absolute;
     bottom: 125%;

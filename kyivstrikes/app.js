@@ -250,8 +250,13 @@ class KyivAttacksMap {
             }
 
         } else {
-            this.dateRange.start = this.dateRange.min;
             this.dateRange.end = this.dateRange.max;
+            this.dateRange.start = new Date(this.dateRange.max);
+            this.dateRange.start.setMonth(this.dateRange.start.getMonth() - 2);
+
+            if (this.dateRange.start < this.dateRange.min) {
+                this.dateRange.start = this.dateRange.min;
+            }
         }
     }
 

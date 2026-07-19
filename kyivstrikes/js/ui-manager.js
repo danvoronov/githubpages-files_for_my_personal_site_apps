@@ -120,6 +120,7 @@ export class UIManager {
 
         this.updateDateFilter();
         this.createYearMarks();
+        startHandle.classList.add('date-handle--intro');
 
         startHandle.addEventListener('mousedown', (e) => this.startDrag(e, 'start'));
         endHandle.addEventListener('mousedown', (e) => this.startDrag(e, 'end'));
