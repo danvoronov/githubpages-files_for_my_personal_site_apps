@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050706">
+  <title>У світі бомжів — документальний театр</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app" id="mainApp" aria-label="Інтерактивна документальна п'єса">
+    <section class="scene" id="scene" aria-label="Нічний ліс і четверо людей біля багаття">
+      <div class="scene__shade" aria-hidden="true"></div>
+
+      <div class="fire" aria-hidden="true">
+        <div class="fire__glow"></div>
+        <div class="fire__flame fire__flame--back"></div>
+        <div class="fire__flame fire__flame--middle"></div>
+        <div class="fire__flame fire__flame--front"></div>
+        <i class="ember ember--1"></i>
+        <i class="ember ember--2"></i>
+        <i class="ember ember--3"></i>
+        <i class="ember ember--4"></i>
+        <i class="ember ember--5"></i>
+      </div>
+
+      <header class="hud">
+        <div class="hud__status">
+          <span id="progress">0 / 0</span>
+          <button class="text-button" id="restartButton" type="button">спочатку</button>
+        </div>
+      </header>
+
+      <aside class="lang-switcher" id="langSwitcher" aria-label="Вибір мови">
+        <button class="lang-switcher__btn" id="langBtnUa" type="button" data-lang="ua">УКР</button>
+        <span class="lang-switcher__divider">/</span>
+        <button class="lang-switcher__btn" id="langBtnRu" type="button" data-lang="ru">РУС</button>
+      </aside>
+
+      <svg class="character-outlines character-outlines--compact" viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          class="character-outline character-outline--sasha"
+          data-character="sasha"
+          d="M634 230 L658 230 L681 245 L681 280 L674 304 L690 319 L704 348 L718 381 L731 414 L724 437 L711 446 L708 484 L725 515 L739 523 L735 543 L710 551 L683 542 L666 514 L659 544 L635 552 L611 545 L610 518 L617 488 L603 455 L579 447 L567 431 L572 405 L581 382 L586 347 L608 321 L610 300 L604 282 L609 250 Z"
+        />
+        <path
+          class="character-outline character-outline--ukraine"
+          data-character="ukraine"
+          d="M416 481 L445 487 L461 509 L462 533 L452 550 L465 564 L486 572 L501 596 L512 625 L510 653 L533 680 L542 695 L532 713 L505 718 L482 707 L462 685 L447 668 L442 704 L427 718 L397 718 L374 704 L362 683 L354 650 L359 610 L376 576 L393 557 L389 532 L393 503 Z"
+        />
+        <path
+          class="character-outline character-outline--germany"
+          data-character="germany"
+          d="M1010 650 L1042 657 L1067 681 L1071 706 L1065 735 L1082 755 L1094 787 L1107 830 L1122 852 L1135 875 L1129 903 L1106 922 L1074 931 L1037 930 L1004 918 L975 904 L945 905 L918 892 L910 872 L918 850 L938 832 L951 792 L955 751 L970 718 L985 705 L984 681 L993 660 Z"
+        />
+        <path
+          class="character-outline character-outline--britain"
+          data-character="britain"
+          d="M1070 395 L1101 397 L1126 414 L1132 438 L1122 468 L1112 483 L1135 493 L1151 516 L1163 549 L1160 572 L1145 587 L1141 606 L1160 618 L1156 637 L1126 644 L1089 632 L1063 623 L1035 624 L1007 637 L975 633 L964 617 L976 598 L1002 580 L1008 550 L1025 516 L1047 495 L1056 475 L1048 449 L1052 416 Z"
+        />
+      </svg>
+
+      <svg class="character-outlines character-outlines--wide" viewBox="0 0 1280 720" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          class="character-outline character-outline--sasha"
+          data-character="sasha"
+          d="M575 398 L592 399 L601 409 L600 426 L596 433 L609 443 L615 463 L618 478 L613 484 L611 501 L621 515 L631 518 L631 528 L617 532 L603 527 L595 509 L591 529 L579 531 L566 526 L566 512 L570 498 L563 482 L552 479 L548 470 L552 457 L556 444 L566 435 L566 425 L562 414 L566 403 Z"
+        />
+        <path
+          class="character-outline character-outline--ukraine"
+          data-character="ukraine"
+          d="M487 500 L500 503 L507 511 L507 523 L502 530 L511 536 L521 540 L528 553 L531 567 L530 579 L540 589 L540 598 L529 603 L516 600 L504 591 L494 583 L493 596 L484 604 L470 604 L456 598 L447 587 L444 573 L446 555 L453 540 L464 530 L463 519 L468 506 Z"
+        />
+        <path
+          class="character-outline character-outline--germany"
+          data-character="germany"
+          transform="translate(14 -6)"
+          d="M719 570 L735 574 L746 585 L747 596 L744 609 L751 618 L757 633 L765 651 L774 660 L777 672 L771 682 L756 690 L738 691 L720 686 L704 679 L689 678 L675 672 L671 663 L675 653 L686 644 L693 627 L696 611 L703 595 L710 589 L708 580 L713 572 Z"
+        />
+        <path
+          class="character-outline character-outline--britain"
+          data-character="britain"
+          d="M753 462 L768 463 L782 471 L785 482 L781 494 L775 501 L786 506 L795 517 L800 531 L798 540 L792 546 L792 553 L801 560 L798 569 L782 572 L766 566 L752 562 L738 563 L725 570 L708 568 L704 561 L711 553 L723 545 L727 532 L735 517 L744 507 L748 496 L745 484 L747 471 Z"
+        />
+      </svg>
+
+      <div class="character character--sasha" data-character="sasha" aria-hidden="true">
+        <span id="charLabelSasha">Саша</span>
+      </div>
+      <div class="character character--ukraine" data-character="ukraine" aria-hidden="true">
+        <span id="charLabelUkraine">Україна</span>
+      </div>
+      <div class="character character--germany" data-character="germany" aria-hidden="true">
+        <span id="charLabelGermany">Німеччина</span>
+      </div>
+      <div class="character character--britain" data-character="britain" aria-hidden="true">
+        <span id="charLabelBritain">Британія</span>
+      </div>
+
+      <article class="dialogue is-hidden" id="dialogue" data-character="sasha">
+        <div class="dialogue__head">
+          <span class="dialogue__speaker" id="speaker">Саша</span>
+          <span class="dialogue__part" id="partMarker"></span>
+        </div>
+        <p class="dialogue__text" id="dialogueText" aria-live="polite"></p>
+        <div class="dialogue__continue" id="continueHint">
+          <span class="dialogue__cursor" aria-hidden="true"></span>
+          <span id="continueHintText">клік — далі</span>
+        </div>
+      </article>
+
+      <button class="advance-surface" id="advanceSurface" type="button" aria-label="Показати або продовжити репліку"></button>
+
+      <section class="curtain" id="startCurtain">
+        <div class="curtain__wrap">
+          <div class="curtain__card">
+            <p class="curtain__eyebrow" id="startEyebrow">ДОКУМЕНТАЛЬНИЙ ТЕАТР</p>
+            <h1 id="startTitle">У світі<br>бомжів</h1>
+            <p id="startDescription">Чотири голоси біля одного багаття.<br>Читайте у своєму темпі.</p>
+            <button class="primary-button" id="startButton" type="button">УВІЙТИ В ЛІС</button>
+            <small id="startHint">Після кожної репліки натискайте мишкою<br>або клавішею пробілу.</small>
+          </div>
+
+          <div class="curtain__lang" aria-label="Вибір мови">
+            <button class="curtain__lang-btn is-active" id="startLangUa" type="button" data-lang="ua">УКРАЇНСЬКА</button>
+            <button class="curtain__lang-btn" id="startLangRu" type="button" data-lang="ru">РУССКИЙ</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="curtain curtain--end is-hidden" id="endCurtain">
+        <div class="curtain__card">
+          <p class="curtain__eyebrow" id="endEyebrow">КІНЕЦЬ</p>
+          <h2 id="endTitle">Вогонь<br>догоряє</h2>
+          <p id="endDescription">П'єсу завершено.</p>
+          <button class="primary-button" id="playAgainButton" type="button">ЩЕ РАЗ</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="dialogue-data.js"></script>
+  <script src="app.js"></script>
+ </body>
+</html>
