@@ -4,7 +4,7 @@ window.PLAY_DATA = {
       "pageTitle": "В мире бомжей — документальный театр",
       "eyebrow": "ДОКУМЕНТАЛЬНЫЙ ТЕАТР",
       "mainTitle": "В мире<br>бомжей",
-      "startDescription": "Четыре голоса у одного костра.<br>Читайте в своём темпе.",
+      "startDescription": "Четыре голоса у одного костра.<br>Читай в своём темпе.",
       "startButton": "ВОЙТИ В ЛЕС",
       "startHint": "После каждой реплики нажимайте мышкой<br>или клавишей пробела.",
       "endEyebrow": "КОНЕЦ",
@@ -12,26 +12,28 @@ window.PLAY_DATA = {
       "endDescription": "Пьеса завершена.",
       "playAgainButton": "ЕЩЁ РАЗ",
       "continueHint": "клик — дальше",
-      "restartButton": "сначала",
-      "restartConfirm": "Начать пьесу сначала?",
+      "restartButton": "сброс",
+      "restartConfirm": "Сбросить прогресс и вернуться в начало?",
       "replicaPrefix": "реплика",
       "introPrefix": "вступление",
       "stageRemark": "Ремарка",
       "sceneCharacterNames": {
         "sasha": "Саша",
-        "ukraine": "Украина",
-        "germany": "Германия",
-        "britain": "Британия"
+        "ukraine": "Александр",
+        "germany": "Тина",
+        "britain": "Энтони"
       },
       "ariaMain": "Интерактивная документальная пьеса",
       "ariaScene": "Ночной лес и четыре человека у костра",
-      "ariaAdvance": "Показать или продолжить реплику"
+      "ariaAdvance": "Показать или продолжить реплику",
+      "ariaBack": "Предыдущая реплика",
+      "backTitle": "Назад (←)"
     },
     "ua": {
       "pageTitle": "У світі бомжів — документальний театр",
       "eyebrow": "ДОКУМЕНТАЛЬНИЙ ТЕАТР",
       "mainTitle": "У світі<br>бомжів",
-      "startDescription": "Чотири голоси біля одного багаття.<br>Читайте у своєму темпі.",
+      "startDescription": "Чотири голоси біля одного вогнища.<br>Читай у своєму темпі.",
       "startButton": "УВІЙТИ В ЛІС",
       "startHint": "Після кожної репліки натискайте мишкою<br>або клавішею пробілу.",
       "endEyebrow": "КІНЕЦЬ",
@@ -39,24 +41,26 @@ window.PLAY_DATA = {
       "endDescription": "П'єсу завершено.",
       "playAgainButton": "ЩЕ РАЗ",
       "continueHint": "клік — далі",
-      "restartButton": "спочатку",
-      "restartConfirm": "Почати п'єсу спочатку?",
+      "restartButton": "скинути",
+      "restartConfirm": "Скинути прогрес і повернутися на початок?",
       "replicaPrefix": "репліка",
       "introPrefix": "вступ",
       "stageRemark": "Ремарка",
       "sceneCharacterNames": {
         "sasha": "Саша",
-        "ukraine": "Україна",
-        "germany": "Німеччина",
-        "britain": "Британія"
+        "ukraine": "Олександр",
+        "germany": "Тіна",
+        "britain": "Ентоні"
       },
       "ariaMain": "Інтерактивна документальна п'єса",
       "ariaScene": "Нічний ліс і четверо людей біля багаття",
-      "ariaAdvance": "Показати або продовжити репліку"
+      "ariaAdvance": "Показати або продовжити репліку",
+      "ariaBack": "Попередня репліка",
+      "backTitle": "Назад (←)"
     }
   },
   "ru": {
-    "title": "Воронова — Гончар",
+    "title": "Воронов / Гончар",
     "version": 1,
     "characters": {
       "sasha": {
@@ -1751,7 +1755,7 @@ window.PLAY_DATA = {
     ]
   },
   "ua": {
-    "title": "Воронова — Гончар",
+    "title": "Воронов / Гончар",
     "version": 1,
     "characters": {
       "sasha": {

@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#050706">
   <title>У світі бомжів — документальний театр</title>
+  <script>
+    try {
+      var p = JSON.parse(localStorage.getItem('bomji_play_progress'));
+      if (p && p.lineId !== null && p.lineId !== undefined) {
+        document.documentElement.classList.add('has-saved-progress');
+      }
+    } catch (e) {}
+  </script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -27,7 +35,7 @@
       <header class="hud">
         <div class="hud__status">
           <span id="progress">0 / 0</span>
-          <button class="text-button" id="restartButton" type="button">спочатку</button>
+          <button class="text-button" id="restartButton" type="button">скинути</button>
         </div>
       </header>
 
@@ -88,13 +96,13 @@
         <span id="charLabelSasha">Саша</span>
       </div>
       <div class="character character--ukraine" data-character="ukraine" aria-hidden="true">
-        <span id="charLabelUkraine">Україна</span>
+        <span id="charLabelUkraine">Олександр</span>
       </div>
       <div class="character character--germany" data-character="germany" aria-hidden="true">
-        <span id="charLabelGermany">Німеччина</span>
+        <span id="charLabelGermany">Тіна</span>
       </div>
       <div class="character character--britain" data-character="britain" aria-hidden="true">
-        <span id="charLabelBritain">Британія</span>
+        <span id="charLabelBritain">Ентоні</span>
       </div>
 
       <article class="dialogue is-hidden" id="dialogue" data-character="sasha">
@@ -103,9 +111,12 @@
           <span class="dialogue__part" id="partMarker"></span>
         </div>
         <p class="dialogue__text" id="dialogueText" aria-live="polite"></p>
-        <div class="dialogue__continue" id="continueHint">
-          <span class="dialogue__cursor" aria-hidden="true"></span>
-          <span id="continueHintText">клік — далі</span>
+        <div class="dialogue__footer">
+          <button class="dialogue__back" id="backButton" type="button" aria-label="Попередня репліка" title="Назад (←)">⇠</button>
+          <div class="dialogue__continue" id="continueHint">
+            <span class="dialogue__cursor" aria-hidden="true"></span>
+            <span id="continueHintText">клік — далі</span>
+          </div>
         </div>
       </article>
 
@@ -116,7 +127,7 @@
           <div class="curtain__card">
             <p class="curtain__eyebrow" id="startEyebrow">ДОКУМЕНТАЛЬНИЙ ТЕАТР</p>
             <h1 id="startTitle">У світі<br>бомжів</h1>
-            <p id="startDescription">Чотири голоси біля одного багаття.<br>Читайте у своєму темпі.</p>
+            <p id="startDescription">Чотири голоси біля одного вогнища.<br>Читайте у своєму темпі.</p>
             <button class="primary-button" id="startButton" type="button">УВІЙТИ В ЛІС</button>
             <small id="startHint">Після кожної репліки натискайте мишкою<br>або клавішею пробілу.</small>
           </div>

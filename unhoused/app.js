@@ -14,6 +14,7 @@
     speaker: document.querySelector('#speaker'),
     partMarker: document.querySelector('#partMarker'),
     progress: document.querySelector('#progress'),
+    backButton: document.querySelector('#backButton'),
     advanceSurface: document.querySelector('#advanceSurface'),
     startCurtain: document.querySelector('#startCurtain'),
     endCurtain: document.querySelector('#endCurtain'),
@@ -111,6 +112,10 @@
     if (elements.advanceSurface) {
       elements.advanceSurface.setAttribute('aria-label', ui.ariaAdvance);
     }
+    if (elements.backButton) {
+      elements.backButton.setAttribute('aria-label', ui.ariaBack || 'Попередня репліка');
+      elements.backButton.title = ui.backTitle || 'Назад (←)';
+    }
 
     // Update UI elements in Curtains and HUD
     if (elements.startEyebrow) elements.startEyebrow.textContent = ui.eyebrow;
@@ -138,9 +143,11 @@
     if (elements.startLangUa) elements.startLangUa.classList.toggle('is-active', currentLang === 'ua');
     if (elements.startLangRu) elements.startLangRu.classList.toggle('is-active', currentLang === 'ru');
 
+    updateBackButtonState();
+
     // Update progress & current view if in progress
     if (!hasStarted) {
-      renderProgress(ui.replicaPrefix, 0, data.lines.length);
+      renderProgress('', 0, data.lines.length, false);
     } else if (hasEnded) {
       // Nothing needed on end screen
     } else if (targetLineId !== null) {
@@ -166,6 +173,13 @@
     event.stopPropagation();
     startPlay();
   });
+
+  if (elements.backButton) {
+    elements.backButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      stepBack();
+    });
+  }
 
   elements.advanceSurface.addEventListener('click', advance);
   elements.dialogue.addEventListener('click', advance);
@@ -209,16 +223,24 @@
   }
 
   document.addEventListener('keydown', (event) => {
-    if (![' ', 'Enter', 'ArrowRight'].includes(event.key)) return;
-    if (event.target instanceof HTMLButtonElement) return;
+    const forwardKeys = [' ', 'Enter', 'ArrowRight', 'ArrowDown'];
+    const backwardKeys = ['ArrowLeft', 'ArrowUp', 'Backspace'];
+
+    if (!forwardKeys.includes(event.key) && !backwardKeys.includes(event.key)) return;
+    if (event.target instanceof HTMLButtonElement && [' ', 'Enter'].includes(event.key)) return;
+
     event.preventDefault();
 
-    if (!hasStarted) {
-      startPlay();
-      return;
+    if (forwardKeys.includes(event.key)) {
+      if (!hasStarted) {
+        startPlay();
+        return;
+      }
+      advance();
+    } else if (backwardKeys.includes(event.key)) {
+      if (!hasStarted) return;
+      stepBack();
     }
-
-    advance();
   });
 
   function buildScript(playData) {
@@ -296,6 +318,7 @@
   function startPlay() {
     hasStarted = true;
     hasEnded = false;
+    document.documentElement.classList.add('has-saved-progress');
     elements.startCurtain.classList.add('is-hidden');
     elements.endCurtain.classList.add('is-hidden');
     elements.dialogue.classList.remove('is-hidden');
@@ -305,14 +328,23 @@
 
   function restartPlay() {
     cancelAnimationFrame(typingFrame);
-    hasStarted = true;
-    hasEnded = false;
     isTyping = false;
-    elements.startCurtain.classList.add('is-hidden');
+    hasStarted = false;
+    hasEnded = false;
+    currentIndex = -1;
+    document.documentElement.classList.remove('has-saved-progress');
+    elements.startCurtain.classList.remove('is-hidden');
     elements.endCurtain.classList.add('is-hidden');
-    elements.dialogue.classList.remove('is-hidden');
-    currentIndex = 0;
-    renderCurrent();
+    elements.dialogue.classList.add('is-hidden');
+    elements.characters.forEach((character) => character.classList.remove('is-active'));
+    renderProgress('', 0, data.lines.length, false);
+    updateBackButtonState();
+
+    try {
+      localStorage.removeItem(progressStorageKey);
+    } catch {
+      // Ignore localStorage errors
+    }
   }
 
   function advance() {
@@ -330,6 +362,32 @@
 
     currentIndex += 1;
     renderCurrent();
+  }
+
+  function stepBack() {
+    if (!hasStarted) return;
+
+    if (hasEnded) {
+      hasEnded = false;
+      elements.endCurtain.classList.add('is-hidden');
+      elements.dialogue.classList.remove('is-hidden');
+      renderCurrent(true);
+      return;
+    }
+
+    if (currentIndex <= 0) return;
+
+    cancelAnimationFrame(typingFrame);
+    isTyping = false;
+    currentIndex -= 1;
+    renderCurrent(true);
+  }
+
+  function updateBackButtonState() {
+    if (!elements.backButton) return;
+    const canGoBack = hasStarted && (hasEnded || currentIndex > 0);
+    elements.backButton.disabled = !canGoBack;
+    elements.backButton.setAttribute('aria-disabled', String(!canGoBack));
   }
 
   function renderCurrent(immediate = false) {
@@ -356,16 +414,18 @@
       renderProgress(
         ui.introPrefix,
         currentIndex + 1,
-        Math.max(0, data.intro.length - skippedIntroCount)
+        Math.max(0, data.intro.length - skippedIntroCount),
+        false
       );
     } else {
-      renderProgress(ui.replicaPrefix, line.id, data.lines.length);
+      renderProgress('', line.id, data.lines.length, true);
     }
 
     elements.characters.forEach((character) => {
       character.classList.toggle('is-active', character.dataset.character === line.character);
     });
 
+    updateBackButtonState();
     saveProgress(line);
 
     if (immediate || typeInterval === 0) {
@@ -425,19 +485,33 @@
     elements.dialogueText.replaceChildren(fragment);
   }
 
-  function renderProgress(prefix, current, total) {
+  function renderProgress(prefix, current, total, showPercent = true) {
     const currentNumber = document.createElement('strong');
     currentNumber.className = 'progress__current';
     currentNumber.textContent = String(current);
 
-    elements.progress.replaceChildren(
-      document.createTextNode(`${prefix} `),
+    const nodes = [];
+    if (prefix) {
+      nodes.push(document.createTextNode(`${prefix} `));
+    }
+    nodes.push(
       currentNumber,
       document.createTextNode(` / ${total}`)
     );
+
+    if (showPercent && total > 0) {
+      const percent = Math.round((current / total) * 100);
+      const percentSpan = document.createElement('span');
+      percentSpan.className = 'progress__percent';
+      percentSpan.textContent = ` (${percent}%)`;
+      nodes.push(percentSpan);
+    }
+
+    elements.progress.replaceChildren(...nodes);
   }
 
   function saveProgress(line, ended = false) {
+    if (!line) return;
     try {
       localStorage.setItem(progressStorageKey, JSON.stringify({
         lineId: line.id,
@@ -458,15 +532,19 @@
       return;
     }
 
-    if (!savedProgress || !Object.hasOwn(savedProgress, 'lineId')) return;
+    if (!savedProgress || savedProgress.lineId === null || savedProgress.lineId === undefined) return;
 
     const savedIndex = script.findIndex((item) => (
       item.id === savedProgress.lineId
       && (item.chunkIndex || 0) === (savedProgress.chunkIndex || 0)
     ));
 
-    if (savedIndex === -1) return;
+    if (savedIndex === -1) {
+      document.documentElement.classList.remove('has-saved-progress');
+      return;
+    }
 
+    document.documentElement.classList.add('has-saved-progress');
     hasStarted = true;
     hasEnded = false;
     currentIndex = savedIndex;
@@ -487,6 +565,7 @@
     elements.dialogue.classList.add('is-hidden');
     elements.endCurtain.classList.remove('is-hidden');
     elements.characters.forEach((character) => character.classList.remove('is-active'));
+    updateBackButtonState();
     saveProgress(script[currentIndex], true);
   }
 })();

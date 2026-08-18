@@ -69,15 +69,15 @@ button {
   position: absolute;
   z-index: 20;
   bottom: 2.4%;
-  left: 2.2%;
-  right: auto;
+  right: 2.2%;
+  left: auto;
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: rgb(237 220 190 / 62%);
+  color: rgb(215 190 155 / 60%);
   font-size: clamp(9px, 0.76vw, 13px);
   letter-spacing: 0.11em;
-  text-shadow: 1px 2px #000;
+  text-shadow: 1px 1px 2px #000;
 }
 
 .hud__status {
@@ -90,35 +90,41 @@ button {
 }
 
 #progress {
-  color: rgb(237 220 190 / 48%);
+  color: rgb(195 170 135 / 50%);
   cursor: default;
   user-select: none;
 }
 
 .progress__current {
-  color: #fff8e9;
+  color: #dfcaa7;
   font-weight: 700;
   text-shadow:
-    0 0 5px rgb(255 244 220 / 72%),
-    0 0 12px rgb(255 174 89 / 34%);
+    0 0 6px rgb(180 105 45 / 30%),
+    1px 1px #000;
+}
+
+.progress__percent {
+  color: rgb(195 170 135 / 50%);
+  font-weight: 400;
 }
 
 .text-button {
   position: relative;
   z-index: 1;
   border: 0;
-  border-bottom: 1px solid transparent;
-  padding: 0;
+  border-bottom: 1px dotted currentColor;
+  padding: 0 0 1px 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
   letter-spacing: inherit;
+  transition: color 150ms ease, border-color 150ms ease;
 }
 
 .text-button:hover,
 .text-button:focus-visible {
   border-color: currentColor;
-  color: var(--paper);
+  color: #dfcaa7;
   outline: none;
 }
 
@@ -126,18 +132,18 @@ button {
   position: absolute;
   z-index: 25;
   bottom: 2.4%;
-  right: 2.2%;
-  left: auto;
+  left: 2.2%;
+  right: auto;
   display: flex;
   align-items: center;
   gap: 0.4em;
   padding: 0.55em 0.75em;
   border: 0;
   background: rgb(3 6 5 / 68%);
-  color: rgb(237 220 190 / 62%);
+  color: rgb(215 190 155 / 60%);
   font-size: clamp(9px, 0.76vw, 13px);
   letter-spacing: 0.11em;
-  text-shadow: 1px 2px #000;
+  text-shadow: 1px 1px 2px #000;
   user-select: none;
 }
 
@@ -145,10 +151,10 @@ button {
   position: relative;
   z-index: 1;
   border: 0;
-  border-bottom: 1px solid transparent;
-  padding: 0;
+  border-bottom: 1px dotted currentColor;
+  padding: 0 0 1px 0;
   background: transparent;
-  color: rgb(237 220 190 / 48%);
+  color: rgb(195 170 135 / 50%);
   cursor: pointer;
   letter-spacing: inherit;
   font-family: inherit;
@@ -158,18 +164,18 @@ button {
 .lang-switcher__btn:hover,
 .lang-switcher__btn:focus-visible {
   border-color: currentColor;
-  color: var(--paper);
+  color: #dfcaa7;
   outline: none;
 }
 
 .lang-switcher__btn.is-active {
-  border-color: transparent;
-  color: var(--paper);
+  border-bottom-color: transparent;
+  color: #dfcaa7;
   font-weight: bold;
 }
 
 .lang-switcher__divider {
-  color: rgb(237 220 190 / 28%);
+  color: rgb(215 190 155 / 28%);
   pointer-events: none;
 }
 
@@ -410,18 +416,72 @@ button {
   font-style: italic;
 }
 
+.dialogue__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 1.2em;
+  margin-top: 0.7em;
+  gap: 0.5rem;
+}
+
+.dialogue__back {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1em 0.45em;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgb(239 221 190 / 60%);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: clamp(14px, 1.3vw, 19px);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.75;
+  transition: color 150ms ease, opacity 150ms ease, border-color 150ms ease, background-color 150ms ease, transform 120ms ease;
+}
+
+.dialogue__back:hover,
+.dialogue__back:focus-visible {
+  color: #ffe3ae;
+  border-color: rgb(var(--speaker-color) / 45%);
+  background: rgb(var(--speaker-color) / 12%);
+  opacity: 1;
+  transform: translateX(-2px);
+  outline: none;
+}
+
+.dialogue__back:active {
+  transform: translateX(-3px);
+  background: rgb(var(--speaker-color) / 22%);
+}
+
+.dialogue__back:disabled,
+.dialogue__back[aria-disabled="true"],
+.dialogue__back.is-disabled {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+  transform: none;
+}
+
 .dialogue__continue {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 0.55em;
   min-height: 1em;
-  margin-top: 0.7em;
+  margin-top: 0;
+  margin-left: auto;
   color: rgb(239 221 190 / 48%);
   font-size: clamp(7px, 0.65vw, 11px);
   letter-spacing: 0.08em;
   opacity: 0;
   transition: opacity 160ms ease;
+  user-select: none;
 }
 
 .dialogue.is-waiting .dialogue__continue {
@@ -457,6 +517,12 @@ button {
     rgb(1 3 2 / 72%);
   backdrop-filter: blur(2px);
   transition: opacity 480ms ease, visibility 480ms ease;
+}
+
+html.has-saved-progress #startCurtain {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .curtain__wrap {
@@ -696,8 +762,8 @@ button {
     position: fixed;
     top: auto;
     bottom: max(12px, env(safe-area-inset-bottom));
-    left: 4vw;
-    right: auto;
+    right: 4vw;
+    left: auto;
     align-items: flex-end;
   }
 
@@ -705,8 +771,8 @@ button {
     position: fixed;
     top: auto;
     bottom: max(12px, env(safe-area-inset-bottom));
-    right: 4vw;
-    left: auto;
+    left: 4vw;
+    right: auto;
   }
 
   .advance-surface {
@@ -722,6 +788,11 @@ button {
 
   .dialogue__text {
     font-size: clamp(15px, 4vw, 19px);
+  }
+
+  .dialogue__back {
+    font-size: 16px;
+    padding: 0.2em 0.5em;
   }
 
   .dialogue__continue {
