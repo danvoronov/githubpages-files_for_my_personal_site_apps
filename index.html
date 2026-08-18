@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dan Voronov - Programs</title>
+    <title>Dan Voronov - Mini Apps</title>
+    <meta name="description" content="Interactive projects by Dan Voronov: the documentary theatre play 'In the World of the Homeless', the strikes map of Kyiv, the falafel map, mind flow diagrams and more.">
+    <link rel="canonical" href="https://apps.danvoronov.com/">
+    <link rel="alternate" hreflang="en" href="https://apps.danvoronov.com/">
+    <link rel="alternate" hreflang="uk" href="https://apps.danvoronov.com/uk/">
+    <link rel="alternate" hreflang="x-default" href="https://apps.danvoronov.com/">
     <style>
         * {
             box-sizing: border-box;
@@ -35,6 +40,25 @@
             margin-bottom: 30px;
             text-align: center; /* Центрирование заголовков */
             font-weight: 600; /* Более жирный шрифт для заголовков */
+        }
+
+        /* Переключатель языков */
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .lang-switcher a {
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .lang-switcher a.is-active {
+            color: #2c3e50;
+            font-weight: 700;
+            background-color: #eef2f6;
+            text-decoration: none;
         }
 
         /* Отступы для секций программ */
@@ -80,15 +104,29 @@
 </head>
 <body>
     <div class="container">
+        <nav class="lang-switcher" aria-label="Language selection">
+            <a href="./" hreflang="en" lang="en" aria-current="page" class="is-active">EN</a>
+            <span aria-hidden="true">/</span>
+            <a href="./uk/" hreflang="uk" lang="uk">УКР</a>
+        </nav>
+
         <h1>Dan Voronov - Mini Apps</h1>
 
         <div class="program-section">
-            <p><a href="kyivstrikes">Map of Strikes in Kyiv</a> (2025 year)</p>
+            <p><a href="kyivstrikes">Map of Strikes in Kyiv</a> (2025-26). An interactive visualization of official data on Russian attacks, aggregated from Wikipedia and presented with flexible filtering options.</p>
+            <p class="secondary-text">Youtube video: <a href="https://www.youtube.com/watch?v=5E7DIiqd3ro">About my visualization "Shooting of Kyiv - Interactive Map"</a>.</p>
         </div>
 
         <div class="program-section">
             <p><a href="kievfalafel">Falafel Map in Kyiv</a> (active in 2016-2017, no longer updated)</p>
             <p class="secondary-text">Article on Hmarochos (ua): <a href="https://hmarochos.kiev.ua/2016/09/14/kiyanin-stvoriv-kartu-mists-stolitsi-de-mozhna-skushtuvati-falafel/">Киянин створив карту місць столиці, де можна скуштувати фалафель</a>.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="program-section">
+            <p><a href="unhoused">In the World of the Homeless</a> - documentary theatre (text 2015-2016, web version 2026). An interactive documentary play born from the question: what do the most unsuccessful think about success? Three true stories of real people from Ukraine, Germany and Britain are interwoven with the fictional character of actor Sasha. Four voices around one campfire. Available in Ukrainian, Russian and English.</p>
+            <p class="secondary-text">Bot-theatre in a Telegram group (active in 2019-2024): <a href="https://t.me/v_mire_bomjei">t.me/v_mire_bomjei</a></p>
         </div>
 
         <div class="divider"></div> 

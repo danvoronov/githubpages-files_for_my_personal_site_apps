@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dan Voronov - Міні-застосунки</title>
+    <meta name="description" content="Інтерактивні проєкти Дана Воронова: документальна п'єса «У світі бомжів», мапа влучань по Києву, мапа фалафелю, діаграми мислення та інші.">
+    <link rel="canonical" href="https://apps.danvoronov.com/uk/">
+    <link rel="alternate" hreflang="en" href="https://apps.danvoronov.com/">
+    <link rel="alternate" hreflang="uk" href="https://apps.danvoronov.com/uk/">
+    <link rel="alternate" hreflang="x-default" href="https://apps.danvoronov.com/">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .lang-switcher {
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .lang-switcher a {
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .lang-switcher a.is-active {
+            color: #2c3e50;
+            font-weight: 700;
+            background-color: #eef2f6;
+            text-decoration: none;
+        }
+
+        .program-section {
+            margin-bottom: 25px;
+        }
+
+        .program-section p {
+            margin-bottom: 10px;
+        }
+
+        .program-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        .secondary-text {
+            font-size: 0.9em;
+            color: #666;
+            padding-left: 20px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .divider {
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="lang-switcher" aria-label="Вибір мови">
+            <a href="../" hreflang="en" lang="en">EN</a>
+            <span aria-hidden="true">/</span>
+            <a href="./" hreflang="uk" lang="uk" aria-current="page" class="is-active">UK</a>
+        </nav>
+
+        <h1>Dan Voronov - Міні-застосунки</h1>
+
+        <div class="program-section">
+            <p><a href="../kyivstrikes">Мапа влучань по Києву</a> (2025–26). Інтерактивна візуалізація офіційних даних про російські атаки: дані агрегуються з Вікіпедії та подаються з гнучкими фільтрами.</p>
+            <p class="secondary-text"><a href="https://www.youtube.com/watch?v=5E7DIiqd3ro">Про мою візуалізацію «Обстріли Києва — інтерактивна карта»</a>.</p>
+        </div>
+
+        <div class="program-section">
+            <p><a href="../kievfalafel">Мапа фалафелю в Києві</a> (активна у 2016–2017, більше не працює)</p>
+            <p class="secondary-text">Стаття на Hmarochos: <a href="https://hmarochos.kiev.ua/2016/09/14/kiyanin-stvoriv-kartu-mists-stolitsi-de-mozhna-skushtuvati-falafel/">Киянин створив карту місць столиці, де можна скуштувати фалафель</a>.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="program-section">
+            <p><a href="../unhoused">У світі бомжів</a> — документальний театр (текст 2015–2016, веб-версія 2026). Інтерактивна документальна п'єса, що народилася з питання: що думають найнеуспішніші про успіх? Три справжні історії реальних людей з України, Німеччини та Британії переплетені з вигаданим персонажем — актором Сашком. Чотири голоси біля одного вогнища. П'єса доступна українською, російською та англійською.</p>
+            <p class="secondary-text">Бот-театр у Telegram-групі (працювало у 2019–202): <a href="https://t.me/v_mire_bomjei">t.me/v_mire_bomjei</a></p>
+        </div>
+
+        <div class="divider"></div> 
+
+        <div class="program-section">
+            <p>Онлайн-сервіс для побудови <a href="../mindflow">діаграм мислення Едварда де Боно</a> (2008, 2012, 2025).</p>
+                        <br/>
+            <p>Калькулятор "<a href="../reldb">Шкали різних типів відносин</a>" (2018).</p>
+            <p class="secondary-text">Стаття на Medium (ru): <a href="https://medium.com/@dan.voronov/rel-compare-f4b4b6a91e26">Сравнение типов отношений</a>.</p>
+            <br/>
+            <p>Гра "<a href="../alpattern">Алфавіт-Паттерн</a>" (2012).</p>
+        </div>
+
+        <div class="divider"></div> 
+      
+        <div class="program-section">
+            <p><a href="https://danvoronov.com/">Основний сайт Дана Воронова</a></p>
+        </div>
+    </div>
+</body>
+</html>
