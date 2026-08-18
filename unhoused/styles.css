@@ -324,23 +324,23 @@ button {
 }
 
 .character--sasha {
-  left: 42.2%;
-  top: 54.7%;
+  left: 34%;
+  top: 39%;
 }
 
 .character--ukraine {
   left: 27.5%;
-  top: 71.4%;
+  top: 75%;
 }
 
 .character--germany {
   left: 67.2%;
-  top: 91.8%;
+  top: 94%;
 }
 
 .character--britain {
-  left: 69.4%;
-  top: 64.3%;
+  left: 78.6%;
+  top: 47%;
 }
 
 .dialogue {
@@ -355,18 +355,50 @@ button {
   translate: -50% 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   padding: clamp(12px, 1.5vw, 24px) clamp(14px, 1.8vw, 30px) clamp(10px, 1.25vw, 20px);
-  border: 1px solid rgb(var(--speaker-color) / 48%);
+  filter: drop-shadow(0 12px 40px rgb(0 0 0 / 60%));
+  transition: opacity 180ms ease;
+}
+
+.dialogue::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: rgb(var(--speaker-color) / 52%);
+  clip-path: polygon(
+    9px 0,
+    calc(100% - 9px) 0,
+    100% 9px,
+    100% calc(100% - 9px),
+    calc(100% - 9px) 100%,
+    9px 100%,
+    0 calc(100% - 9px),
+    0 9px
+  );
+  pointer-events: none;
+  transition: background-color 220ms ease;
+}
+
+.dialogue::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
   background:
-    linear-gradient(135deg, rgb(var(--speaker-color) / 9%), transparent 40%),
-    rgb(5 8 7 / 92%);
-  box-shadow:
-    0 12px 45px rgb(0 0 0 / 52%),
-    inset 0 -1px 0 rgb(var(--speaker-color) / 48%),
-    inset 0 0 28px rgb(255 255 255 / 2%);
-  clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);
-  transition: border-color 220ms ease, background-color 220ms ease, opacity 180ms ease;
+    linear-gradient(135deg, rgb(var(--speaker-color) / 10%), transparent 40%),
+    rgb(5 8 7 / 94%);
+  clip-path: polygon(
+    8.5px 0,
+    calc(100% - 8.5px) 0,
+    100% 8.5px,
+    100% calc(100% - 8.5px),
+    calc(100% - 8.5px) 100%,
+    8.5px 100%,
+    0 calc(100% - 8.5px),
+    0 8.5px
+  );
+  pointer-events: none;
 }
 
 .dialogue[data-character="ukraine"] { --speaker-color: 102 181 214; }
@@ -535,13 +567,49 @@ html.has-saved-progress #startCurtain {
 }
 
 .curtain__card {
+  position: relative;
   width: min(86%, 530px);
   padding: clamp(20px, 3.5vw, 44px);
-  border: 1px solid rgb(255 198 119 / 29%);
-  background: rgb(3 6 5 / 88%);
-  box-shadow: 0 24px 80px rgb(0 0 0 / 65%);
   text-align: center;
-  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  filter: drop-shadow(0 24px 70px rgb(0 0 0 / 75%));
+}
+
+.curtain__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: rgb(255 198 119 / 35%);
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 calc(100% - 10px),
+    0 10px
+  );
+  pointer-events: none;
+}
+
+.curtain__card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: rgb(3 6 5 / 92%);
+  clip-path: polygon(
+    9.5px 0,
+    calc(100% - 9.5px) 0,
+    100% 9.5px,
+    100% calc(100% - 9.5px),
+    calc(100% - 9.5px) 100%,
+    9.5px 100%,
+    0 calc(100% - 9.5px),
+    0 9.5px
+  );
+  pointer-events: none;
 }
 
 .curtain__wrap .curtain__card {
@@ -729,7 +797,7 @@ html.has-saved-progress #startCurtain {
 
   .character--sasha {
     left: 41%;
-    top: 59%;
+    top: 61.5%;
   }
 
   .character--ukraine {
@@ -738,13 +806,13 @@ html.has-saved-progress #startCurtain {
   }
 
   .character--germany {
-    left: 56.5%;
-    top: 95%;
+    left: 55%;
+    top: 97%;
   }
 
   .character--britain {
-    left: 63%;
-    top: 79%;
+    left: 64.6%;
+    top: 69%;
   }
 
   .dialogue {
