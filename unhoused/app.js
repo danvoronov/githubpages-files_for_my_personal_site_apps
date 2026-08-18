@@ -2,8 +2,8 @@
   'use strict';
 
   const rawData = window.PLAY_DATA;
-  if (!rawData || !rawData.ru || !rawData.ua || !rawData.ui) {
-    throw new Error('Не вдалося завантажити дані п’єси / Не удалось загрузить данные пьесы.');
+  if (!rawData || !rawData.ru || !rawData.ua || !rawData.en || !rawData.ui) {
+    throw new Error('Не вдалося завантажити дані п’єси / Не удалось загрузить данные пьесы / Failed to load play data.');
   }
 
   const elements = {
@@ -35,8 +35,10 @@
     charLabelBritain: document.querySelector('#charLabelBritain'),
     langBtnUa: document.querySelector('#langBtnUa'),
     langBtnRu: document.querySelector('#langBtnRu'),
+    langBtnEn: document.querySelector('#langBtnEn'),
     startLangUa: document.querySelector('#startLangUa'),
     startLangRu: document.querySelector('#startLangRu'),
+    startLangEn: document.querySelector('#startLangEn'),
     characters: [...document.querySelectorAll('.character, .character-outline')]
   };
 
@@ -49,7 +51,7 @@
   let currentLang = 'ua';
   try {
     const savedLang = localStorage.getItem('bomji_play_lang');
-    if (savedLang === 'ru' || savedLang === 'ua') {
+    if (savedLang === 'ru' || savedLang === 'ua' || savedLang === 'en') {
       currentLang = savedLang;
     }
   } catch {
@@ -77,7 +79,7 @@
   }
 
   function setLanguage(lang, preserveTyping = false) {
-    if (lang !== 'ua' && lang !== 'ru') return;
+    if (lang !== 'ua' && lang !== 'ru' && lang !== 'en') return;
     currentLang = lang;
 
     try {
@@ -101,7 +103,7 @@
     script = buildScript(data);
 
     // Update document metadata
-    document.documentElement.lang = currentLang === 'ua' ? 'uk' : 'ru';
+    document.documentElement.lang = currentLang === 'ua' ? 'uk' : (currentLang === 'ru' ? 'ru' : 'en');
     document.title = ui.pageTitle;
     if (elements.mainApp) {
       elements.mainApp.setAttribute('aria-label', ui.ariaMain);
@@ -140,8 +142,10 @@
     // Update switcher active states
     if (elements.langBtnUa) elements.langBtnUa.classList.toggle('is-active', currentLang === 'ua');
     if (elements.langBtnRu) elements.langBtnRu.classList.toggle('is-active', currentLang === 'ru');
+    if (elements.langBtnEn) elements.langBtnEn.classList.toggle('is-active', currentLang === 'en');
     if (elements.startLangUa) elements.startLangUa.classList.toggle('is-active', currentLang === 'ua');
     if (elements.startLangRu) elements.startLangRu.classList.toggle('is-active', currentLang === 'ru');
+    if (elements.startLangEn) elements.startLangEn.classList.toggle('is-active', currentLang === 'en');
 
     updateBackButtonState();
 
@@ -209,6 +213,12 @@
       setLanguage('ru');
     });
   }
+  if (elements.langBtnEn) {
+    elements.langBtnEn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setLanguage('en');
+    });
+  }
   if (elements.startLangUa) {
     elements.startLangUa.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -219,6 +229,12 @@
     elements.startLangRu.addEventListener('click', (event) => {
       event.stopPropagation();
       setLanguage('ru');
+    });
+  }
+  if (elements.startLangEn) {
+    elements.startLangEn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setLanguage('en');
     });
   }
 

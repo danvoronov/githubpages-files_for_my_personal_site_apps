@@ -57,6 +57,35 @@ window.PLAY_DATA = {
       "ariaAdvance": "Показати або продовжити репліку",
       "ariaBack": "Попередня репліка",
       "backTitle": "Назад (←)"
+    },
+    "en": {
+      "pageTitle": "In the World of the Homeless — Documentary Theatre",
+      "eyebrow": "DOCUMENTARY THEATRE",
+      "mainTitle": "In the World<br>of the Homeless",
+      "startDescription": "Four voices around one campfire.<br>Read at your own pace.",
+      "startButton": "ENTER THE FOREST",
+      "startHint": "After each line, click with your mouse<br>or press the spacebar.",
+      "endEyebrow": "THE END",
+      "endTitle": "The fire<br>dies down",
+      "endDescription": "The play has ended.",
+      "playAgainButton": "ONCE MORE",
+      "continueHint": "click — next",
+      "restartButton": "reset",
+      "restartConfirm": "Reset progress and return to the beginning?",
+      "replicaPrefix": "line",
+      "introPrefix": "intro",
+      "stageRemark": "Remark",
+      "sceneCharacterNames": {
+        "sasha": "Sasha",
+        "ukraine": "Oleksandr",
+        "germany": "Tina",
+        "britain": "Anthony"
+      },
+      "ariaMain": "Interactive documentary play",
+      "ariaScene": "Night forest and four people around the campfire",
+      "ariaAdvance": "Show or continue line",
+      "ariaBack": "Previous line",
+      "backTitle": "Back (←)"
     }
   },
   "ru": {
@@ -1814,7 +1843,7 @@ window.PLAY_DATA = {
         "sourceIndex": 10,
         "type": "dialogue",
         "character": "germany",
-        "text": "Мене звати Тіна. 34 роки. Я з Тюрингії. З Базальцена. Живу зараз у Німеччині. Я вже не бездомна, на щастя, вже ні. Але я все одно шукаю зараз квартиру, у мене маленька кімната 8 м² з ванною, але я б хотіла однокімнатну квартиру. Але знайти таку важко. Я шукаю підходящу вже п'ять років. У мене є власна кімната, я можу приходити й іти, коли захочу. У мене є мікрохвильовка, але в нас є і спільна кухня, якщо необхідно. У нас багато кімнат у будинку, але я не знаю всіх сусідів. У нас не питають дозволу, коли підселяють когось: впишеться він у нашу групу чи ні. Це нас ніхто не питає. Йому просто виділяють кімнату. І невідомо, порозуміємося ми чи ні. А до цього протягом 25 років я жила на вулиці."
+        "text": "Мене звати Тіна. 34 роки. Я з Тюрингії. З Бад-Зальцунгена. Живу зараз у Німеччині. Я вже не бездомна, на щастя, вже ні. Але я все одно шукаю зараз квартиру, у мене маленька кімната 8 м² з ванною, але я б хотіла однокімнатну квартиру. Але знайти таку важко. Я шукаю підходящу вже п'ять років. У мене є власна кімната, я можу приходити й іти, коли захочу. У мене є мікрохвильовка, але в нас є і спільна кухня, якщо необхідно. У нас багато кімнат у будинку, але я не знаю всіх сусідів. У нас не питають дозволу, коли підселяють когось: впишеться він у нашу групу чи ні. Це нас ніхто не питає. Йому просто виділяють кімнату. І невідомо, порозуміємося ми чи ні. А до цього протягом 25 років я жила на вулиці."
       },
       {
         "id": 6,
@@ -2808,7 +2837,7 @@ window.PLAY_DATA = {
         "sourceIndex": 198,
         "type": "dialogue",
         "character": "ukraine",
-        "text": "Люди в нас хороші. От, крім бомжів, звичайно. (сміється) Коли я ніч проводжу.. можна ЯКЩО це саме і підвали є, і горища, аби людина… де хочеш можна переспати, ніхто не зачепить, тільки… Люди хороші, тільки бомж якщо тебе побачить, шо ти спиш, може обчистить, бомжі отакі аморальний народ, шо від них можна очікувати всяких гидот, всяких капостей, ну на добро вони мало здатні. Може, це просто життя їх так повернуло, шо.. А отакі люди, от так як ви, наприклад, вони тебе не зачеплять нічого і-і-і і не заберуть нічого, які не бомжі. Вони хех…"
+        "text": "Люди в нас хороші. От, крім бомжів, звичайно. (сміється) Коли я ніч проводжу.. можна якщо це саме і підвали є, і горища, аби людина… де хочеш можна переспати, ніхто не зачепить, тільки… Люди хороші, тільки бомж якщо тебе побачить, шо ти спиш, може обчистить, бомжі отакі аморальний народ, шо від них можна очікувати всяких гидот, всяких капостей, ну на добро вони мало здатні. Може, це просто життя їх так повернуло, шо.. А отакі люди, от так як ви, наприклад, вони тебе не зачеплять нічого і-і-і і не заберуть нічого, які не бомжі. Вони хех…"
       },
       {
         "id": 148,
@@ -2906,7 +2935,7 @@ window.PLAY_DATA = {
         "sourceIndex": 218,
         "type": "dialogue",
         "character": "ukraine",
-        "text": "Можна! Агага ось цього якраз можна. Е. Продати шось можна і ее ну хехех на ринок вилізти на барахолку… правда, там, так би мовити.. воно невдячне заняття.. на смітнику там. Принесеш, а тобі дають копійки, шо думаєш, навіщо я його брав, навіщо я його отето носив, але вже раз приніс, так давайте скільки даєте і-і-і і спасибі й за те. Та я багато знаходив, і праски, і радіоприймачі. Але принесеш, а вони там по дві, по п'ять гривень отак і це на на Пташці. Ну є на Петрівку можна возити, але знову ж таки, привезеш, а тобі дають там наче для сміху карбованець, починаєш сперечатися, а він ні в яку. Ну так шо ж, ну давай карбованець уже кажу. Шо вже даси. Та давай скільки є. Еее так я вже це не дуже захоплююся таким промислом, щоб на Пташку шось возити."
+        "text": "Можна! Агага ось цього якраз можна. Е. Продати шось можна і ее ну хехех на ринок вилізти на барахолку… правда, там, так би мовити.. воно невдячне заняття.. на смітнику там. Принесеш, а тобі дають копійки, шо думаєш, навіщо я його брав, навіщо я його отето носив, але вже раз приніс, так давайте скільки даєте і-і-і і спасибі й за те. Та я багато знаходив, і праски, і радіоприймачі. Але принесеш, а вони там по дві, по п'ять гривень отак і це на на Пташці. Ну є на Петрівку можна возити, але знову ж таки, привезеш, а тобі дають там наче для сміху рубль, починаєш сперечатися, а він ні в яку. Ну так шо ж, ну давай рубль уже кажу. Шо вже даси. Та давай скільки є. Еее так я вже це не дуже захоплююся таким промислом, щоб на Пташку шось возити."
       },
       {
         "id": 162,
@@ -3214,7 +3243,7 @@ window.PLAY_DATA = {
         "sourceIndex": 283,
         "type": "dialogue",
         "character": "sasha",
-        "text": "Я б злякався. (сміється)"
+        "text": "Я б злякалася. (сміється)"
       },
       {
         "id": 206,
@@ -3446,6 +3475,1701 @@ window.PLAY_DATA = {
         "type": "stage",
         "character": "sasha",
         "text": "КІНЕЦЬ"
+      }
+    ]
+  },
+  "en": {
+    "title": "Voronov / Gonchar",
+    "version": 1,
+    "characters": {
+      "sasha": {
+        "name": "Sasha",
+        "position": "top"
+      },
+      "ukraine": {
+        "name": "Oleksandr · Ukraine",
+        "position": "left"
+      },
+      "germany": {
+        "name": "Tina · Germany",
+        "position": "bottom"
+      },
+      "britain": {
+        "name": "Anthony · Britain",
+        "position": "right"
+      }
+    },
+    "intro": [
+      "Good evening. We will begin shortly.",
+      "The project was born in 2015 out of the question: what do the least successful think about success?",
+      "This is documentary theatre: three stories of real people from Ukraine, Germany, and Britain intertwined with a fictional character — the actor Sasha."
+    ],
+    "lines": [
+      {
+        "id": 1,
+        "sourceIndex": 1,
+        "type": "stage",
+        "character": "sasha",
+        "text": "IN THE WORLD OF THE HOMELESS (based on interviews)"
+      },
+      {
+        "id": 2,
+        "sourceIndex": 3,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Dan Voronov, Yulia Gonchar. 2015, 2016"
+      },
+      {
+        "id": 3,
+        "sourceIndex": 6,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Good day. My name is Sasha, I'm 32 years old. I'm an actor. So what? What do I know about the street? (reading from phone) Street — an element of settlement infrastructure. Usually represents two rows of buildings and the space between them for movement. (speaking) For movement. My parents, they always said: \"Sasha, if you study poorly — you'll go live on the street. Sasha, if you misbehave — you'll end up on the street.\" They never explained how or why. But I remembered forever that the street is the place where I don't want to end up."
+      },
+      {
+        "id": 4,
+        "sourceIndex": 8,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Hello. Kozhukh Oleksandr Petrovych. Born in 1963. I have no documents. I live on the street in Kyiv. Homeless. For a long time. Since 2003. Originally from Chernivtsi region."
+      },
+      {
+        "id": 5,
+        "sourceIndex": 10,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "My name is Tina. 34 years old. I'm from Thuringia. From Bad Salzungen. I live in Germany now. I'm not homeless anymore, luckily, not anymore. But I'm still looking for an apartment right now, I have a small 8 m² room with a bathroom, but I'd like a one-room apartment. But finding one is hard. I've been looking for a suitable one for five years already. I have my own room, I can come and go whenever I want. I have a microwave, but we also have a shared kitchen if needed. We have many rooms in the building, but I don't know all the neighbors. They don't ask our permission when moving someone in: whether he'll fit into our group or not. Nobody asks us that. They just allocate him a room. And who knows whether we'll get along or not. And before that, for 25 years, I lived on the street."
+      },
+      {
+        "id": 6,
+        "sourceIndex": 12,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Anthony. 38 years old, I'm from London. I'm from London, Dulwich Village. Five years ago a council officer made the decision to evict me. Now I have no home. I live on the street with my dog."
+      },
+      {
+        "id": 7,
+        "sourceIndex": 14,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Inaction the first!"
+      },
+      {
+        "id": 8,
+        "sourceIndex": 16,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "I have a dog too. Feeding her (rubs dog's ear) costs about a hundred euros a month, and at home I have three more guinea pigs..."
+      },
+      {
+        "id": 9,
+        "sourceIndex": 17,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Ah, you keep guinea pigs!"
+      },
+      {
+        "id": 10,
+        "sourceIndex": 18,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "They live with me in my room. Three of them. Only 8 square meters... That's very small. And I have so much stuff. People always gave me all kinds of things, clothes, blankets... It accumulates over a lifetime. And I only have a small closet, so I have to lay out clothes on various armchairs or chairs, or wherever. On the ironing board, for example. Or hang them on the wall. And there's no space left."
+      },
+      {
+        "id": 11,
+        "sourceIndex": 19,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "The flat is paid for by the state?"
+      },
+      {
+        "id": 12,
+        "sourceIndex": 20,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Yes, by social services, yes. 433 euros. For eight square meters. Well, okay, 40 euros for electricity I pay myself, they deduct it from my account. 390 euros I receive from the state. Everything costs money, so very little is left, basically. But nothing can replace them (points to dog), no amount of money (smiles)."
+      },
+      {
+        "id": 13,
+        "sourceIndex": 22,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Nobody helped me at all. Not a single person. Nobody. The council officers kicked me out. They came to me. I was supposed to meet with them. Made an appointment. To sort it out. And nothing. But I want to change this. My way of life. The way I live. I'm upset about a lot of things. Not just my wife. And get more help. I lack help. Help! There isn't enough help in my life. Help. They don't help me very much right now. I need so much help right now (to dog: sit down) There are so many people who don't help me. Because in another place, if they see you on the street — they take you to a hostel. Take you. Two, three thousand people all together. And when you can't find them, they find you. And you sleep on the floor. Your back hurts. And that's how you don't get enough sleep. You have to find where to sleep, and they wake you up. It's madness. Madness."
+      },
+      {
+        "id": 14,
+        "sourceIndex": 24,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "My mother threw me out of the house. We were already in Leipzig. My mother moved to Leipzig with the three of us, my sisters and me, and everything fell apart there. First we had a six-room apartment, then a three-room one. My mother stayed to live with my sisters, and I got thrown out. If you count France too, I lived on the street for 20 whole years. Six years ago I got a room."
+      },
+      {
+        "id": 15,
+        "sourceIndex": 26,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "What am I lacking? Right. Ah. God's help!!! First of all, what I want. First of all — salvation. Through the blood of Jesus Christ. Second — God's help. So that God helps... well, in everyday worldly cares. And desirable somehow already, er, meaning that, eh, like you, for example, you consider me, well, a degraded person, and I’d like to sort of rise up and become (laughs) live like, well... well, I don’t know, maybe not just you think so, but others too."
+      },
+      {
+        "id": 16,
+        "sourceIndex": 28,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And how do you interact with the government, or do you cross paths with the Ukrainian state in any way?"
+      },
+      {
+        "id": 17,
+        "sourceIndex": 29,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Not at all! The government doesn't help me in any way, and I don't demand anything from it. (pause) Neither any use nor any harm. The militia, they're people too, you think the militia or the police — he’s a human being too, he understands a person has hardships. He treats you with understanding. Heh, you think (laughs) he... well, all people understand that it's hard for a person to live — he... well, in principle, I have no complaints against the militia or police (laughs) By the way, ee, vodka probably helps. Without vodka, you can't get anywhere. Because if you don't drink — er, you can't live on the street."
+      },
+      {
+        "id": 18,
+        "sourceIndex": 31,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Aha. Could you name a few more positive aspects of your lifestyle?"
+      },
+      {
+        "id": 19,
+        "sourceIndex": 33,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I'm blind in one eye. No. Except that I love my dogs. I try to do everything that depends on me, but this way of life is very abnormal, and what positive sides could there be. It's such a situation, if you think about it, well, there are no positive sides to my way of life. My dog — she's my best friend. In the whole world. I had two dogs. And he died three months ago. My thirty-eighth birthday. And he died right on my birthday. Which upsets me. He died right on my birthday. Which upsets me so much. He died at eleven years old."
+      },
+      {
+        "id": 20,
+        "sourceIndex": 35,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Positive sides? Social bonds between us are much better than among other people. Because we simply have a similar fate and a shared path. Like-minded people. Our social connection is so much better. I know life among normal people and life on the street, I can compare. So I know for sure: our social life is better. But 10 years ago was still better. The euro divided us a lot, so to speak. Because so many people think about money. The euro divided us. People started stealing more among their own. Started more... When it comes to money, people don't give a shit about principles. Setting people up. Going through pockets, if, say, you go to the toilet or somewhere, they rummage through your pockets. You really have to watch your stuff."
+      },
+      {
+        "id": 21,
+        "sourceIndex": 37,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I think (looks towards trash cans where homeless people are), that here, by the way, comrade, you can ask him a couple of questions too — he's of the same confession as me. Maybe he'll answer. I think not! Maybe you'll ask — maybe he'll find something positive (laughs) I'd be interested myself if he says there's anything positive."
+      },
+      {
+        "id": 22,
+        "sourceIndex": 39,
+        "type": "stage",
+        "character": "sasha",
+        "text": "(pause)"
+      },
+      {
+        "id": 23,
+        "sourceIndex": 41,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I'm very glad I met you. I'm looking for an internet club around here. Are you from social services?"
+      },
+      {
+        "id": 24,
+        "sourceIndex": 42,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "No. I'm an actor. Running a project. Looking at how people live."
+      },
+      {
+        "id": 25,
+        "sourceIndex": 43,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I'm looking for an internet club. They told me it would be somewhere around here. In this area. Pointed me here."
+      },
+      {
+        "id": 26,
+        "sourceIndex": 44,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, I can try looking on my phone where the nearest one is."
+      },
+      {
+        "id": 27,
+        "sourceIndex": 45,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I need to get on the internet."
+      },
+      {
+        "id": 28,
+        "sourceIndex": 46,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "What for?"
+      },
+      {
+        "id": 29,
+        "sourceIndex": 47,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Could you maybe get on the internet through that gizmo (points to phone) too?"
+      },
+      {
+        "id": 30,
+        "sourceIndex": 48,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Yes, I can."
+      },
+      {
+        "id": 31,
+        "sourceIndex": 49,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "You can?"
+      },
+      {
+        "id": 32,
+        "sourceIndex": 50,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, very slowly, but it connects."
+      },
+      {
+        "id": 33,
+        "sourceIndex": 51,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "What difference does it make, slowly. Will you do it for me for free?"
+      },
+      {
+        "id": 34,
+        "sourceIndex": 52,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, yes."
+      },
+      {
+        "id": 35,
+        "sourceIndex": 54,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Tina's dog barks loudly and lunges at a passing labrador. The labrador's owner tries to hold him back."
+      },
+      {
+        "id": 36,
+        "sourceIndex": 56,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Do people see nothing at all or what."
+      },
+      {
+        "id": 37,
+        "sourceIndex": 57,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Poor doggie."
+      },
+      {
+        "id": 38,
+        "sourceIndex": 58,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Nah, nothing terrible, everything's under control. She needs gluten-free food."
+      },
+      {
+        "id": 39,
+        "sourceIndex": 59,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "I don't eat gluten products either. I need that kind of food too. There's special dog food like that, right?"
+      },
+      {
+        "id": 40,
+        "sourceIndex": 60,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Only in one shop, but I live nearby. So it's not a problem."
+      },
+      {
+        "id": 41,
+        "sourceIndex": 62,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Ten years ago I had a completely different life. I was... I had... I went blind. That's when I went blind. Yes. In one eye. A dark spot, you know. Inside the muscle. The pupil. Inside my eye (dog barks) And I couldn't work as a roofer anymore."
+      },
+      {
+        "id": 42,
+        "sourceIndex": 63,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Bummer."
+      },
+      {
+        "id": 43,
+        "sourceIndex": 64,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Right now my body sensation is just tired. Tired, you know, these last months I developed pneumonia, fluid in the lungs. I sit here all the time and it's not good for the lungs, it poisons the lungs. Ten years ago I ate whatever I wanted. And now? Scraps. And for that I go to church, around seven in the morning."
+      },
+      {
+        "id": 44,
+        "sourceIndex": 65,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Yeah, tough luck."
+      },
+      {
+        "id": 45,
+        "sourceIndex": 67,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And 10 years ago I had a completely different life too. And I was much younger then, healthier. Now I'm already like a worm-eaten mushroom. Back then still... You see, vodka won't lead to any good. Well, in a village, how is it — in a village it's usually moonshine, everyone has a still, if you don't distill it yourself, the neighbors will give you some. I drank, actually. Now, of course, thank God, the government showed some sense, booze got more expensive. Now there'll be fewer alcoholics in our country, fewer drunks. And we'll live together, er, prosperously. The fact that vodka got more expensive in Ukraine is better by all accounts. People will drink less and there'll be less evil from vodka... I know all about it from myself."
+      },
+      {
+        "id": 46,
+        "sourceIndex": 68,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "You were forty?"
+      },
+      {
+        "id": 47,
+        "sourceIndex": 69,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, yes. (clicks tongue). Unfortunately, ten years, twelve years... Already on the street. Well, what can you do. That's how we live. I hand in, er, whatever you hand in, there's money — you buy something... well, pizza, for example. Or something like that."
+      },
+      {
+        "id": 48,
+        "sourceIndex": 70,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And what is the tastiest food here (gestures around the area)?"
+      },
+      {
+        "id": 49,
+        "sourceIndex": 71,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, meat patties there, sausage roll. You never know, haha. If only there was money, gah-gah-gah. You won't starve to death. And are you going to show me on television too?"
+      },
+      {
+        "id": 50,
+        "sourceIndex": 72,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "No. I only need your words. For myself. Would you feel ashamed on television?"
+      },
+      {
+        "id": 51,
+        "sourceIndex": 73,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Yes, of-of course. Someone I know will see me and laugh, and point fingers, heh-heh-heh-heh."
+      },
+      {
+        "id": 52,
+        "sourceIndex": 75,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "How did you decide to go to the street, how did it happen? Why did it turn out like that?"
+      },
+      {
+        "id": 53,
+        "sourceIndex": 76,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, drank like that. Drank, drank everything away. I used to drink a whole lot, and smoked too, of course. Well, then when life turned out like this, you're not in the mood for drinking, not for whoo-hoo, not for... well, basically I still drink now, (laughs) if there's a chance. So... Are you recording this on, er..."
+      },
+      {
+        "id": 54,
+        "sourceIndex": 77,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Sound."
+      },
+      {
+        "id": 55,
+        "sourceIndex": 78,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And filming me too?"
+      },
+      {
+        "id": 56,
+        "sourceIndex": 79,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "No."
+      },
+      {
+        "id": 57,
+        "sourceIndex": 81,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "And when I wake up I need a drink. I'm an alcoholic. Er, you shouldn't have to see this. I'm an alcoholic — I need a drink. Then I come to my senses. Feed my dog. The biggest thing I achieved this year. A huge success is that I stopped using heroin. Yes. That's right. I was a heroin addict. Seven years. And now I'm clean. Already. Three months already. I'm clean. Already. And only alcohol is left. One replaces the other. And now I have to. First it was heroin, and now alcohol. First I started selling cocaine. Selling cocaine to people. And one evening I woke up. It was a weekend. I had so much cocaine in my head. I had snorted so much cocaine. They came. Knocked on the door. Talked about heroin too. And he says to me, you look terrible. Here. You're using cocaine, right? And I go, 'No no no no no no.' That's, you know, sad. But. I said no. And again. And then a few hits of heroin. And bad. And then woke up at 12 on Sunday. My friend from Chile. Very, very bad. And it wasn't because of the eye situation, it was in our family, where I come from. A lot of money from selling drugs. Years. I come from a not-so-good family. Made lots and lots of money."
+      },
+      {
+        "id": 58,
+        "sourceIndex": 83,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "My mother was a terrible alcoholic. But for about five and a half years now she hasn't been drinking... Same with me."
+      },
+      {
+        "id": 59,
+        "sourceIndex": 84,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Did you drink too?"
+      },
+      {
+        "id": 60,
+        "sourceIndex": 85,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Yes, but for many years now I haven't been drinking at all. Not at all. Nope."
+      },
+      {
+        "id": 61,
+        "sourceIndex": 86,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Just like that, or... it's just hard for me to imagine..."
+      },
+      {
+        "id": 62,
+        "sourceIndex": 87,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "I switched on revulsion inside myself whenever I took a glass in hand."
+      },
+      {
+        "id": 63,
+        "sourceIndex": 88,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Switched on revulsion?"
+      },
+      {
+        "id": 64,
+        "sourceIndex": 89,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Well yes, I was constantly nauseous whenever I saw alcohol. Sometimes you just smell it — and that's it. Brrr. Don't even know how it happened, but one day I just couldn't even stand the smell. And as soon as I drank, I immediately felt sick."
+      },
+      {
+        "id": 65,
+        "sourceIndex": 91,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Cool, and good for health... But I've never tasted alcohol. Let alone drugs. Don't even know what they taste like or what would happen to me — bad or good. Don't know."
+      },
+      {
+        "id": 66,
+        "sourceIndex": 93,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "I knew that someday I'd quit. That was actually the reason for breaking up with my boyfriend. Well yeah, I told him: either you quit drinking, or I quit you. And then he said he couldn't leave alcohol, and then I said I'd have to leave him. Just like that. Nothing you can do. Stupid. Took my stuff, moved in with a colleague. And after three and a half weeks I got the room where I live now. That's why I told my colleague too: maximum three months and I'll move out. And I knew it would be quick. I knew that. Because even before that I'd heard that all you need is to go to social services, chat with the right person from the housing department, and on the very same day you can get an assigned room. It used to be faster, of course. And now you never know. Because..."
+      },
+      {
+        "id": 67,
+        "sourceIndex": 94,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Competition?"
+      },
+      {
+        "id": 68,
+        "sourceIndex": 95,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Exactly. Nowadays I wouldn't get a room that fast. And that's why I can't get an apartment yet. Yes, getting a whole apartment in Germany right now, with everything that's going on... Nope. Too little social housing. In Karlsruhe it's very tight. And a lot of housing for the homeless was taken away, closed down. Yes... for... (pauses, with curiosity) refugees!"
+      },
+      {
+        "id": 69,
+        "sourceIndex": 96,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Meaning, they build and open for refugees, and close down for the homeless?"
+      },
+      {
+        "id": 70,
+        "sourceIndex": 97,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Exactly! But they'll regret it yet. Especially when it gets really cold and everyone wants to drink something hot and warm their arse. So it's brutal. And they want everything brand new."
+      },
+      {
+        "id": 71,
+        "sourceIndex": 98,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Refugees?"
+      },
+      {
+        "id": 72,
+        "sourceIndex": 99,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Yes, throwing away food to get money... I've heard about this many times from different people. They especially complain over there, on Hirtenweg (points with hand). Over there it's really, really bad. Throwing food away and shouting, 'Oh, I'm hungry! Give me money.' And people give it to them."
+      },
+      {
+        "id": 73,
+        "sourceIndex": 101,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Life is so uncertain, you don't know yourself what's in the future and what... That's how it is.. I didn't want this. Didn't expect it. But that's how it turned out. I had a private house there. Meaning, not private, back then it was just like... It wasn't private at the time, just mine. Private property wasn't very fashionable yet back then. Well, I sold it anyway... Eh. Drank it away. Some got stolen. Didn't drink it all away. Drank some of it away, and some they stole from me."
+      },
+      {
+        "id": 74,
+        "sourceIndex": 102,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "What did you drink over?"
+      },
+      {
+        "id": 75,
+        "sourceIndex": 103,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Eh. I don't know. Foolish head, so I drank. (laughs) Just drank like that and all that... heh-heh, why did I drink... interesting question. Why did you drink, heh-heh. Can't even answer. Just drank for some reason, that's all. Well, why do people drink? Means, heh-heh, there's some kind of need. People wouldn't drink for nothing. People drink for one reason or another. To each their own."
+      },
+      {
+        "id": 76,
+        "sourceIndex": 104,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "I see."
+      },
+      {
+        "id": 77,
+        "sourceIndex": 105,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And besides, there's even a song like that, that.. er (sings) My head doesn't ache, a bottle of wine, yeah, haha, But it aches for the one who drinks nothing at all. (laughs)"
+      },
+      {
+        "id": 78,
+        "sourceIndex": 107,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "In the dark blue forest,"
+      },
+      {
+        "id": 79,
+        "sourceIndex": 108,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Where the aspens quiver,"
+      },
+      {
+        "id": 80,
+        "sourceIndex": 109,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Where from wizard oak-trees"
+      },
+      {
+        "id": 81,
+        "sourceIndex": 110,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Leaves come drifting down,"
+      },
+      {
+        "id": 82,
+        "sourceIndex": 111,
+        "type": "stage",
+        "character": "sasha",
+        "text": "On a clearing, poison"
+      },
+      {
+        "id": 83,
+        "sourceIndex": 112,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Bums drank together at midnight"
+      },
+      {
+        "id": 84,
+        "sourceIndex": 113,
+        "type": "stage",
+        "character": "sasha",
+        "text": "And while doing so, hummed"
+      },
+      {
+        "id": 85,
+        "sourceIndex": 114,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Strange words."
+      },
+      {
+        "id": 86,
+        "sourceIndex": 116,
+        "type": "stage",
+        "character": "sasha",
+        "text": "We don't give a damn,"
+      },
+      {
+        "id": 87,
+        "sourceIndex": 117,
+        "type": "stage",
+        "character": "sasha",
+        "text": "We don't give a damn,"
+      },
+      {
+        "id": 88,
+        "sourceIndex": 118,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Though we fear the wolf and the owl alike."
+      },
+      {
+        "id": 89,
+        "sourceIndex": 119,
+        "type": "stage",
+        "character": "sasha",
+        "text": "We have work to do —"
+      },
+      {
+        "id": 90,
+        "sourceIndex": 120,
+        "type": "stage",
+        "character": "sasha",
+        "text": "At the direst hour"
+      },
+      {
+        "id": 91,
+        "sourceIndex": 121,
+        "type": "stage",
+        "character": "sasha",
+        "text": "We are drinking down"
+      },
+      {
+        "id": 92,
+        "sourceIndex": 122,
+        "type": "stage",
+        "character": "sasha",
+        "text": "Magic poison."
+      },
+      {
+        "id": 93,
+        "sourceIndex": 124,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "(remembering the phone) Well anyway, can you check a point through space anywhere in Ukraine?"
+      },
+      {
+        "id": 94,
+        "sourceIndex": 125,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "A map, you mean?"
+      },
+      {
+        "id": 95,
+        "sourceIndex": 126,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well yeah, a map. In any district... No, I want to see how everything is over there. Well... well, so you can see the terrain."
+      },
+      {
+        "id": 96,
+        "sourceIndex": 127,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Ah! Well, we could, only..."
+      },
+      {
+        "id": 97,
+        "sourceIndex": 128,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "How much will that cost?"
+      },
+      {
+        "id": 98,
+        "sourceIndex": 129,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "At an internet club, I don't know."
+      },
+      {
+        "id": 99,
+        "sourceIndex": 130,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And with you, how much?"
+      },
+      {
+        "id": 100,
+        "sourceIndex": 131,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "With me it's free. But it's not real-time, the imagery is from like two years ago."
+      },
+      {
+        "id": 101,
+        "sourceIndex": 132,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Ah... two years ago... I need it to be right now."
+      },
+      {
+        "id": 102,
+        "sourceIndex": 133,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, give or take a year."
+      },
+      {
+        "id": 103,
+        "sourceIndex": 134,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "How much? Give or take is how much?"
+      },
+      {
+        "id": 104,
+        "sourceIndex": 135,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "You have to check. It varies, if it's, say, Kyiv — Kyiv gets updated often."
+      },
+      {
+        "id": 105,
+        "sourceIndex": 136,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "No, not Kyiv. In a completely different region."
+      },
+      {
+        "id": 106,
+        "sourceIndex": 137,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "If it's an oblast, it might not be very frequent. But we can just take a look."
+      },
+      {
+        "id": 107,
+        "sourceIndex": 138,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Please, I'd be very glad."
+      },
+      {
+        "id": 108,
+        "sourceIndex": 139,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "By satellite."
+      },
+      {
+        "id": 109,
+        "sourceIndex": 140,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "From a satellite, yeah."
+      },
+      {
+        "id": 110,
+        "sourceIndex": 141,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Yes, a map."
+      },
+      {
+        "id": 111,
+        "sourceIndex": 142,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, I just need to take a look."
+      },
+      {
+        "id": 112,
+        "sourceIndex": 144,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "And my mother was already asking whether I'm coming for Christmas this year or not."
+      },
+      {
+        "id": 113,
+        "sourceIndex": 145,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Yeah, and?"
+      },
+      {
+        "id": 114,
+        "sourceIndex": 146,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "To be honest, right now I'm not sure. She lives in Leipzig. For 14 whole years we haven't seen each other. 14 years with no contact at all. My sister just recently found me on Facebook."
+      },
+      {
+        "id": 115,
+        "sourceIndex": 147,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "What, really?"
+      },
+      {
+        "id": 116,
+        "sourceIndex": 148,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "(laughs) Yes. My sister lives in Hanover. My mother in Leipzig. The other sister in Australia. Heh-heh. Everyone just got lost somehow. Each went their own way, we drifted apart. And then suddenly everything fell apart. Well, okay, I was in France for a year and a half and nobody looked for me, nobody cared. Then I had no fixed address... And somehow it all fell apart. And only the year before last... no, last year in September I went to visit my sister. She transferred money to my card so I could buy tickets. To my account, because today, unfortunately, everyone needs these cards, bank accounts. They pay social welfare onto them too. Banks are required to issue cards even without a fixed address. At social services they say you have to have an account. Without an account you can't do anything anymore. I've done a lot of things with this account already. But sometimes at ticket machines it doesn't want to accept small change. That's how it is."
+      },
+      {
+        "id": 117,
+        "sourceIndex": 149,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, that's progress. Civilization."
+      },
+      {
+        "id": 118,
+        "sourceIndex": 151,
+        "type": "stage",
+        "character": "sasha",
+        "text": "A passing man drops change into a paper cup. The dog barks."
+      },
+      {
+        "id": 119,
+        "sourceIndex": 153,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Inaction the second."
+      },
+      {
+        "id": 120,
+        "sourceIndex": 155,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "My family is in Spain. John Marinos. There are people like my brother. My brother is my best friend. Yes, always on the phone. Internet. But I'm not that good with the internet. My relationship right now isn't all that good with them. My mum, mum, mum, she's all right. But we don't. My sister — fantastic. I have nephews. It's all me being like this, it's my fault that I'm like this. Family. My father. That's who a successful person is to me — my father. Yes. His achievements in life. That's a man who... who has lots of money now. Has property. Beautiful things. He handled his life very well. When I was little, I remember visiting my father in prison. My mother told me for a long time that my father was a fucking sailor. Sailing. And he's in bloody prison, sitting in fucking prison. (laughs) My father's a sailor. Yeah, right. And he spent eleven years in prison."
+      },
+      {
+        "id": 121,
+        "sourceIndex": 157,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "I have a smartphone too, without it I wouldn't get on Facebook. It's my laptop, my computer, all in one. Yeah, that's why. Well, that was my Christmas money. Yes, I was able to save up well. But without certain people I wouldn't have managed. Yes. Some even chipped in extra. Yes. People I've known for a long time. One gave ten, another twenty. Because I said I'm saving for a phone. And it will replace everything for me, laptop too. I do everything on my phone. Through Facebook I found Niki, who I did my apprenticeship with. Yes, yes. Ever since I found my family, more and more of my old friends showed up. From back then. I never thought we'd ever see each other again. And she wrote to me too. Yes, back then she lived right where I live now. Almost the exact same spot. Roughly 50 meters from me. Back then, in the old days... In the morning we always walked to school together. I'd swing by for her. Back then. Facebook or WhatsApp, a regular text or calling mum. I have a contract and she does too. We can call each other. (sadly) But it doesn't compare to if she could sit next to me, listen to me. That's completely different. I hope my mum understands that too."
+      },
+      {
+        "id": 122,
+        "sourceIndex": 159,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And what about your relatives?"
+      },
+      {
+        "id": 123,
+        "sourceIndex": 160,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Eeeh, what relatives, pigs, not relatives. Eh-heh-heh. Let's assume they... that there are no relatives. They're distant, have no interest in me. Why would they need me. And my parents passed away already, what is there. I worked as a loader. We don't have a factory, never did, but I could load things. Well, it's rural area. What kind of factory could there be. Worked as a loader in a store there, unload sacks here, fetch this and that. Sometimes swept up. Worked as a loader all my life. Grocery store. Right after the army finished. Came back from the army. Well, somewhere around then. Practically all my life I was like that... true, they put up with me too. Drank and skipped work, yeah... but ho-ho-ho people treated you with understanding."
+      },
+      {
+        "id": 124,
+        "sourceIndex": 162,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Did you have a wife?"
+      },
+      {
+        "id": 125,
+        "sourceIndex": 163,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "(decisively) Had one, of course. Had a wife too. There. So what, such a drunkard, she died."
+      },
+      {
+        "id": 126,
+        "sourceIndex": 164,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "She drank too, right?"
+      },
+      {
+        "id": 127,
+        "sourceIndex": 165,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And how."
+      },
+      {
+        "id": 128,
+        "sourceIndex": 166,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "And mine. She's not like me. No. She's been living in a hostel for the last 12 months. She's not on the street, she's all right. She's all right. The most important day of my life is the birthday of my little girl. When she was born. Yes, I have a daughter. Four daughters. They live with Marvilo. Whenever I can, I see them. That's precisely what brings me joy. My youngest, she goes to college. She's eight. Jessie is four. Lily is five. And Olivia is nine."
+      },
+      {
+        "id": 129,
+        "sourceIndex": 168,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "And I don't have children. Never wanted them. No-o. Because I never had a suitable partner for that. That's why. They just didn't suit me, couldn't adjust. The dog is plenty for me."
+      },
+      {
+        "id": 130,
+        "sourceIndex": 169,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Did you not have children? Or did you?"
+      },
+      {
+        "id": 131,
+        "sourceIndex": 170,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "(takes a deep breath) Eh. Didn't work out. Maybe I didn't have the strength, maybe my wife didn't have that ability."
+      },
+      {
+        "id": 132,
+        "sourceIndex": 172,
+        "type": "stage",
+        "character": "sasha",
+        "text": "A passerby drops money into the cup."
+      },
+      {
+        "id": 133,
+        "sourceIndex": 174,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "The government doesn't help. No! No. The laws. They don't understand. My case can't be classified. They need to treat my eye. They can't treat my eye. My left eye. And there's also back damage. For that, eight days. They give eight days. See, I use one eye. Only one. On the street. And she goes, 'Don't read' (laughs) Just don't read, she says, just don't read. And what am I supposed to say to her."
+      },
+      {
+        "id": 134,
+        "sourceIndex": 176,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "What government? We hustle on our own. In Kyiv, sometimes, small side gigs. Ooh, sometimes you get lucky. I go to this so-called labor exchange at the station. They come looking for loaders, bricklayers. Though I'm not really one, I already heh-heh say I'm a bricklayer and they take me. You lay bricks somehow, they pay you money, and there you go, live and rejoice. Even though by trade I don't have that training, but I got the hang of it, I can lay bricks now, even tiles if they take me. Even if the quality isn't great, people are fine with it, heh-heh-heh, they praise it, heh-heh-heh-heh. No hard feelings. If you're lucky — they pay daily. And sometimes you stand all day and nothing. Stood like that and nothing. Rarely, though, they do hire you. Like you're just standing on the street and someone approaches you, says they need this and that. Carry out a couch. Or what. Or load a truck. I say 'no problem' — well, you do the work and they pay you the money (laughs) heh-heh. Isn't that luck? Otherwise what? Depends on what you consider luck."
+      },
+      {
+        "id": 135,
+        "sourceIndex": 178,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I don't get money any other way. Only what people give me on the streets."
+      },
+      {
+        "id": 136,
+        "sourceIndex": 180,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Actually I wanted... I wanted to be a house painter. Yes, I wanted to be a painter. And did an apprenticeship through technical college. After school I had training for this job. Four weeks of practical training everyone in class had to do. I was with my girlfriend, we signed up together. And everything was going great. I really liked it. Then I fell off a ladder. In the very first year of training, during the internship. The injury wasn't recognized as a violation of safety regulations. Social insurance, unfortunately, didn't recognize it as an industrial accident. Like I didn't want to tie myself off properly, but he was supposed to check everything, supervise. He just forgot. Just forgot to check. And he managed to get away with it, wriggled out of it. But nothing you can do. A severe spinal injury. And nothing you can do. Go to social services, beg on the street. What else could I do? That's how it happens. I try to sit here at the best time, when there are lots of people. Mostly around lunchtime or in the afternoon. Also at the station. My neighbor and I sit there. At the station people sometimes come up and offer clothes. Often even offer to bring them to my place. Very sweet. Those are genuinely kind people. The owner of the bakery on the corner where I often sit says: you can sit wherever you want. She likes me a lot. She has a dog too. Sometimes brings me coffee and something else. She's kind. People like that are genuinely kind. I'd gladly go to work. With pleasure. But what's not possible is not possible. Gladly would. Yes. Right now I can sit like this for two hours a day, take a break, and stand for 25 minutes. Otherwise I can't. And what boss would put up with that? Not a single employer would agree. I'd be surprised, very surprised. Well, in the workshop for disabled people there are mentally ill people working too. But I'm not crazy in the head. I can't. I'd become like that too, go crazy. That's how it is."
+      },
+      {
+        "id": 137,
+        "sourceIndex": 182,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I walk around here, collecting bottles. Cans can be turned in for 15 kopecks apiece. How much do I... well, roubles, how many... depends on when. Sometimes more than 100 roubles a day, sometimes less than a hundred, around 50 roubles. Hit or miss, well, around up to a hundred, minus a hundred, in the ballpark of a hundred. Fluctuates."
+      },
+      {
+        "id": 138,
+        "sourceIndex": 184,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "For me every day is different too. Like, sometimes you sit and in 10 minutes make 1–2 euros. No-o, in general it's hard to say how much overall. No-o."
+      },
+      {
+        "id": 139,
+        "sourceIndex": 186,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I had a buddy, then turned out he cleaned me out, robbed me. Here, these bums can, well... how to tell you... ones like me don't like each other. They even threatened me today. We'll beat you up if we see you again. Smash your head. Well, there were several of them, three guys. So they threatened. Whoever has the strength is right. That's the philosophy. It's dangerous walking like that, on the street I try not to go into back alleys, only on wide streets. On the street I figure they won't start beating me."
+      },
+      {
+        "id": 140,
+        "sourceIndex": 188,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Here among the homeless there's... um... let's say... competition. But not among Germans, rather it's like... a struggle between Germans and foreigners. With those who, like her (points to a woman in a hijab, also begging. She sits 30 meters from us) in a headscarf over there, and among us Germans. Because we Germans do everything for ourselves and on our own. Each for themselves. But in the evening they throw everything into one pot, so they end up with more per person. Than what we collect individually. Because of that, there's friction. And she knows for sure this is my spot. Usually she comes earlier, before I'm here."
+      },
+      {
+        "id": 141,
+        "sourceIndex": 190,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, I, heh-heh-heh, walked around here today, and there are already bums who don't like it, as they say, one elder doesn't like another elder. Well, and they say, get out of here, because if you walk around here, we'll... we'll do to you, how to put it politely... er... That was just recently, haha. It's just that before, God was merciful, I didn't run into such bad people."
+      },
+      {
+        "id": 142,
+        "sourceIndex": 191,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Ah, are they young? What's the average age?"
+      },
+      {
+        "id": 143,
+        "sourceIndex": 192,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, I'd say younger than me. Big, husky bulls. Er, well, around forty, thirty-five maybe. 35–40, somewhere around there."
+      },
+      {
+        "id": 144,
+        "sourceIndex": 193,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And in general, what age are homeless people now?"
+      },
+      {
+        "id": 145,
+        "sourceIndex": 194,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I've met all kinds. There's one old grandpa walking around here, he lives in the underground pedestrian underpass. He dresses well, but he stands in the underpass all day long, stands right there. Looking at him you wouldn't even tell, even though he has a beard and all, you wouldn't think he's a bum. Yet he lives just like I do. Don't know what he does there, but whenever I walk through the underpass, he's standing there all the time, day and night, you can see him in the morning. Walk through during the day, he's standing there. It's just warmer there probably, so he stands there."
+      },
+      {
+        "id": 146,
+        "sourceIndex": 196,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "For the most part, people aren't horrible. But you can't go to certain places, only walk along that road. In other places it's not entirely safe. There are safer areas."
+      },
+      {
+        "id": 147,
+        "sourceIndex": 198,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "People here are good. Except for the bums, of course. (laughs) When I spend the night... you can IF you want, there are basements, attics, as long as a person... you can sleep wherever you want, nobody will touch you, only... People are good, only if a bum sees you sleeping, he might rob you, bums are such an immoral crowd, you can expect all kinds of nastiness from them, they're hardly capable of good. Maybe life just turned them that way... But people like you, for example, they won't touch you or take anything from you, the non-bums. They, heh..."
+      },
+      {
+        "id": 148,
+        "sourceIndex": 200,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Yes, I remember having to look for a place to sleep all the time. Often at universities, there on stadiums and sports grounds. The entrances are open, you can sleep over. Or at the train station, before it got renovated. It had such soft seats. Now we live in a hostel like this and all our corridor neighbors, we organize little evenings together, have dinner. We chip in, whoever has what. Often go grocery shopping together. Everyone pools money and one or two people go to the shop. We don't need much: someone likes cooking, someone cleaning. For now it works."
+      },
+      {
+        "id": 149,
+        "sourceIndex": 201,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And on the street, what did you eat? From dumpsters?"
+      },
+      {
+        "id": 150,
+        "sourceIndex": 202,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "No-no, never did that. Didn't need to. I always had some kind of food."
+      },
+      {
+        "id": 151,
+        "sourceIndex": 203,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "From the money you got on the street?"
+      },
+      {
+        "id": 152,
+        "sourceIndex": 204,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Yes, yes, it was enough. I met very good people who gave me various clothes. Or would press 20 euros into my palm. Just like that. But there are very nasty people too, who would curse at you. So it varies."
+      },
+      {
+        "id": 153,
+        "sourceIndex": 206,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "In London there's a shelter, but if you're late there's a long queue. And I wash wherever I can. At friends' places. When possible. But the closest place from here is at church. The nearest is a mission. And there are commercial places with showers and all that."
+      },
+      {
+        "id": 154,
+        "sourceIndex": 208,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "And I wash, I go to the Dnipro river sometimes whenever possible. Bathe. Well, now it was... thank God... you know... warmed up. You can go again, before it was cold — stopped going. In winter you have to, in winter it's hard. Washing in winter means you have to survive the winter, but in summer it's fine, open space. Well... In winter usually what. In winter you need warm clothes, but ask any bum — how he spends the winter. He walks like that, shivering from the cold, in winter there's nowhere to wash and, er, you know, I won't mention what starts crawling there. Well, and winter is winter. Heh-heh, not summer, of course."
+      },
+      {
+        "id": 155,
+        "sourceIndex": 210,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "At our station you can pay 1 euro to go take a shower. There are special shelters for the homeless where you can go wash. So there are lots of options. And when I see some broads sitting on the street with this trail of stench following them... Then I think to myself: hey, girl, you're not 88 years old, it's not martial law. Behind some of them, a 100-meter carpet of stench spreads out."
+      },
+      {
+        "id": 156,
+        "sourceIndex": 211,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, probably there are also alcoholics who don't understand at all..."
+      },
+      {
+        "id": 157,
+        "sourceIndex": 212,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "No-no, I don't think so. I just think: you're just too lazy! Yes. You're just too lazy. And you shouldn't be afraid at all, in the shower you can always lock yourself in. They give you a key. For safety. So that's not an issue."
+      },
+      {
+        "id": 158,
+        "sourceIndex": 213,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Is the street dangerous for women?"
+      },
+      {
+        "id": 159,
+        "sourceIndex": 214,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "I always stuck with a group of people, then nothing would happen. But all sorts of things occurred. Happened. Yes. But as for rape or something like that... No, no. I was always lucky, because with my mug I could quickly cause disgust. Besides, I always have my dog with me. By the way, I'm a member of an animal welfare society. I look after dogs that live on the street. Check whether they're cared for and all that. And I have an acquaintance who's a lawyer, she's in that animal welfare society too. If something happens, I call her and she sorts it out. We work together. Not bad."
+      },
+      {
+        "id": 160,
+        "sourceIndex": 216,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Can you find things in the trash to sell later?"
+      },
+      {
+        "id": 161,
+        "sourceIndex": 218,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "You can! Aha-ga, that you certainly can. Er, you can sell something and, er, well, heh-heh-heh, go to the flea market... true, there, so to speak... it's a thankless task... at the dump there. You bring it, and they offer you pennies, you think, why did I take it, why did I carry it all the way, but once you brought it, just give whatever you're giving and, er, thanks for that too. Yeah, I found a lot, irons, radios. But you bring it, and they offer two, five hryvnias for it at the Bird Market. Well, you can take it to Petrivka, but then again, you bring it and they offer you like a rouble as a joke, you start arguing and they won't budge. Well, what can you do, just give me a rouble then, I say. Whatever you give. Just give whatever you have. Er, so I'm not very keen on that trade anymore, hauling stuff to the Bird Market."
+      },
+      {
+        "id": 162,
+        "sourceIndex": 219,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And books to Petrivka?"
+      },
+      {
+        "id": 163,
+        "sourceIndex": 220,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Eeeh, no-o, they don't only sell books there. But books too, if you come across any, you can take them to Petrivka."
+      },
+      {
+        "id": 164,
+        "sourceIndex": 222,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I love reading. The last thing I read was 'Confession'. Yes. Ben Al-Arithment. It's based on a true story. And they found, er... er, a village. And a guy who was going to confession at church. He... and he... An incredible book. Yes. Incredible."
+      },
+      {
+        "id": 165,
+        "sourceIndex": 224,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Eh-heh-heh-heh, see, I loved reading since childhood, tell me why I have poor eyesight and wear glasses. It's from reading little books since childhood, and loved watching television. Well, not only since childhood. Gah-gah-gah, all my life while I lived more or less, and even now if I come across a book somewhere, of course I'll read it if it's good. (laughs) Well, ah, it's a shame that you read, but instead of gaining wisdom, you just ruined your eyesight. Gah-gah-gah."
+      },
+      {
+        "id": 166,
+        "sourceIndex": 226,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "What about cinema or theatre?"
+      },
+      {
+        "id": 167,
+        "sourceIndex": 228,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I love theatre very much, love cinema very much, but, er, I don't have the means (laughs) heh-heh-heh."
+      },
+      {
+        "id": 168,
+        "sourceIndex": 229,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Not at all. No. I don't want to leave my dog alone. I'd have to leave her alone, and I never do that. I'd rather stay home."
+      },
+      {
+        "id": 169,
+        "sourceIndex": 230,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I go to the cinema. The one they show in church. Every Wednesday. At seven. The last film there was... let's think, er... er, RED 2. Bruce Willis. John Malkovich. Yeah, that was brilliant. Last week. Very nice."
+      },
+      {
+        "id": 170,
+        "sourceIndex": 232,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Inaction the third."
+      },
+      {
+        "id": 171,
+        "sourceIndex": 234,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "The last thing I read, oh boy, that I won't even remember. Er, I think it was a small brochure, called some kind of rhapsody, something like that. Er, well, the author plunged into philosophy there, about what the meaning of life is. I read it, I figured it's something complicated to understand, well, I didn't delve too deep. The meaning of life. Not every philosopher can answer that. (smiles) Heh. What is the meaning of life? Probably, the meaning of life, probably after all (sing-song) is to believe in our Lord Jesus Christ and through the blood of Jesus Christ receive forgiveness of sins and be saved. (smiling) Did I guess right? Or not? (laughs)"
+      },
+      {
+        "id": 172,
+        "sourceIndex": 236,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I pray every day. I believe in God, actually. Pray every day. I have to be grateful. I've seen people who met God and He changed their lives. And that really inspired me. Seeing that. These two Black guys. The most terrifying people in the world. Anyone who saw them on the street would cross to the other side right away. They did drugs, beat people up. Then they came to God — a completely different life. Absolutely unreal what they became. I'd love to. If I could find that. Find that spiritual strength inside me and gather it. I'd really love for that to happen to me. I really want to, if I could! I pray. I'd pray if I could. But I can't find it. Reach it. Get it. See it. What's wrong with me."
+      },
+      {
+        "id": 173,
+        "sourceIndex": 238,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "And I don't believe in God at all. Absolutely not. And I wasn't raised that way at all. From early childhood. I'm from East Germany, and there it wasn't the thing to do at all. So everyone there was like that. And my great-grandmother left the church too. I never had anything to do with it, but in school there was a religious education class. Then I told them I'd never had anything to do with religion at all. And they said: ah, well, there's also ethics class, go to them then. Of course, it was fun. When you know nothing about religion, but still have to chatter about something. Had to make things up."
+      },
+      {
+        "id": 174,
+        "sourceIndex": 240,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Atheism is close to me. God is such a vestige."
+      },
+      {
+        "id": 175,
+        "sourceIndex": 242,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I've met people who look so religious on the outside, but you only have to look away and he'll... heh-heh-heh, better deal with non-believers than with believers like that. So, eh-heh-heh-heh, as they say, you can't look into a person's soul, and to get to know someone takes a certain amount of time. But I am a believer. Of course. I go to an Orthodox church. To the Kyiv-Pechersk Lavra, there's Bishop Pavlo, such a golden person. He helps those in need. Meaning, if you go to Bishop Pavlo, he can give you money too. Well, within reasonable limits, of course, heh-heh. Won't give much, but they'll feed you there and everything. Thank God that the church cares for people."
+      },
+      {
+        "id": 176,
+        "sourceIndex": 243,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Do you observe fasting? Fasting or anything like that? Or on the street nowadays such things..."
+      },
+      {
+        "id": 177,
+        "sourceIndex": 244,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Er, whenever possible, when, well, er, the way I live, er, sometimes you have to fast anyway. (laughs)"
+      },
+      {
+        "id": 178,
+        "sourceIndex": 245,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Does it happen that you can't eat for a long time, like go hungry for a week?"
+      },
+      {
+        "id": 179,
+        "sourceIndex": 246,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I try, of course, not to starve to death, if I have a penny, I eat, of course. (laughs). On whatever, on whatever, but on food I'll spend it. I try not to stay hungry. Ee, so far you can still live here, there's no famine, it's not the year 1933. Aha-ga, you can live now. God grant that everything is fine, and that..."
+      },
+      {
+        "id": 180,
+        "sourceIndex": 248,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Have you thought about suicide?"
+      },
+      {
+        "id": 181,
+        "sourceIndex": 250,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "No! Never! No."
+      },
+      {
+        "id": 182,
+        "sourceIndex": 251,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, I think ask any person about death, nobody wants, you know, heh-heh-heh, the next world. Please don't jinx it, God forbid. Lord, Lord, save me, a great sinner. (crosses himself) And it's better not to think about death, and better not to ask me such questions. Yes, I turn to God right away, God forbid. From death, from all of that."
+      },
+      {
+        "id": 183,
+        "sourceIndex": 252,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I don't want to think about death at all. What can I say about death. Losses. My uncle died three months ago. The first uncle I lost. My acquaintance Jenny died of pneumonia four weeks ago. She was buried."
+      },
+      {
+        "id": 184,
+        "sourceIndex": 254,
+        "type": "stage",
+        "character": "sasha",
+        "text": "(pause)"
+      },
+      {
+        "id": 185,
+        "sourceIndex": 256,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "(remembering the phone) And can you see through space how the houses stand? It's a village. Basically not a village, a settlement. Vinnytsia region, Pohrebysche station."
+      },
+      {
+        "id": 186,
+        "sourceIndex": 258,
+        "type": "stage",
+        "character": "sasha",
+        "text": "SASHA finds it on the map."
+      },
+      {
+        "id": 187,
+        "sourceIndex": 260,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "The houses are there. But you can hardly make out anything. It's just like, ee, from the air and even then the resolution is really low. There isn't more? So you can't really look at all, turns out?"
+      },
+      {
+        "id": 188,
+        "sourceIndex": 261,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "There's nothing more. It's good as it is. There won't be more detail."
+      },
+      {
+        "id": 189,
+        "sourceIndex": 262,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well... need to go there. For, for, for a ticket, you need money and all that."
+      },
+      {
+        "id": 190,
+        "sourceIndex": 263,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "How many hryvnias?"
+      },
+      {
+        "id": 191,
+        "sourceIndex": 264,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Er, right now, well, I don't know."
+      },
+      {
+        "id": 192,
+        "sourceIndex": 265,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "The electric train to Bila Tserkva costs 14 hryvnias. And from there another electric train, well, twenty-something hryvnias, if you take electric trains."
+      },
+      {
+        "id": 193,
+        "sourceIndex": 266,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, haha, really need to go. That, that's best of all."
+      },
+      {
+        "id": 194,
+        "sourceIndex": 267,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Well, the one to Bila Tserkva goes through Fastiv, it's not a direct train."
+      },
+      {
+        "id": 195,
+        "sourceIndex": 268,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "I thought you could... I just. I thought you could inspect it and very thoroughly, that is. But here, turns out, the resolution, heh-heh, isn't enough."
+      },
+      {
+        "id": 196,
+        "sourceIndex": 269,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Yeah, won't work."
+      },
+      {
+        "id": 197,
+        "sourceIndex": 270,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, that's just, well, my lack of information, I... I was told you could look from space. But that the resolution is so poor, that I didn't know. I wouldn't have troubled you, heh-heh, troubled you, heh-heh."
+      },
+      {
+        "id": 198,
+        "sourceIndex": 271,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "No problem. Would you like to have a car?"
+      },
+      {
+        "id": 199,
+        "sourceIndex": 272,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "(pause) Ts, I'd like to, of course. (pause) Wouldn't mind, of course. (pause) But what will come of it if I'd like to? What? Will it be the way I'd like?"
+      },
+      {
+        "id": 200,
+        "sourceIndex": 274,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "I don't know. How do you feel about wealthy people in general? Do you envy them? Or anything like that?"
+      },
+      {
+        "id": 201,
+        "sourceIndex": 276,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I don't think about rich people. Nothing. Nothing. I feel nothing. No envy or anything like that. Normal."
+      },
+      {
+        "id": 202,
+        "sourceIndex": 278,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Why wouldn't I envy. Everyone envies the rich. Heh-heh. Take... you, for example, errr, you wouldn't refuse either to have a million or a billion lying in your pocket, right? (laughs) heh-heh-heh"
+      },
+      {
+        "id": 203,
+        "sourceIndex": 280,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "Well, it's always different... it always depends on how people manage that money. Because there are people with money who are total egoists, and there are people with money who give despite everything. So you can't paint everyone with the same brush. That won't work. Just like us poor people, you can't paint us with the same brush either."
+      },
+      {
+        "id": 204,
+        "sourceIndex": 282,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Dollars... a billion dollars in your pocket right now. You'd probably be rejoicing and glowing all over, right?"
+      },
+      {
+        "id": 205,
+        "sourceIndex": 283,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "I'd be terrified. (laughs)"
+      },
+      {
+        "id": 206,
+        "sourceIndex": 284,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, I think a billion dollars wouldn't fit in your pocket. Well, (laughs) well, well, all the same, er, you'd probably rejoice very much. Imagine that. A million is no small amount. And a billion, like our esteemed Petro Oleksiyovych, I think even more than one billion (laughs), and Kolomoisky and Akhmetov. Good on those people. How much money, wow (laughs), they have."
+      },
+      {
+        "id": 207,
+        "sourceIndex": 286,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "In your opinion, who are successful people? Are the people around us right now successful too, or only those who have... well, from what point does the concept of success begin?"
+      },
+      {
+        "id": 208,
+        "sourceIndex": 287,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "It's like in that joke. As, er, the joke about that guy went... er, er, what was his name... err, err, I'll remember now. The scientist! That one said — \"everything, boys, is relative.\" So if successful people walk by, the ones you see — it's all relative what they are. Relative to me they are successful. But relative to, er, Kolomoisky or Petro Oleksiyovych they aren't successful (laughs), so it's all relative."
+      },
+      {
+        "id": 209,
+        "sourceIndex": 289,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Yeah, is it deserved or undeserved that they have all this?"
+      },
+      {
+        "id": 210,
+        "sourceIndex": 291,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Who am I to judge? Them. You think it's easy being an oligarch? You think, take for example, er, which oligarch to take, well, at least Ihor Kolomoisky, right? You think it's easy for him when President Poroshenko is already picking on him a bit and sort of, er, err, well, I won't get into their feud (smiles) but still, looks like he took something from him or something. Ah! Fired him from governorship and took something from him, errr. Naftogaz or what did he take from him, I don't remember exactly? Took some company or oil firm from him. Seems so (laughs). Or, er, rather didn't take, but shifted him from the chairmanship or something, well, I think it's not easy for a person to go through that, at least, we don't know how he feels inside. Take Tsar Nicholas the Second, for example — you think it was easy for a man who was Tsar, and suddenly they stripped him of his kingdom, right? Er-ee, and the man suffered. And he wasn't bad. Then the commies came after him, right? (laughs) Heh-heh. Turned out even worse than Nicholas the Second. Er. Am I right? (laughs) Heh-heh. And the people should have, er, stood up and, look, he's a saintly person, they recognized Nicholas the Second as a saint. At least that's what I heard. Errr. And... See. Once a person suffered, a passion-bearer — means a saint! Mmm. Take, for example, any apostle, er, like (sing-song) Apostle Peter, Apostle Paul. How they suffered for faith! God forbid (in regular voice) and I think they even crucified Apostle Peter in Rome. Right?"
+      },
+      {
+        "id": 211,
+        "sourceIndex": 293,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Aha. Do you have a feeling right now that you are suffering for something or not? Such a feeling?"
+      },
+      {
+        "id": 212,
+        "sourceIndex": 294,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Feeling what. That I'm suffering for something? Errr, well, well. Errr, probably, after all (sing-song) for my sins, see (in regular voice) I already confessed one sin of mine, that I was a bitter drunkard, at least before. And besides that, there are sins not only being a drunkard. Telling a lie somewhere. Stealing a little something somewhere. Offending someone. Aren't those all sins? Er, you must constantly repent and, if, mm, ask. Meaning, seek the intercession of Jesus Christ. He suffered for our sins and took all our sins upon himself. So if I did something wrong, it wasn't me who did it, it was Jesus Christ who did it because he took my sin upon himself."
+      },
+      {
+        "id": 213,
+        "sourceIndex": 296,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "And I answer for myself. For me success will be — finding an apartment. So that I can say, this is mine, only I live here. Nobody else will move into my flat. But it's really not easy, finding an apartment. Maybe in two years. Don't know for sure. To be honest, I can't imagine myself in 10 years at all. It's completely impossible to say which path I'll take. I can't predict in advance how everything will turn out. What I'm lacking... Right now? A sense of friendship, solidarity among people. The fact that my family is scattered across the world like that... I don't like it. That's what I miss. So that I could just say in the evening: I'm going to my mum's. To chat. Or whatever. And both my sisters, they're so far away too. One in Europe, the second in Australia. And by the time my parcel reaches them, an eternity passes. And she has her own life, her own family too. I don't want to bother her either, because I feel I'm an outsider in their family. Don't want to intrude. I'm always very cautious about this. Even with what I text. Others aren't. Her family, for example. But I'm always cautious about this. Yes, what I write. I always think for a long time about what to write to relatives. Not like texting a girlfriend. And it's not easy at all, because we haven't seen each other for so long. And none of us ever tried to change that. Nobody. Yes, 14 years... that's so long. How long we hadn't seen each other... then you did see each other after all. In September I was in Hanover, visiting my sister. And mum was there too. And last Christmas I visited my mum in Leipzig. Spent all my money saved for Christmas. Blew everything on that trip. I persuaded myself that I'd see mum. And this year I'm debating whether to go or not. By train. With her, only by train. No other way. Trains. They're expensive. And mum won't be angry with me. She won't hold it against me if I don't come. She understands perfectly what financial situation I'm in right now. And she is too. Forced to beg, lives on welfare for low-income people. And her knees are bad. 22 years as a waitress. Knees are ruined. Knee arthritis, just like I have now. Yes. It's even hereditary. I'll have the exact same thing. Oh well."
+      },
+      {
+        "id": 214,
+        "sourceIndex": 298,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, we don't know their needs. People have less than Petro Oleksiyovych, but they're content — it's enough for them. Heh-ha. And I think like this: \"have enough for your life's needs — be content,\" and if you have too much, that's already from the devil. Er, meaning, as the Bible says, \"naked a man came and naked he will depart.\" And with him... And with him he'll take nothing. Only his own, his salvation that he accepted through Jesus Christ. Lord save us. (pause) God's salvation is above all else. And as it's said, seek first the Kingdom of God, and all these things shall be added unto you, and do not grumble. Because as Samuel said, \"vanity of vanities, all is vanity.\" The most important day of my life, probably, was when I got baptized. Heh-heh, and believed in Jesus Christ. It was at Hydropark. It was already, heh-heh, won't say, forgot when, but it happened. Several years ago already. Aside from the fact that, er, I was baptized in childhood... baptized in childhood, but that's, heh-heh, besides that in childhood it's unconscious, but this was conscious. Heh-heh, received baptism."
+      },
+      {
+        "id": 215,
+        "sourceIndex": 299,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Do you hide your cross somewhere, do you have one?"
+      },
+      {
+        "id": 216,
+        "sourceIndex": 300,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "The cross, that's from when I received it in childhood, the one that, er, I... er, er, it wasn't preserved here, and this baptism I took wasn't Orthodox. A church that teaches that you shouldn't wear crosses, shouldn't worship icons. I joined a church that teaches completely differently. Well, their teaching differs slightly from... There's some difference. In the Middle Ages they called them \"heretics\" and burned people at the stake for such disagreements. And now, thank God, there's tolerance — and now whatever heretics there are, try figuring out which are right and which are heretical?"
+      },
+      {
+        "id": 217,
+        "sourceIndex": 302,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Have you read the Bible?"
+      },
+      {
+        "id": 218,
+        "sourceIndex": 303,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "No — I listened to sermons sometimes. (laughs) But haven't read the Bible. Because, well. Don't know why. Well, because... when there's an opportunity — we'll read the Bible too. By the way, you have to find time for that. Lack of time. Why I never have time. Just like that, morning comes, this and that, before you look around the day has passed. (laughs)"
+      },
+      {
+        "id": 219,
+        "sourceIndex": 304,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Do you talk about God with other people living on the street, or what do you talk about with each other, or do you not talk at all, or how?"
+      },
+      {
+        "id": 220,
+        "sourceIndex": 305,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Usually people like that don't think about God, don't know what or about what they think. Probably most think about vodka rather than God."
+      },
+      {
+        "id": 221,
+        "sourceIndex": 306,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Meaning you don't talk?"
+      },
+      {
+        "id": 222,
+        "sourceIndex": 307,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Well, why don't I? Sometimes I talk, well, er. Uh-huh. We-ell. People have such primitive thoughts that it's not even interesting to talk somehow. It... I don't know if you've talked much with such people, but a person is just completely like a monkey, like an orangutan or macaque. He doesn't comprehend anything specific or higher, only something base. Steal something. Or..."
+      },
+      {
+        "id": 223,
+        "sourceIndex": 308,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Is that because of alcohol? Or something else?"
+      },
+      {
+        "id": 224,
+        "sourceIndex": 309,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Maybe alcohol bears no small share of the blame for why people, but, er... Not only, er, petty people like bums have that, er, those same oligarchs are pretty primitive sometimes too, all they care about is stealing. Something somewhere. Profiteering at someone else's expense. Deceiving someone."
+      },
+      {
+        "id": 225,
+        "sourceIndex": 311,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "I want to get back to a normal life. Yes. Of course. That's the main point in my life. Do I have a plan? Yes. Lots of plans. Yes. Go back to work. See my kids even more often. Find myself a flat. I think I got what I deserved, that that's why I'm getting this. I made mistakes in my life. And you have to put effort in to live with that. Yes, I think so."
+      },
+      {
+        "id": 226,
+        "sourceIndex": 313,
+        "type": "dialogue",
+        "character": "germany",
+        "text": "The most important thing is health. Health in any case. How you feel. That's the most important thing. And I feel happiness (strokes dog's head, affectionately) when I'm with her. When we can play with each other. And also — when nobody forces me to do something. You have to sit on the street and beg for alms. Otherwise you won't make anything. And if I didn't have to force myself to sit like that, it would be awesome. Forced to torture myself like this in the afternoon. Have to go into town. Sometimes I think: oh, no. No desire at all. But I need money."
+      },
+      {
+        "id": 227,
+        "sourceIndex": 315,
+        "type": "dialogue",
+        "character": "britain",
+        "text": "Depends what kind of happiness we're talking about. In general, feeling good — not all that often. No. More likely I upset myself more. Though yeah, when I'm with a woman, then yeah, at that time. What brought me joy last time? Sex! (laughs) Shocked? That's right. (laughs) And what's most important to me: I don't like violence. I don't like violence. Don't like cops. I want safety for my kids. I had a young friend, a lad who was murdered. Three weeks ago. He was seven years old. And there are junkies. Knives and guns. They kill each other. It scares me. That's not what you expect from modern civilization."
+      },
+      {
+        "id": 228,
+        "sourceIndex": 317,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "With women I'm afraid of that, because you can catch all sorts of diseases. You understand me? Well, it's a dangerous business overall — with women. Well, besides that, it's a sin, called fornication in, er... Well, from the church's point of view. Meaning, again, if you take homeless women like me — well. I think it's very dangerous. And who knows — maybe a woman is unclean... and take, for example, normal people — who needs a guy like me? People who are fine, they don't pay any attention to a bum like me. I have no success. With those, well (laughs) people who are, well, normal. If you divide people into successful and unsuccessful, then I have no success with successful people."
+      },
+      {
+        "id": 229,
+        "sourceIndex": 319,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Do fewer women live on the street than men?"
+      },
+      {
+        "id": 230,
+        "sourceIndex": 321,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Fewer, fewer. Of course. Why? Don't know. Maybe they have some kind of constitution, somehow they know how. There are more men, I must say. That's the truth, that... well, maybe they're just more adapted to survival. Smarter, so to speak. By and large, they know how to come out dry from the water and wriggle out where a man, er, falls, a woman won't fall. Maybe because of that. Well, if I notice there are fewer women, probably statistics would confirm my words too, though I don't have such statistics, but you probably do, if..."
+      },
+      {
+        "id": 231,
+        "sourceIndex": 323,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "And besides that, what else upsets you?"
+      },
+      {
+        "id": 232,
+        "sourceIndex": 325,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Er-heh-heh-heh, seems like nothing really upsets me. Er, lack of time. This way and that, it's already evening, I don't know how it happens that 24 hours in a day seems like too little, we need 100 hours in a day."
+      },
+      {
+        "id": 233,
+        "sourceIndex": 326,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "How many hours do you sleep?"
+      },
+      {
+        "id": 234,
+        "sourceIndex": 327,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Oh, I love sleeping. If I don't sleep, then I'm not human, I'm not capable of anything, but if I get enough sleep, then I feel... then I'm a hero. Well, nine to ten hours I sleep for sure. Er, I like to sleep a little more than average."
+      },
+      {
+        "id": 235,
+        "sourceIndex": 329,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Do you think now about how to get out of your situation, any plans or what?"
+      },
+      {
+        "id": 236,
+        "sourceIndex": 331,
+        "type": "dialogue",
+        "character": "ukraine",
+        "text": "Haven't even thought about it. Eh. How could you, only God alone can help. Eh. What is impossible with man is possible with God. And God can arrange everything so that... well, even if a person doesn't do anything, God can arrange it if, er... if He deems necessary. That everything will be fine!"
+      },
+      {
+        "id": 237,
+        "sourceIndex": 333,
+        "type": "dialogue",
+        "character": "sasha",
+        "text": "Epilogue. Okay. Friends, how do I want to finish this? I really want to make the lives of these three people better — to help them. To give them what they lack, but if I follow any one of them, become his — so to speak — coach and mentor, what will happen to my own life then? Right now I’m not living on the street, but I rent a room. And if a homeless person from Germany somehow thinks she can get a private flat in two years, I don't see at all how a theatre actor in Ukraine could ever do that. There is only one item left — a miracle. God. But I told you I don’t believe in God. And I don’t want to believe. I'm at a dead end. And that’s the only way I could ever have my own apartment. There's no other way. I can’t even help myself. I realize that I have no way of ever buying my own flat. I will never have a home. I'll be paying rent. For the rest of my life. I will have no fixed address. That’s how it is, friends."
+      },
+      {
+        "id": 238,
+        "sourceIndex": 335,
+        "type": "stage",
+        "character": "sasha",
+        "text": "THE END"
       }
     ]
   }
