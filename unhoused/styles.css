@@ -557,7 +557,120 @@ html.has-saved-progress #startCurtain {
   visibility: hidden !important;
 }
 
+.curtain__flares {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+.curtain__flare {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.curtain__flare--core {
+  width: min(75vw, 620px);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 154 60 / 28%) 0%,
+    rgb(255 107 27 / 16%) 38%,
+    rgb(160 50 12 / 8%) 62%,
+    transparent 78%
+  );
+  filter: blur(28px);
+  animation: flare-core-pulse 4.8s ease-in-out infinite alternate;
+}
+
+.curtain__flare--1 {
+  width: min(50vw, 420px);
+  aspect-ratio: 1.2;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 180 80 / 22%) 0%,
+    rgb(255 115 35 / 12%) 45%,
+    transparent 72%
+  );
+  filter: blur(34px);
+  animation: flare-drift-1 9.4s ease-in-out infinite alternate;
+}
+
+.curtain__flare--2 {
+  width: min(46vw, 380px);
+  aspect-ratio: 0.9;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 160 50 / 24%) 0%,
+    rgb(230 90 20 / 12%) 42%,
+    transparent 70%
+  );
+  filter: blur(32px);
+  animation: flare-drift-2 11.2s ease-in-out infinite alternate 1.2s;
+}
+
+.curtain__flare--3 {
+  width: min(42vw, 340px);
+  aspect-ratio: 1.3;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 195 100 / 20%) 0%,
+    rgb(255 130 40 / 10%) 40%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  animation: flare-drift-3 8.6s ease-in-out infinite alternate 2.5s;
+}
+
+.curtain__flare--4 {
+  width: min(44vw, 360px);
+  aspect-ratio: 1.1;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 145 45 / 22%) 0%,
+    rgb(200 70 15 / 11%) 44%,
+    transparent 72%
+  );
+  filter: blur(35px);
+  animation: flare-drift-4 10.5s ease-in-out infinite alternate 0.6s;
+}
+
+.curtain__flare--5 {
+  width: min(52vw, 440px);
+  aspect-ratio: 1.4;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 170 65 / 25%) 0%,
+    rgb(255 100 25 / 14%) 42%,
+    transparent 75%
+  );
+  filter: blur(32px);
+  animation: flare-drift-5 12.4s ease-in-out infinite alternate 3.1s;
+}
+
+.curtain__flare--6 {
+  width: min(38vw, 310px);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(255 215 130 / 18%) 0%,
+    rgb(255 140 50 / 9%) 40%,
+    transparent 68%
+  );
+  filter: blur(26px);
+  animation: flare-drift-6 8.1s ease-in-out infinite alternate 1.8s;
+}
+
 .curtain__wrap {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -652,7 +765,8 @@ html.has-saved-progress #startCurtain {
 
 .curtain__lang {
   position: absolute;
-  bottom: max(clamp(14px, 2.5vh, 28px), env(safe-area-inset-bottom));
+  z-index: 30;
+  bottom: max(clamp(14px, 2.8vh, 28px), env(safe-area-inset-bottom));
   left: 50%;
   display: flex;
   justify-content: center;
@@ -765,6 +879,111 @@ html.has-saved-progress #startCurtain {
 
 @keyframes cursor-blink {
   50% { opacity: 0.22; }
+}
+
+@keyframes flare-core-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.98);
+    opacity: 0.75;
+  }
+}
+
+@keyframes flare-drift-1 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(-105%, -85%) scale(1.25) rotate(18deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-75%, -115%) scale(1.1) rotate(35deg);
+    opacity: 0.45;
+  }
+}
+
+@keyframes flare-drift-2 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(25%, -95%) scale(1.3) rotate(-22deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(65%, -70%) scale(1.15) rotate(-40deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes flare-drift-3 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-115%, 5%) scale(1.35) rotate(25deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-90%, 35%) scale(1.18) rotate(45deg);
+    opacity: 0.35;
+  }
+}
+
+@keyframes flare-drift-4 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.88) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(55%, 15%) scale(1.28) rotate(-18deg);
+    opacity: 0.82;
+  }
+  100% {
+    transform: translate(85%, -25%) scale(1.12) rotate(-35deg);
+    opacity: 0.45;
+  }
+}
+
+@keyframes flare-drift-5 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-15%, 45%) scale(1.32) rotate(14deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(20%, 65%) scale(1.15) rotate(28deg);
+    opacity: 0.45;
+  }
+}
+
+@keyframes flare-drift-6 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(5%, -115%) scale(1.22) rotate(-15deg);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate(-30%, -100%) scale(1.05) rotate(-30deg);
+    opacity: 0.35;
+  }
 }
 
 /* The wide artwork keeps extra darkness around the group for large desktop screens. */

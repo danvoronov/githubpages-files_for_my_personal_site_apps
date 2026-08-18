@@ -125,6 +125,15 @@
       <button class="advance-surface" id="advanceSurface" type="button" aria-label="Показати або продовжити репліку"></button>
 
       <section class="curtain" id="startCurtain">
+        <div class="curtain__flares" aria-hidden="true">
+          <div class="curtain__flare curtain__flare--core"></div>
+          <div class="curtain__flare curtain__flare--1"></div>
+          <div class="curtain__flare curtain__flare--2"></div>
+          <div class="curtain__flare curtain__flare--3"></div>
+          <div class="curtain__flare curtain__flare--4"></div>
+          <div class="curtain__flare curtain__flare--5"></div>
+          <div class="curtain__flare curtain__flare--6"></div>
+        </div>
         <div class="curtain__wrap">
           <div class="curtain__card">
             <p class="curtain__eyebrow" id="startEyebrow">ДОКУМЕНТАЛЬНИЙ ТЕАТР</p>
@@ -133,12 +142,12 @@
             <button class="primary-button" id="startButton" type="button">УВІЙТИ В ЛІС</button>
             <small id="startHint">Після кожної репліки натискайте мишкою<br>або клавішею пробілу.</small>
           </div>
+        </div>
 
-          <div class="curtain__lang" aria-label="Вибір мови">
-            <button class="curtain__lang-btn is-active" id="startLangUa" type="button" data-lang="ua">УКРАЇНСЬКА</button>
-            <button class="curtain__lang-btn" id="startLangRu" type="button" data-lang="ru">РУССКИЙ</button>
-            <button class="curtain__lang-btn" id="startLangEn" type="button" data-lang="en">ENGLISH</button>
-          </div>
+        <div class="curtain__lang" aria-label="Вибір мови">
+          <button class="curtain__lang-btn is-active" id="startLangUa" type="button" data-lang="ua">УКРАЇНСЬКА</button>
+          <button class="curtain__lang-btn" id="startLangRu" type="button" data-lang="ru">РУССКИЙ</button>
+          <button class="curtain__lang-btn" id="startLangEn" type="button" data-lang="en">ENGLISH</button>
         </div>
       </section>
 
