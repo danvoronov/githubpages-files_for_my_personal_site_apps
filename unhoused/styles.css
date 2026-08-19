@@ -509,13 +509,14 @@ html.ambient-active .sound {
   overflow: visible;
   color: #f3e4c8;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(13px, 1.26vw, 21px);
-  line-height: 1.42;
+  font-size: clamp(15px, 1.35vw, 23px);
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 55%);
   text-wrap: pretty;
 }
 
 .dialogue.is-stage .dialogue__text {
-  color: #c6b9a4;
+  color: #d9cdbb;
   font-style: italic;
 }
 
@@ -1118,6 +1119,17 @@ html.has-saved-progress #startCurtain {
 
 @media (max-aspect-ratio: 4 / 5) {
   .scene {
+    /* Artwork sits in the lower part: its center around 75% of the viewport
+       height, leaving the top band for the dialogue text. The min() clamp
+       keeps the art bottom at least 65px above the viewport bottom on
+       tablets where 75% would push it flush. 33.3333vw = half the 3:2 art
+       height, 66.6667vw = full art height. */
+    position: absolute;
+    left: 0;
+    top: min(calc(75% - 33.3333vw), calc(100vh - 66.6667vw - 65px));
+  }
+
+  .scene {
     overflow: visible;
   }
 
@@ -1152,13 +1164,21 @@ html.has-saved-progress #startCurtain {
 
   .dialogue {
     position: fixed;
-    top: auto;
-    bottom: max(60px, calc(env(safe-area-inset-bottom) + 52px));
+    top: max(24px, env(safe-area-inset-top));
+    bottom: auto;
     width: min(92vw, 680px);
   }
 
   .dialogue__text {
-    font-size: clamp(15px, 4vw, 19px);
+    font-size: clamp(16px, 4.5vw, 21px);
+  }
+
+  /* Phone portrait: the control chrome (sound, language switcher, progress,
+     reset) inherits 9px from the base clamp — too small for a touch screen. */
+  .hud,
+  .lang-switcher,
+  .sound {
+    font-size: clamp(11px, 3.2vw, 15px);
   }
 
   .dialogue__back {
