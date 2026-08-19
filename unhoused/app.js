@@ -39,7 +39,10 @@
     startLangUa: document.querySelector('#startLangUa'),
     startLangRu: document.querySelector('#startLangRu'),
     startLangEn: document.querySelector('#startLangEn'),
-    characters: [...document.querySelectorAll('.character, .character-outline')]
+    characters: [...document.querySelectorAll('.character, .character-outline')],
+    soundControl: document.querySelector('#soundControl'),
+    soundToggle: document.querySelector('#soundToggle'),
+    ambientAudio: document.querySelector('#ambientAudio')
   };
 
   const maxChunkLength = 360;
@@ -71,6 +74,87 @@
   let isTyping = false;
   let hasStarted = false;
   let hasEnded = false;
+
+  // Ambient campfire sound. The <audio> uses preload="none" and the browser
+  // streams fireplace.ogg via HTTP range requests — the full 22 MB file is
+  // never downloaded up front. Playback is only started from a user gesture:
+  // the "УВІЙТИ В ЛІС" click, or the first advance (mouse/keyboard) when a
+  // mid-play progress was restored from localStorage.
+  const volumeStorageKey = 'bomji_ambient_volume';
+  const mutedStorageKey = 'bomji_ambient_muted';
+  const ambient = {
+    audio: elements.ambientAudio,
+    toggle: elements.soundToggle,
+    muted: false,
+    started: false
+  };
+
+  function persistAmbientMuted() {
+    try {
+      localStorage.setItem(mutedStorageKey, ambient.muted ? '1' : '0');
+    } catch {
+      // Ignore localStorage errors
+    }
+  }
+
+  function updateAmbientUI() {
+    if (!ambient.toggle) return;
+    ambient.toggle.classList.toggle('is-muted', ambient.muted);
+    ambient.toggle.setAttribute('aria-pressed', String(!ambient.muted));
+    ambient.toggle.setAttribute('aria-label', ambient.muted ? ui.soundToggleOff : ui.soundToggleOn);
+  }
+
+  function startAmbient() {
+    if (!ambient.audio || ambient.started || !ambient.toggle) return;
+    ambient.started = true;
+    // Default state is ON; make it explicit in storage even before any toggle.
+    persistAmbientMuted();
+    if (ambient.muted) return;
+    ambient.audio.play().catch(() => {});
+  }
+
+  function pauseAmbient() {
+    if (!ambient.audio) return;
+    ambient.started = false;
+    ambient.audio.pause();
+  }
+
+  function toggleAmbient() {
+    if (!ambient.audio) return;
+    if (ambient.muted) {
+      ambient.muted = false;
+      persistAmbientMuted();
+      updateAmbientUI();
+      ambient.audio.play().catch(() => {});
+    } else if (!ambient.audio.paused) {
+      ambient.audio.pause();
+      ambient.muted = true;
+      persistAmbientMuted();
+      updateAmbientUI();
+    } else {
+      ambient.audio.play().catch(() => {});
+    }
+  }
+
+// Restore saved mute state (volume fixed at 60%) and bind the toggle
+  {
+    try {
+      ambient.muted = localStorage.getItem(mutedStorageKey) === '1';
+      // Drop the obsolete volume control value from the slider era.
+      localStorage.removeItem(volumeStorageKey);
+    } catch {
+      // Ignore localStorage errors
+    }
+    if (ambient.audio) ambient.audio.volume = 0.6;
+    updateAmbientUI();
+  }
+
+  if (ambient.toggle) {
+    ambient.toggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleAmbient();
+    });
+  }
 
   function getCharacterNames(playData) {
     return Object.fromEntries(
@@ -117,6 +201,13 @@
     if (elements.backButton) {
       elements.backButton.setAttribute('aria-label', ui.ariaBack || 'Попередня репліка');
       elements.backButton.title = ui.backTitle || 'Назад (←)';
+    }
+
+    if (elements.soundControl) elements.soundControl.setAttribute('aria-label', ui.soundLabel);
+    if (elements.soundToggle) {
+      elements.soundToggle.title = ui.soundLabel;
+      elements.soundToggle.textContent = ui.soundButton;
+      elements.soundToggle.setAttribute('aria-label', ambient.muted ? ui.soundToggleOff : ui.soundToggleOn);
     }
 
     // Update UI elements in Curtains and HUD
@@ -335,11 +426,13 @@
     hasStarted = true;
     hasEnded = false;
     document.documentElement.classList.add('has-saved-progress');
+    document.documentElement.classList.add('ambient-active');
     elements.startCurtain.classList.add('is-hidden');
     elements.endCurtain.classList.add('is-hidden');
     elements.dialogue.classList.remove('is-hidden');
     currentIndex = 0;
     renderCurrent();
+    startAmbient();
   }
 
   function restartPlay() {
@@ -349,12 +442,14 @@
     hasEnded = false;
     currentIndex = -1;
     document.documentElement.classList.remove('has-saved-progress');
+    document.documentElement.classList.remove('ambient-active');
     elements.startCurtain.classList.remove('is-hidden');
     elements.endCurtain.classList.add('is-hidden');
     elements.dialogue.classList.add('is-hidden');
     elements.characters.forEach((character) => character.classList.remove('is-active'));
     renderProgress('', 0, data.lines.length, false);
     updateBackButtonState();
+    pauseAmbient();
 
     try {
       localStorage.removeItem(progressStorageKey);
@@ -365,6 +460,8 @@
 
   function advance() {
     if (!hasStarted || hasEnded) return;
+
+    startAmbient();
 
     if (isTyping) {
       finishTyping();
@@ -561,6 +658,7 @@
     }
 
     document.documentElement.classList.add('has-saved-progress');
+    document.documentElement.classList.add('ambient-active');
     hasStarted = true;
     hasEnded = false;
     currentIndex = savedIndex;

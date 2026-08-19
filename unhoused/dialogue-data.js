@@ -27,7 +27,11 @@ window.PLAY_DATA = {
       "ariaScene": "Ночной лес и четыре человека у костра",
       "ariaAdvance": "Показать или продолжить реплику",
       "ariaBack": "Предыдущая реплика",
-      "backTitle": "Назад (←)"
+      "backTitle": "Назад (←)",
+      "soundLabel": "Звук костра",
+      "soundButton": "звук",
+      "soundToggleOn": "Выключить звук костра",
+      "soundToggleOff": "Включить звук костра"
     },
     "ua": {
       "pageTitle": "У світі бомжів — документальний театр",
@@ -56,7 +60,11 @@ window.PLAY_DATA = {
       "ariaScene": "Нічний ліс і четверо людей біля багаття",
       "ariaAdvance": "Показати або продовжити репліку",
       "ariaBack": "Попередня репліка",
-      "backTitle": "Назад (←)"
+      "backTitle": "Назад (←)",
+      "soundLabel": "Звук багаття",
+      "soundButton": "звук",
+      "soundToggleOn": "Вимкнути звук багаття",
+      "soundToggleOff": "Увімкнути звук багаття"
     },
     "en": {
       "pageTitle": "In the World of the Homeless — Documentary Theatre",
@@ -85,7 +93,11 @@ window.PLAY_DATA = {
       "ariaScene": "Night forest and four people around the campfire",
       "ariaAdvance": "Show or continue line",
       "ariaBack": "Previous line",
-      "backTitle": "Back (←)"
+      "backTitle": "Back (←)",
+      "soundLabel": "Campfire sound",
+      "soundButton": "sound",
+      "soundToggleOn": "Turn off campfire sound",
+      "soundToggleOff": "Turn on campfire sound"
     }
   },
   "ru": {

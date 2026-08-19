@@ -34,8 +34,8 @@
 
       <header class="hud">
         <div class="hud__status">
-          <span id="progress">0 / 0</span>
           <button class="text-button" id="restartButton" type="button">скинути</button>
+          <span id="progress">0 / 0</span>
         </div>
       </header>
 
@@ -121,6 +121,12 @@
           </div>
         </div>
       </article>
+
+      <audio id="ambientAudio" src="fireplace.ogg" preload="none" loop></audio>
+
+      <div class="sound" id="soundControl" role="group" aria-label="Звук багаття">
+        <button class="sound__toggle" id="soundToggle" type="button" aria-pressed="true" aria-label="Вимкнути звук багаття" title="Звук багаття">ЗВУК</button>
+      </div>
 
       <button class="advance-surface" id="advanceSurface" type="button" aria-label="Показати або продовжити репліку"></button>
 

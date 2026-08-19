@@ -72,8 +72,9 @@ button {
   right: 2.2%;
   left: auto;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
   color: rgb(215 190 155 / 60%);
   font-size: clamp(9px, 0.76vw, 13px);
   letter-spacing: 0.11em;
@@ -82,14 +83,19 @@ button {
 
 .hud__status {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
   padding: 0;
   border: 0;
   background: transparent;
 }
 
 #progress {
+  display: inline-block;
+  padding: 0.55em 0.75em;
+  border: 0;
+  background: rgb(3 6 5 / 68%);
   color: rgb(195 170 135 / 50%);
   cursor: default;
   user-select: none;
@@ -126,6 +132,11 @@ button {
   border-color: currentColor;
   color: #dfcaa7;
   outline: none;
+}
+
+/* Align the reset text (top floor) with the progress pill's inner text. */
+#restartButton {
+  margin-right: 0.75em;
 }
 
 .lang-switcher {
@@ -177,6 +188,71 @@ button {
 .lang-switcher__divider {
   color: rgb(215 190 155 / 28%);
   pointer-events: none;
+}
+
+.sound {
+  position: absolute;
+  z-index: 40;
+  /* Top floor of the left column: 2.8em above the 2.4% baseline, level with
+     the right column's top floor. +0.75em aligns text with pill inner text. */
+  bottom: calc(2.4% + 2.8em);
+  left: calc(2.2% + 0.75em);
+  right: auto;
+  display: flex;
+  align-items: center;
+  color: rgb(215 190 155 / 60%);
+  font-size: clamp(9px, 0.76vw, 13px);
+  letter-spacing: 0.11em;
+  text-shadow: 1px 1px 2px #000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms ease, visibility 300ms ease;
+  user-select: none;
+}
+
+html.ambient-active .sound {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sound__toggle {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  border-bottom: 1px dotted transparent;
+  padding: 0 0 1px 0;
+  background: transparent;
+  color: rgb(195 170 135 / 50%);
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: inherit;
+  transition: color 150ms ease, border-color 150ms ease, text-shadow 150ms ease;
+}
+
+/* Sound enabled: just glows, no underline. */
+.sound__toggle:not(.is-muted) {
+  border-bottom-color: transparent;
+  color: #ffe3ae;
+  font-weight: bold;
+  text-shadow:
+    0 0 9px rgb(255 154 60 / 55%),
+    0 0 18px rgb(255 154 60 / 28%),
+    1px 1px 2px #000;
+}
+
+/* Sound muted: dim with a dotted underline, no glow. */
+.sound__toggle.is-muted {
+  border-bottom-color: currentColor;
+  color: rgb(195 170 135 / 42%);
+  text-shadow: 1px 1px 2px #000;
+}
+
+/* On hover/focus the dotted underline shows in either state. */
+.sound__toggle:hover,
+.sound__toggle:focus-visible {
+  border-color: currentColor;
+  color: #dfcaa7;
+  outline: none;
 }
 
 .fire {
@@ -1059,6 +1135,14 @@ html.has-saved-progress #startCurtain {
     top: auto;
     bottom: max(12px, env(safe-area-inset-bottom));
     left: 4vw;
+    right: auto;
+  }
+
+  .sound {
+    position: fixed;
+    top: auto;
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 2.8em);
+    left: calc(4vw + 0.75em);
     right: auto;
   }
 
