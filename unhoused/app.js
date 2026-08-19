@@ -33,12 +33,6 @@
     charLabelUkraine: document.querySelector('#charLabelUkraine'),
     charLabelGermany: document.querySelector('#charLabelGermany'),
     charLabelBritain: document.querySelector('#charLabelBritain'),
-    langBtnUa: document.querySelector('#langBtnUa'),
-    langBtnRu: document.querySelector('#langBtnRu'),
-    langBtnEn: document.querySelector('#langBtnEn'),
-    startLangUa: document.querySelector('#startLangUa'),
-    startLangRu: document.querySelector('#startLangRu'),
-    startLangEn: document.querySelector('#startLangEn'),
     characters: [...document.querySelectorAll('.character, .character-outline')],
     soundControl: document.querySelector('#soundControl'),
     soundToggle: document.querySelector('#soundToggle'),
@@ -48,12 +42,27 @@
   const maxChunkLength = 360;
   const skippedIntroCount = 1;
   const progressStorageKey = 'bomji_play_progress';
-  const typeInterval = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 16;
+  const langStorageKey = 'bomji_play_lang';
+  const volumeStorageKey = 'bomji_ambient_volume';
+  const mutedStorageKey = 'bomji_ambient_muted';
+
+  // Dynamic reduced-motion preference tracking
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let isReducedMotion = motionQuery.matches;
+  if (typeof motionQuery.addEventListener === 'function') {
+    motionQuery.addEventListener('change', (event) => {
+      isReducedMotion = event.matches;
+    });
+  }
+
+  function getTypeInterval() {
+    return isReducedMotion ? 0 : 16;
+  }
 
   // Language state (default: 'ua', or read from localStorage)
   let currentLang = 'ua';
   try {
-    const savedLang = localStorage.getItem('bomji_play_lang');
+    const savedLang = localStorage.getItem(langStorageKey);
     if (savedLang === 'ru' || savedLang === 'ua' || savedLang === 'en') {
       currentLang = savedLang;
     }
@@ -61,10 +70,23 @@
     // Ignore localStorage errors
   }
 
+  // Script caching to avoid re-chunking strings repeatedly on language switch
+  const scriptCache = new Map();
+
+  function getScript(lang) {
+    if (scriptCache.has(lang)) {
+      return scriptCache.get(lang);
+    }
+    const playData = rawData[lang];
+    const script = buildScript(playData);
+    scriptCache.set(lang, script);
+    return script;
+  }
+
   let data = rawData[currentLang];
   let ui = rawData.ui[currentLang];
   let characterNames = getCharacterNames(data);
-  let script = buildScript(data);
+  let script = getScript(currentLang);
 
   let currentIndex = -1;
   let typingFrame = 0;
@@ -75,13 +97,7 @@
   let hasStarted = false;
   let hasEnded = false;
 
-  // Ambient campfire sound. The <audio> uses preload="none" and the browser
-  // streams fireplace.ogg via HTTP range requests — the full 22 MB file is
-  // never downloaded up front. Playback is only started from a user gesture:
-  // the "УВІЙТИ В ЛІС" click, or the first advance (mouse/keyboard) when a
-  // mid-play progress was restored from localStorage.
-  const volumeStorageKey = 'bomji_ambient_volume';
-  const mutedStorageKey = 'bomji_ambient_muted';
+  // Ambient campfire sound
   const ambient = {
     audio: elements.ambientAudio,
     toggle: elements.soundToggle,
@@ -107,7 +123,6 @@
   function startAmbient() {
     if (!ambient.audio || ambient.started || !ambient.toggle) return;
     ambient.started = true;
-    // Default state is ON; make it explicit in storage even before any toggle.
     persistAmbientMuted();
     if (ambient.muted) return;
     ambient.audio.play().catch(() => {});
@@ -136,16 +151,17 @@
     }
   }
 
-// Restore saved mute state (volume fixed at 60%) and bind the toggle
+  // Restore saved mute state and clean legacy storage
   {
     try {
       ambient.muted = localStorage.getItem(mutedStorageKey) === '1';
-      // Drop the obsolete volume control value from the slider era.
       localStorage.removeItem(volumeStorageKey);
     } catch {
       // Ignore localStorage errors
     }
-    if (ambient.audio) ambient.audio.volume = 0.6;
+    if (ambient.audio) {
+      ambient.audio.volume = 0.6;
+    }
     updateAmbientUI();
   }
 
@@ -167,7 +183,7 @@
     currentLang = lang;
 
     try {
-      localStorage.setItem('bomji_play_lang', lang);
+      localStorage.setItem(langStorageKey, lang);
     } catch {
       // Ignore localStorage errors
     }
@@ -184,7 +200,7 @@
       targetChunkIndex = script[currentIndex].chunkIndex || 0;
     }
 
-    script = buildScript(data);
+    script = getScript(currentLang);
 
     // Update document metadata
     document.documentElement.lang = currentLang === 'ua' ? 'uk' : (currentLang === 'ru' ? 'ru' : 'en');
@@ -230,23 +246,17 @@
     if (elements.charLabelGermany) elements.charLabelGermany.textContent = ui.sceneCharacterNames.germany;
     if (elements.charLabelBritain) elements.charLabelBritain.textContent = ui.sceneCharacterNames.britain;
 
-    // Update switcher active states
-    if (elements.langBtnUa) elements.langBtnUa.classList.toggle('is-active', currentLang === 'ua');
-    if (elements.langBtnRu) elements.langBtnRu.classList.toggle('is-active', currentLang === 'ru');
-    if (elements.langBtnEn) elements.langBtnEn.classList.toggle('is-active', currentLang === 'en');
-    if (elements.startLangUa) elements.startLangUa.classList.toggle('is-active', currentLang === 'ua');
-    if (elements.startLangRu) elements.startLangRu.classList.toggle('is-active', currentLang === 'ru');
-    if (elements.startLangEn) elements.startLangEn.classList.toggle('is-active', currentLang === 'en');
+    // Update language switcher active & aria states
+    document.querySelectorAll('[data-lang]').forEach((btn) => {
+      const isActive = btn.dataset.lang === currentLang;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
 
     updateBackButtonState();
 
-    // Update progress & current view if in progress
-    if (!hasStarted) {
-      renderProgress('', 0, data.lines.length, false);
-    } else if (hasEnded) {
-      // Nothing needed on end screen
-    } else if (targetLineId !== null) {
-      // Find matching index in newly built script
+    // Map current index in new script
+    if (targetLineId !== null) {
       let matchIdx = script.findIndex(
         (item) => item.id === targetLineId && item.chunkIndex === targetChunkIndex
       );
@@ -255,7 +265,30 @@
       }
       if (matchIdx !== -1) {
         currentIndex = matchIdx;
+      } else if (hasEnded) {
+        currentIndex = script.length - 1;
       }
+    }
+
+    // Update progress & current view if in progress
+    if (!hasStarted) {
+      renderProgress('', 0, data.lines.length, false);
+    } else if (hasEnded) {
+      const lastLine = script[currentIndex] || script[script.length - 1];
+      if (lastLine) {
+        if (typeof lastLine.id === 'string') {
+          renderProgress(
+            ui.introPrefix,
+            currentIndex + 1,
+            Math.max(0, data.intro.length - skippedIntroCount),
+            false
+          );
+        } else {
+          renderProgress('', lastLine.id, data.lines.length, true);
+        }
+        saveProgress(lastLine, true);
+      }
+    } else if (targetLineId !== null) {
       renderCurrent(preserveTyping);
     }
   }
@@ -264,10 +297,12 @@
   setLanguage(currentLang);
   restoreProgress();
 
-  elements.startButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-    startPlay();
-  });
+  if (elements.startButton) {
+    elements.startButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      startPlay();
+    });
+  }
 
   if (elements.backButton) {
     elements.backButton.addEventListener('click', (event) => {
@@ -276,58 +311,39 @@
     });
   }
 
-  elements.advanceSurface.addEventListener('click', advance);
-  elements.dialogue.addEventListener('click', advance);
+  if (elements.advanceSurface) {
+    elements.advanceSurface.addEventListener('click', advance);
+  }
+  if (elements.dialogue) {
+    elements.dialogue.addEventListener('click', advance);
+  }
 
-  elements.restartButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (window.confirm(ui.restartConfirm)) {
+  if (elements.restartButton) {
+    elements.restartButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (window.confirm(ui.restartConfirm)) {
+        restartPlay();
+      }
+    });
+  }
+
+  if (elements.playAgainButton) {
+    elements.playAgainButton.addEventListener('click', (event) => {
+      event.stopPropagation();
       restartPlay();
-    }
-  });
+    });
+  }
 
-  elements.playAgainButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-    restartPlay();
+  // Unified language switch listeners
+  document.querySelectorAll('[data-lang]').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const targetLang = btn.dataset.lang;
+      if (targetLang) {
+        setLanguage(targetLang);
+      }
+    });
   });
-
-  // Switcher event handlers
-  if (elements.langBtnUa) {
-    elements.langBtnUa.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('ua');
-    });
-  }
-  if (elements.langBtnRu) {
-    elements.langBtnRu.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('ru');
-    });
-  }
-  if (elements.langBtnEn) {
-    elements.langBtnEn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('en');
-    });
-  }
-  if (elements.startLangUa) {
-    elements.startLangUa.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('ua');
-    });
-  }
-  if (elements.startLangRu) {
-    elements.startLangRu.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('ru');
-    });
-  }
-  if (elements.startLangEn) {
-    elements.startLangEn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      setLanguage('en');
-    });
-  }
 
   document.addEventListener('keydown', (event) => {
     const forwardKeys = [' ', 'Enter', 'ArrowRight', 'ArrowDown'];
@@ -427,9 +443,9 @@
     hasEnded = false;
     document.documentElement.classList.add('has-saved-progress');
     document.documentElement.classList.add('ambient-active');
-    elements.startCurtain.classList.add('is-hidden');
-    elements.endCurtain.classList.add('is-hidden');
-    elements.dialogue.classList.remove('is-hidden');
+    if (elements.startCurtain) elements.startCurtain.classList.add('is-hidden');
+    if (elements.endCurtain) elements.endCurtain.classList.add('is-hidden');
+    if (elements.dialogue) elements.dialogue.classList.remove('is-hidden');
     currentIndex = 0;
     renderCurrent();
     startAmbient();
@@ -443,9 +459,9 @@
     currentIndex = -1;
     document.documentElement.classList.remove('has-saved-progress');
     document.documentElement.classList.remove('ambient-active');
-    elements.startCurtain.classList.remove('is-hidden');
-    elements.endCurtain.classList.add('is-hidden');
-    elements.dialogue.classList.add('is-hidden');
+    if (elements.startCurtain) elements.startCurtain.classList.remove('is-hidden');
+    if (elements.endCurtain) elements.endCurtain.classList.add('is-hidden');
+    if (elements.dialogue) elements.dialogue.classList.add('is-hidden');
     elements.characters.forEach((character) => character.classList.remove('is-active'));
     renderProgress('', 0, data.lines.length, false);
     updateBackButtonState();
@@ -480,10 +496,12 @@
   function stepBack() {
     if (!hasStarted) return;
 
+    startAmbient();
+
     if (hasEnded) {
       hasEnded = false;
-      elements.endCurtain.classList.add('is-hidden');
-      elements.dialogue.classList.remove('is-hidden');
+      if (elements.endCurtain) elements.endCurtain.classList.add('is-hidden');
+      if (elements.dialogue) elements.dialogue.classList.remove('is-hidden');
       renderCurrent(true);
       return;
     }
@@ -508,21 +526,34 @@
     if (!line) return;
 
     cancelAnimationFrame(typingFrame);
-    isTyping = !immediate;
+    const interval = getTypeInterval();
+    isTyping = !immediate && interval > 0;
     activeText = line.text;
-    revealedCharacters = immediate ? activeText.length : 0;
+    revealedCharacters = immediate || interval === 0 ? activeText.length : 0;
     typingStartedAt = performance.now();
 
-    elements.dialogue.dataset.character = line.character;
-    elements.dialogue.classList.toggle('is-stage', line.type === 'stage');
-    elements.dialogue.classList.toggle('is-intro', typeof line.id === 'string');
-    elements.dialogue.classList.toggle('is-waiting', immediate);
-    renderDialogueText(immediate ? activeText : '');
-    elements.dialogueText.scrollTop = 0;
-    elements.speaker.textContent = line.type === 'stage' ? '' : characterNames[line.character];
-    elements.partMarker.textContent = line.chunkCount > 1
-      ? `${line.chunkIndex + 1} / ${line.chunkCount}`
-      : '';
+    if (elements.dialogue) {
+      elements.dialogue.dataset.character = line.character;
+      elements.dialogue.classList.toggle('is-stage', line.type === 'stage');
+      elements.dialogue.classList.toggle('is-intro', typeof line.id === 'string');
+      elements.dialogue.classList.toggle('is-waiting', immediate || interval === 0);
+    }
+
+    renderDialogueText(immediate || interval === 0 ? activeText : '');
+    if (elements.dialogueText) {
+      elements.dialogueText.scrollTop = 0;
+    }
+
+    if (elements.speaker) {
+      elements.speaker.textContent = line.type === 'stage' ? '' : characterNames[line.character];
+    }
+
+    if (elements.partMarker) {
+      elements.partMarker.textContent = line.chunkCount > 1
+        ? `${line.chunkIndex + 1} / ${line.chunkCount}`
+        : '';
+    }
+
     if (typeof line.id === 'string') {
       renderProgress(
         ui.introPrefix,
@@ -541,7 +572,7 @@
     updateBackButtonState();
     saveProgress(line);
 
-    if (immediate || typeInterval === 0) {
+    if (immediate || interval === 0) {
       finishTyping();
       return;
     }
@@ -550,8 +581,14 @@
   }
 
   function typeStep(timestamp) {
+    const interval = getTypeInterval();
+    if (interval === 0) {
+      finishTyping();
+      return;
+    }
+
     const elapsed = timestamp - typingStartedAt;
-    const targetCharacters = Math.min(activeText.length, Math.floor(elapsed / typeInterval));
+    const targetCharacters = Math.min(activeText.length, Math.floor(elapsed / interval));
 
     if (targetCharacters !== revealedCharacters) {
       revealedCharacters = targetCharacters;
@@ -571,10 +608,20 @@
     isTyping = false;
     revealedCharacters = activeText.length;
     renderDialogueText(activeText);
-    elements.dialogue.classList.add('is-waiting');
+    if (elements.dialogue) {
+      elements.dialogue.classList.add('is-waiting');
+    }
   }
 
   function renderDialogueText(text) {
+    if (!elements.dialogueText) return;
+
+    // Fast-path: plain text with no remarks avoids regex & DOM fragment overhead
+    if (!text.includes('(')) {
+      elements.dialogueText.textContent = text;
+      return;
+    }
+
     const fragment = document.createDocumentFragment();
     const remarkPattern = /\([^)]*(?:\)|$)/gu;
     let cursor = 0;
@@ -599,6 +646,8 @@
   }
 
   function renderProgress(prefix, current, total, showPercent = true) {
+    if (!elements.progress) return;
+
     const currentNumber = document.createElement('strong');
     currentNumber.className = 'progress__current';
     currentNumber.textContent = String(current);
@@ -660,15 +709,16 @@
     document.documentElement.classList.add('has-saved-progress');
     document.documentElement.classList.add('ambient-active');
     hasStarted = true;
-    hasEnded = false;
     currentIndex = savedIndex;
-    elements.startCurtain.classList.add('is-hidden');
-    elements.endCurtain.classList.add('is-hidden');
-    elements.dialogue.classList.remove('is-hidden');
-    renderCurrent(true);
+    if (elements.startCurtain) elements.startCurtain.classList.add('is-hidden');
 
     if (savedProgress.ended) {
       showEnding();
+    } else {
+      hasEnded = false;
+      if (elements.endCurtain) elements.endCurtain.classList.add('is-hidden');
+      if (elements.dialogue) elements.dialogue.classList.remove('is-hidden');
+      renderCurrent(true);
     }
   }
 
@@ -676,10 +726,24 @@
     cancelAnimationFrame(typingFrame);
     isTyping = false;
     hasEnded = true;
-    elements.dialogue.classList.add('is-hidden');
-    elements.endCurtain.classList.remove('is-hidden');
+    if (elements.dialogue) elements.dialogue.classList.add('is-hidden');
+    if (elements.endCurtain) elements.endCurtain.classList.remove('is-hidden');
     elements.characters.forEach((character) => character.classList.remove('is-active'));
     updateBackButtonState();
-    saveProgress(script[currentIndex], true);
+
+    if (currentIndex >= 0 && currentIndex < script.length) {
+      const lastLine = script[currentIndex];
+      if (typeof lastLine.id === 'string') {
+        renderProgress(
+          ui.introPrefix,
+          currentIndex + 1,
+          Math.max(0, data.intro.length - skippedIntroCount),
+          false
+        );
+      } else {
+        renderProgress('', lastLine.id, data.lines.length, true);
+      }
+      saveProgress(lastLine, true);
+    }
   }
 })();
