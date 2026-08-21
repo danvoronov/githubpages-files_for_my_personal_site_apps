@@ -14,8 +14,11 @@
       --muted: #6d675c;
       --line: #b7b0a3;
       --board: #e7e1d5;
-      --zone-a: #ddd6c8;
-      --zone-b: #d4cdc0;
+      --zone-1: #e4ded4;
+      --zone-2: #ded7ca;
+      --zone-3: #d9cfbf;
+      --zone-4: #d6c6b0;
+      --zone-5: #d4bfa1;
       --bank: #faf7f1;
       --card-w: 148px;
       --card-h: 78px;
@@ -292,8 +295,11 @@
         );
     }
 
-    .zone:nth-child(odd) { background-color: var(--zone-a); }
-    .zone:nth-child(even) { background-color: var(--zone-b); }
+    .zone:nth-child(1) { background-color: var(--zone-1); }
+    .zone:nth-child(2) { background-color: var(--zone-2); }
+    .zone:nth-child(3) { background-color: var(--zone-3); }
+    .zone:nth-child(4) { background-color: var(--zone-4); }
+    .zone:nth-child(5) { background-color: var(--zone-5); }
 
     .zone:not(:last-child)::after {
       content: "";
@@ -349,6 +355,16 @@
       font-family: Fraunces, Georgia, serif;
       font-size: 20px;
       font-weight: 640;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .bank-count {
+      font-family: Outfit, "Segoe UI", system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
     }
 
     .bank-head p {
@@ -504,7 +520,7 @@
     <section id="bank" aria-label="Банк цінностей">
       <div class="bank-head">
         <div>
-          <h1>Банк цінностей</h1>
+          <h1>Банк цінностей <span id="bank-count" class="bank-count">(100/100)</span></h1>
           <p>Перетягніть будь-яку картку на дошку. Розміщуйте та переміщуйте її вільно — колонки слугують лише фоном.</p>
         </div>
         <div class="legend">
@@ -681,9 +697,30 @@
 
     let drag = null;
     let resizing = false;
-    let zTop = 10;
     let lastPoint = { x: 0, y: 0 };
     let scrollRaf = 0;
+
+    function updateBankCount() {
+      const bankCountEl = document.getElementById("bank-count");
+      if (!bankCountEl) return;
+      const count = bankCards.querySelectorAll(".card").length;
+      bankCountEl.textContent = `(${count}/100)`;
+    }
+
+    function updateZIndices() {
+      const cards = Array.from(canvas.querySelectorAll(".card"));
+      cards.sort((a, b) => {
+        const topA = parseFloat(a.style.top) || 0;
+        const topB = parseFloat(b.style.top) || 0;
+        if (topA !== topB) return topA - topB;
+        const leftA = parseFloat(a.style.left) || 0;
+        const leftB = parseFloat(b.style.left) || 0;
+        return leftA - leftB;
+      });
+      cards.forEach((card, i) => {
+        card.style.zIndex = String(10 + i);
+      });
+    }
 
     function saveState() {
       try {
@@ -694,7 +731,7 @@
             n: Number(card.dataset.n),
             left: card.style.left,
             top: card.style.top,
-            zIndex: card.style.zIndex || "5"
+            zIndex: card.style.zIndex || "10"
           });
         });
         const state = {
@@ -711,7 +748,10 @@
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
+        if (!raw) {
+          updateBankCount();
+          return;
+        }
         const state = JSON.parse(raw);
         if (state.boardH) {
           app.style.setProperty("--board-h", state.boardH);
@@ -720,7 +760,6 @@
           canvas.style.minHeight = state.canvasMinHeight;
         }
         if (Array.isArray(state.cards) && state.cards.length > 0) {
-          let maxZ = 10;
           state.cards.forEach((item) => {
             const card = bankCards.querySelector(`.card[data-n="${item.n}"]`);
             if (card) {
@@ -728,15 +767,14 @@
               card.style.position = "absolute";
               card.style.left = item.left;
               card.style.top = item.top;
-              const z = parseInt(item.zIndex, 10) || 10;
-              card.style.zIndex = String(z);
-              if (z > maxZ) maxZ = z;
             }
           });
-          zTop = Math.max(zTop, maxZ);
+          updateZIndices();
         }
+        updateBankCount();
       } catch (e) {
         console.warn("Failed to load state from localStorage", e);
+        updateBankCount();
       }
     }
 
@@ -795,8 +833,9 @@
       card.style.position = "absolute";
       card.style.left = x + "px";
       card.style.top = y + "px";
-      card.style.zIndex = String(++zTop);
       card.style.transform = "";
+      updateZIndices();
+      updateBankCount();
       saveState();
     }
 
@@ -817,6 +856,8 @@
       } else {
         bankCards.appendChild(card);
       }
+      updateZIndices();
+      updateBankCount();
       saveState();
     }
 
@@ -837,6 +878,7 @@
       allCards.forEach((c) => bankCards.appendChild(c));
 
       canvas.style.minHeight = CANVAS_MIN + "px";
+      updateBankCount();
       saveState();
     }
 
@@ -893,10 +935,11 @@
       ctx.scale(dpr, dpr);
 
       const colW = width / 5;
+      const ZONE_COLORS = ["#e4ded4", "#ded7ca", "#d9cfbf", "#d6c6b0", "#d4bfa1"];
 
       // 1. Draw 5 column backgrounds below the header (from y = labelH)
       for (let i = 0; i < 5; i++) {
-        ctx.fillStyle = i % 2 === 0 ? "#ddd6c8" : "#d4cdc0";
+        ctx.fillStyle = ZONE_COLORS[i];
         ctx.fillRect(i * colW, labelH, colW, contentHeight);
 
         // Horizontal grid lines
