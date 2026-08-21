@@ -39,8 +39,11 @@
 
     .app {
       height: 100%;
+      height: 100dvh;
+      min-height: 0;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     #board {
@@ -51,6 +54,7 @@
       overflow: auto;
       background: var(--board);
       scrollbar-gutter: stable;
+      overscroll-behavior: contain;
     }
 
     #splitter {
@@ -106,6 +110,7 @@
       pointer-events: none;
       background: linear-gradient(to bottom, rgba(231, 225, 213, 0.98), rgba(231, 225, 213, 0.9) 75%, rgba(231, 225, 213, 0));
       border-bottom: 1px solid rgba(183, 176, 163, 0.3);
+      min-width: 620px;
     }
 
     .zone-labels span {
@@ -128,10 +133,6 @@
 
     .zone-labels span:first-of-type {
       padding-left: 32px;
-    }
-
-    .zone-labels span:last-of-type {
-      padding-right: 32px;
     }
 
     .board-btn {
@@ -165,17 +166,6 @@
       transform: translateY(-50%) scale(1.08);
     }
 
-    .reset-btn {
-      right: 6px;
-    }
-
-    .reset-btn:hover {
-      background: #faf7f1;
-      color: #c45c38;
-      border-color: #c45c38;
-      transform: translateY(-50%) scale(1.08);
-    }
-
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -202,6 +192,9 @@
       padding: 20px 22px;
       width: 90%;
       max-width: 350px;
+      max-height: calc(100vh - 24px);
+      max-height: calc(100dvh - 24px);
+      overflow: auto;
       box-shadow: 0 16px 36px rgba(44, 40, 31, 0.22), 0 2px 6px rgba(44, 40, 31, 0.08);
       transform: translateY(8px) scale(0.97);
       transition: transform 0.18s ease;
@@ -271,7 +264,9 @@
     #canvas {
       position: relative;
       min-height: 2400px;
+      min-width: 620px;
       width: 100%;
+      --card-w: clamp(112px, calc(20% - 12px), 148px);
     }
 
     .zone-bg {
@@ -337,17 +332,19 @@
       min-height: 0;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
       background: var(--bank);
+    }
+
+    .app.bank-collapsed #bank-cards {
+      display: none;
     }
 
     .bank-head {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
+      flex-direction: column;
       padding: 12px 18px 8px;
       border-bottom: 1px solid #e6e0d4;
-      flex-shrink: 0;
     }
 
     .bank-head h1 {
@@ -356,8 +353,9 @@
       font-size: 20px;
       font-weight: 640;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .bank-count {
@@ -367,22 +365,54 @@
       color: var(--muted);
     }
 
+    .bank-reset-btn {
+      font-family: Outfit, "Segoe UI", system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid rgba(183, 176, 163, 0.65);
+      border-radius: 4px;
+      padding: 1px 7px 2px;
+      margin-left: 4px;
+      cursor: pointer;
+      line-height: 1.3;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.12s;
+    }
+
+    .bank-reset-btn:hover {
+      background: #faf7f1;
+      color: #c45c38;
+      border-color: #c45c38;
+      transform: scale(1.03);
+    }
+
+    .bank-reset-btn:active {
+      transform: scale(0.97);
+    }
+
+    .bank-head-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px 14px;
+    }
+
     .bank-head p {
-      margin: 4px 0 0;
+      margin: 0;
       font-size: 12.5px;
       color: var(--muted);
+      text-align: right;
     }
 
     .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px 10px;
-      justify-content: flex-end;
-      max-width: 58%;
+      gap: 4px 10px;
     }
 
     .legend i {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
       font-style: normal;
@@ -402,11 +432,12 @@
       flex: 1;
       min-height: 0;
       overflow: auto;
-      padding: 12px 16px 20px;
+      padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
       gap: 8px;
+      overscroll-behavior: contain;
     }
 
     .card {
@@ -476,6 +507,55 @@
       z-index: 5;
     }
 
+    @media (max-width: 760px) {
+      .bank-head {
+        flex-direction: column;
+        padding: 8px 10px 6px;
+      }
+
+      .bank-head p {
+        display: none;
+      }
+
+      .bank-head-top {
+        flex-wrap: nowrap;
+      }
+
+      .legend {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+      }
+
+      .legend i {
+        flex: 0 0 auto;
+      }
+
+      #bank-cards {
+        padding: 8px 10px calc(14px + env(safe-area-inset-bottom));
+      }
+
+      #bank-cards .card {
+        width: calc((100% - 8px) / 2);
+        min-width: 112px;
+      }
+    }
+
+    @media (max-height: 430px) {
+      .bank-head {
+        padding-top: 5px;
+        padding-bottom: 4px;
+      }
+
+      .bank-head-top {
+        display: none;
+      }
+
+      .bank-head h1 {
+        font-size: 16px;
+      }
+    }
+
     .group-self { --card-bg: #f8e8de; --card-border: #e4c4b2; --card-accent: #c45c38; }
     .group-love { --card-bg: #f8e3ea; --card-border: #e5b8c6; --card-accent: #c4496a; }
     .group-care { --card-bg: #e3f0e6; --card-border: #b5d0bc; --card-accent: #3d8a58; }
@@ -497,12 +577,6 @@
         <span>Важливо для мене</span>
         <span>Дуже важливо для мене</span>
         <span>Найважливіше для мене</span>
-        <button id="reset-btn" class="board-btn reset-btn" type="button" title="Скинути дошку" aria-label="Скинути дошку">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
       </div>
       <div id="canvas">
         <div class="zone-bg" aria-hidden="true">
@@ -515,12 +589,16 @@
       </div>
     </section>
 
-    <div id="splitter" role="separator" aria-orientation="horizontal" aria-label="Змінити розмір банку цінностей"></div>
+    <div id="splitter" role="separator" aria-orientation="horizontal" aria-label="Змінити розмір банку цінностей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45" aria-expanded="true" title="Подвійний клік — згорнути або розгорнути банк" tabindex="0"></div>
 
     <section id="bank" aria-label="Банк цінностей">
       <div class="bank-head">
-        <div>
-          <h1>Банк цінностей <span id="bank-count" class="bank-count">(100/100)</span></h1>
+        <div class="bank-head-top">
+          <h1>
+            Банк цінностей
+            <span id="bank-count" class="bank-count">(100/100)</span>
+            <button id="reset-btn" class="bank-reset-btn" type="button" title="Скинути всі картки до банку">Скинути</button>
+          </h1>
           <p>Перетягніть будь-яку картку на дошку. Розміщуйте та переміщуйте її вільно — колонки слугують лише фоном.</p>
         </div>
         <div class="legend">
@@ -533,6 +611,8 @@
           <i style="--swatch:#7a4eab">Радість, мистецтво та легкість</i>
           <i style="--swatch:#4d5494">Сенс і характер</i>
           <i style="--swatch:#5c6573">Порядок і статус</i>
+        </div>
+      </div>
         </div>
       </div>
       <div id="bank-cards"></div>
@@ -679,10 +759,16 @@
     const resetModal = document.getElementById("reset-modal");
     const btnCancelReset = document.getElementById("btn-cancel-reset");
     const btnConfirmReset = document.getElementById("btn-confirm-reset");
+    const bankHead = bank.querySelector(".bank-head");
 
     const CARD_W = 148;
     const CARD_H = 78;
     const CANVAS_MIN = 2400;
+    const COLUMN_COUNT = 5;
+    const BOARD_INSET = 4;
+    const CARD_BOTTOM_SPACE = 80;
+    const MAX_CARD_TOP = 12000;
+    const COLLAPSE_DRAG_SNAP = 4;
 
     VALUES.forEach((v) => {
       const el = document.createElement("article");
@@ -699,6 +785,138 @@
     let resizing = false;
     let lastPoint = { x: 0, y: 0 };
     let scrollRaf = 0;
+    let resizeRaf = 0;
+    let lastCanvasWidth = 0;
+    let lastBankHeadHeight = 0;
+    let boardRatio = 0.45;
+    let expandedBoardRatio = boardRatio;
+    let bankCollapsed = false;
+    let resizeStartY = null;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(value, max));
+    }
+
+    function finiteNumber(value, fallback) {
+      const number = Number.parseFloat(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function cardSize(card) {
+      return {
+        width: card.offsetWidth || CARD_W,
+        height: card.offsetHeight || CARD_H
+      };
+    }
+
+    function layoutFromLeft(left, cardWidth, canvasWidth) {
+      const width = Math.max(1, canvasWidth);
+      const columnWidth = width / COLUMN_COUNT;
+      const center = clamp(left + cardWidth / 2, 0, width);
+      const columnPosition = clamp(center / columnWidth, 0, COLUMN_COUNT - Number.EPSILON);
+      const zone = Math.min(COLUMN_COUNT - 1, Math.floor(columnPosition));
+      return {
+        zone,
+        xRatio: clamp(columnPosition - zone, 0, 1)
+      };
+    }
+
+    function setCardLayout(card, zone, xRatio, top) {
+      const safeZone = clamp(Math.round(finiteNumber(zone, 0)), 0, COLUMN_COUNT - 1);
+      const safeRatio = clamp(finiteNumber(xRatio, 0.5), 0, 1);
+      const safeTop = clamp(finiteNumber(top, 6), 6, MAX_CARD_TOP);
+      const { width: cardWidth } = cardSize(card);
+      const canvasWidth = Math.max(1, canvas.clientWidth);
+      const columnWidth = canvasWidth / COLUMN_COUNT;
+      const center = (safeZone + safeRatio) * columnWidth;
+      const maxLeft = Math.max(BOARD_INSET, canvasWidth - cardWidth - BOARD_INSET);
+      const left = clamp(center - cardWidth / 2, BOARD_INSET, maxLeft);
+
+      card.dataset.zone = String(safeZone);
+      card.dataset.xRatio = String(safeRatio);
+      card.style.left = left + "px";
+      card.style.top = safeTop + "px";
+    }
+
+    function captureCardLayout(card, left) {
+      const { width } = cardSize(card);
+      const layout = layoutFromLeft(left, width, canvas.clientWidth);
+      card.dataset.zone = String(layout.zone);
+      card.dataset.xRatio = String(layout.xRatio);
+      return layout;
+    }
+
+    function ensureCanvasHeight() {
+      let needed = CANVAS_MIN;
+      canvas.querySelectorAll(".card").forEach((card) => {
+        const top = finiteNumber(card.style.top, 6);
+        needed = Math.max(needed, Math.ceil(top + cardSize(card).height + CARD_BOTTOM_SPACE));
+      });
+      canvas.style.minHeight = Math.min(needed, MAX_CARD_TOP + CARD_H + CARD_BOTTOM_SPACE) + "px";
+    }
+
+    function getBoardHeightBounds() {
+      const totalHeight = Math.max(1, app.clientHeight);
+      const splitHeight = splitter.offsetHeight || 10;
+      const usableHeight = Math.max(1, totalHeight - splitHeight);
+      const minBoard = Math.min(96, usableHeight * 0.4);
+      const desiredBank = Math.max(120, (bankHead ? bankHead.offsetHeight : 48) + 72);
+      const minBank = Math.min(desiredBank, Math.max(1, usableHeight - minBoard));
+      const maxBoard = Math.max(minBoard, usableHeight - minBank);
+      return { usableHeight, minBoard, maxBoard };
+    }
+
+    function applyBoardRatio() {
+      const bounds = getBoardHeightBounds();
+      const height = bankCollapsed
+        ? Math.max(0, bounds.usableHeight - bankHead.offsetHeight)
+        : clamp(bounds.usableHeight * boardRatio, bounds.minBoard, bounds.maxBoard);
+      app.style.setProperty("--board-h", height + "px");
+      splitter.setAttribute("aria-valuenow", String(Math.round(height / bounds.usableHeight * 100)));
+      splitter.setAttribute("aria-expanded", String(!bankCollapsed));
+      splitter.title = bankCollapsed
+        ? "Подвійний клік — розгорнути банк"
+        : "Подвійний клік — згорнути банк";
+    }
+
+    function setBankCollapsed(collapsed, shouldSave = true) {
+      const next = Boolean(collapsed);
+      if (next === bankCollapsed) return;
+      if (next) {
+        expandedBoardRatio = boardRatio;
+      } else {
+        boardRatio = expandedBoardRatio;
+      }
+      bankCollapsed = next;
+      app.classList.toggle("bank-collapsed", bankCollapsed);
+      applyBoardRatio();
+      if (shouldSave) saveState();
+    }
+
+    function reflowPlacedCards() {
+      canvas.querySelectorAll(".card").forEach((card) => {
+        const left = finiteNumber(card.style.left, BOARD_INSET);
+        const storedZone = Number.parseInt(card.dataset.zone, 10);
+        const storedRatio = Number.parseFloat(card.dataset.xRatio);
+        const layout = Number.isInteger(storedZone) && Number.isFinite(storedRatio)
+          ? { zone: storedZone, xRatio: storedRatio }
+          : captureCardLayout(card, left);
+        setCardLayout(card, layout.zone, layout.xRatio, card.style.top);
+      });
+      ensureCanvasHeight();
+    }
+
+    function scheduleResponsiveLayout(shouldSave = true) {
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        applyBoardRatio();
+        if (!drag) reflowPlacedCards();
+        lastCanvasWidth = canvas.clientWidth;
+        lastBankHeadHeight = bankHead.offsetHeight;
+        if (shouldSave && !drag && !resizing) saveState();
+      });
+    }
 
     function updateBankCount() {
       const bankCountEl = document.getElementById("bank-count");
@@ -731,13 +949,20 @@
             n: Number(card.dataset.n),
             left: card.style.left,
             top: card.style.top,
+            zone: finiteNumber(card.dataset.zone, 0),
+            xRatio: finiteNumber(card.dataset.xRatio, 0.5),
             zIndex: card.style.zIndex || "10"
           });
         });
         const state = {
+          version: 2,
           cards,
           canvasMinHeight: canvas.style.minHeight || "",
-          boardH: app.style.getPropertyValue("--board-h") || ""
+          canvasWidth: canvas.clientWidth,
+          boardH: app.style.getPropertyValue("--board-h") || "",
+          boardRatio,
+          expandedBoardRatio,
+          bankCollapsed
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } catch (e) {
@@ -753,24 +978,46 @@
           return;
         }
         const state = JSON.parse(raw);
-        if (state.boardH) {
-          app.style.setProperty("--board-h", state.boardH);
-        }
-        if (state.canvasMinHeight) {
-          canvas.style.minHeight = state.canvasMinHeight;
-        }
+        const savedRatio = finiteNumber(state.boardRatio, NaN);
+        const oldBoardHeight = finiteNumber(state.boardH, NaN);
+        boardRatio = Number.isFinite(savedRatio)
+          ? clamp(savedRatio, 0, 1)
+          : Number.isFinite(oldBoardHeight)
+            ? clamp(oldBoardHeight / Math.max(1, app.clientHeight), 0, 1)
+            : boardRatio;
+        expandedBoardRatio = clamp(finiteNumber(state.expandedBoardRatio, boardRatio), 0, 1);
+        bankCollapsed = state.bankCollapsed === true;
+        app.classList.toggle("bank-collapsed", bankCollapsed);
+        applyBoardRatio();
         if (Array.isArray(state.cards) && state.cards.length > 0) {
-          state.cards.forEach((item) => {
-            const card = bankCards.querySelector(`.card[data-n="${item.n}"]`);
+          const savedCards = state.cards.slice(0, VALUES.length);
+          const maxLegacyLeft = savedCards.reduce((max, item) => {
+            return Math.max(max, finiteNumber(item && item.left, 0));
+          }, 0);
+          const savedCanvasWidth = finiteNumber(state.canvasWidth, NaN);
+          const layoutWidth = Number.isFinite(savedCanvasWidth)
+            ? Math.max(1, savedCanvasWidth)
+            : Math.max(canvas.clientWidth, maxLegacyLeft + CARD_W + BOARD_INSET);
+          savedCards.forEach((item) => {
+            const itemNumber = Number(item && item.n);
+            if (!Number.isInteger(itemNumber) || itemNumber < 1 || itemNumber > VALUES.length) return;
+            const card = bankCards.querySelector(`.card[data-n="${itemNumber}"]`);
             if (card) {
               canvas.appendChild(card);
               card.style.position = "absolute";
-              card.style.left = item.left;
-              card.style.top = item.top;
+              const oldLeft = finiteNumber(item.left, BOARD_INSET);
+              const oldCardWidth = state.version >= 2
+                ? clamp(layoutWidth * 0.2 - 12, 112, CARD_W)
+                : CARD_W;
+              const legacyLayout = layoutFromLeft(oldLeft, oldCardWidth, layoutWidth);
+              const zone = Number.isFinite(Number(item.zone)) ? item.zone : legacyLayout.zone;
+              const xRatio = Number.isFinite(Number(item.xRatio)) ? item.xRatio : legacyLayout.xRatio;
+              setCardLayout(card, zone, xRatio, item.top);
             }
           });
           updateZIndices();
         }
+        ensureCanvasHeight();
         updateBankCount();
       } catch (e) {
         console.warn("Failed to load state from localStorage", e);
@@ -781,20 +1028,60 @@
     function setBoardHeight(clientY) {
       const rect = app.getBoundingClientRect();
       const split = splitter.offsetHeight || 10;
-      const minBoard = 72;
-      const minBank = 96;
-      let h = clientY - rect.top - split / 2;
-      h = Math.max(minBoard, Math.min(h, rect.height - minBank - split));
+      const bounds = getBoardHeightBounds();
+      const requestedHeight = clientY - rect.top - split / 2;
+      const collapsedHeight = Math.max(0, bounds.usableHeight - bankHead.offsetHeight);
+
+      if (requestedHeight >= collapsedHeight - COLLAPSE_DRAG_SNAP) {
+        if (!bankCollapsed) setBankCollapsed(true, false);
+        return;
+      }
+      if (bankCollapsed) setBankCollapsed(false, false);
+
+      let h = requestedHeight;
+      h = clamp(h, bounds.minBoard, collapsedHeight);
+      if (h <= bounds.maxBoard) {
+        boardRatio = h / bounds.usableHeight;
+        expandedBoardRatio = boardRatio;
+      }
       app.style.setProperty("--board-h", h + "px");
+      splitter.setAttribute("aria-valuenow", String(Math.round(h / bounds.usableHeight * 100)));
     }
 
     splitter.addEventListener("pointerdown", (e) => {
       e.preventDefault();
       e.stopPropagation();
       resizing = true;
+      resizeStartY = e.clientY;
       document.body.classList.add("is-resizing");
       splitter.setPointerCapture(e.pointerId);
-      setBoardHeight(e.clientY);
+    });
+
+    splitter.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+      setBankCollapsed(!bankCollapsed);
+    });
+
+    splitter.addEventListener("keydown", (e) => {
+      if (["Enter", " "].includes(e.key)) {
+        e.preventDefault();
+        setBankCollapsed(!bankCollapsed);
+        return;
+      }
+      if (!["ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) return;
+      e.preventDefault();
+      if (bankCollapsed) setBankCollapsed(false, false);
+      const bounds = getBoardHeightBounds();
+      let height = bounds.usableHeight * boardRatio;
+      if (e.key === "ArrowUp") height -= e.shiftKey ? 40 : 12;
+      if (e.key === "ArrowDown") height += e.shiftKey ? 40 : 12;
+      if (e.key === "Home") height = bounds.minBoard;
+      if (e.key === "End") height = bounds.maxBoard;
+      height = clamp(height, bounds.minBoard, bounds.maxBoard);
+      boardRatio = height / bounds.usableHeight;
+      expandedBoardRatio = boardRatio;
+      applyBoardRatio();
+      saveState();
     });
 
     function pointIn(el, x, y) {
@@ -808,32 +1095,31 @@
         return;
       }
       const r = board.getBoundingClientRect();
+      const x = lastPoint.x;
       const y = lastPoint.y;
       const edge = 48;
       if (y >= r.top && y <= r.bottom) {
         if (y > r.bottom - edge) board.scrollTop += 14;
         else if (y < r.top + edge) board.scrollTop -= 14;
+        if (x > r.right - edge) board.scrollLeft += 14;
+        else if (x < r.left + edge) board.scrollLeft -= 14;
       }
       scrollRaf = requestAnimationFrame(autoScroll);
     }
 
-    function placeOnBoard(card, clientX, clientY, ox, oy) {
+    function placeOnBoard(card, clientX, clientY, anchorX, anchorY) {
       const canvasRect = canvas.getBoundingClientRect();
-      let x = clientX - ox - canvasRect.left;
-      let y = clientY - oy - canvasRect.top;
-      const minX = 4;
-      const maxX = Math.max(minX, canvas.clientWidth - CARD_W - 6);
-      x = Math.max(minX, Math.min(x, maxX));
-      y = Math.max(6, y);
-      const need = y + CARD_H + 80;
-      if (need > canvas.offsetHeight) {
-        canvas.style.minHeight = need + "px";
-      }
       canvas.appendChild(card);
       card.style.position = "absolute";
-      card.style.left = x + "px";
-      card.style.top = y + "px";
       card.style.transform = "";
+      card.style.width = "";
+      card.style.height = "";
+      const size = cardSize(card);
+      const proposedLeft = clientX - anchorX * size.width - canvasRect.left;
+      const top = clamp(clientY - anchorY * size.height - canvasRect.top, 6, MAX_CARD_TOP);
+      const layout = layoutFromLeft(proposedLeft, size.width, canvas.clientWidth);
+      setCardLayout(card, layout.zone, layout.xRatio, top);
+      ensureCanvasHeight();
       updateZIndices();
       updateBankCount();
       saveState();
@@ -847,6 +1133,8 @@
       card.style.transform = "";
       card.style.width = "";
       card.style.height = "";
+      delete card.dataset.zone;
+      delete card.dataset.xRatio;
 
       const num = Number(card.dataset.n);
       const children = Array.from(bankCards.querySelectorAll(".card"));
@@ -857,6 +1145,7 @@
         bankCards.appendChild(card);
       }
       updateZIndices();
+      ensureCanvasHeight();
       updateBankCount();
       saveState();
     }
@@ -871,6 +1160,8 @@
         card.style.transform = "";
         card.style.width = "";
         card.style.height = "";
+        delete card.dataset.zone;
+        delete card.dataset.xRatio;
       });
 
       const allCards = Array.from(bankCards.children).concat(placedCards);
@@ -927,11 +1218,12 @@
       const contentHeight = Math.max(board.clientHeight || 500, Math.ceil(maxCardBottom));
       const totalHeight = contentHeight + labelH;
 
-      const dpr = 2;
+      const dpr = Math.max(1, Math.min(2, 16000 / width, 16000 / totalHeight));
       const cvs = document.createElement("canvas");
       cvs.width = width * dpr;
       cvs.height = totalHeight * dpr;
       const ctx = cvs.getContext("2d");
+      if (!ctx) return;
       ctx.scale(dpr, dpr);
 
       const colW = width / 5;
@@ -998,7 +1290,13 @@
       };
 
       sortedCards.forEach((card) => {
-        const x = parseFloat(card.style.left) || 0;
+        const zone = Number.parseInt(card.dataset.zone, 10);
+        const xRatio = Number.parseFloat(card.dataset.xRatio);
+        const fallbackX = finiteNumber(card.style.left, 0) * width / Math.max(1, canvas.clientWidth);
+        const center = (zone + xRatio) * colW;
+        const x = Number.isInteger(zone) && Number.isFinite(xRatio)
+          ? clamp(center - CARD_W / 2, BOARD_INSET, width - CARD_W - BOARD_INSET)
+          : clamp(fallbackX, BOARD_INSET, width - CARD_W - BOARD_INSET);
         const rawY = parseFloat(card.style.top) || 0;
         const y = rawY + labelH;
         const w = CARD_W;
@@ -1172,10 +1470,19 @@
       if (!card) return;
       e.preventDefault();
       const rect = card.getBoundingClientRect();
+      const fromBoard = card.parentElement === canvas;
       drag = {
         card,
-        ox: e.clientX - rect.left,
-        oy: e.clientY - rect.top
+        anchorX: clamp((e.clientX - rect.left) / Math.max(1, rect.width), 0, 1),
+        anchorY: clamp((e.clientY - rect.top) / Math.max(1, rect.height), 0, 1),
+        origin: fromBoard
+          ? {
+              type: "board",
+              zone: finiteNumber(card.dataset.zone, 0),
+              xRatio: finiteNumber(card.dataset.xRatio, 0.5),
+              top: finiteNumber(card.style.top, 6)
+            }
+          : { type: "bank" }
       };
       lastPoint = { x: e.clientX, y: e.clientY };
       card.classList.add("dragging");
@@ -1183,8 +1490,8 @@
       card.style.position = "fixed";
       card.style.left = rect.left + "px";
       card.style.top = rect.top + "px";
-      card.style.width = CARD_W + "px";
-      card.style.height = CARD_H + "px";
+      card.style.width = rect.width + "px";
+      card.style.height = rect.height + "px";
       card.style.zIndex = "2000";
       card.setPointerCapture(e.pointerId);
       if (!scrollRaf) scrollRaf = requestAnimationFrame(autoScroll);
@@ -1192,42 +1499,98 @@
 
     document.addEventListener("pointermove", (e) => {
       if (resizing) {
+        if (resizeStartY !== null && Math.abs(e.clientY - resizeStartY) < 3) return;
         setBoardHeight(e.clientY);
         return;
       }
       if (!drag) return;
       lastPoint = { x: e.clientX, y: e.clientY };
-      drag.card.style.left = e.clientX - drag.ox + "px";
-      drag.card.style.top = e.clientY - drag.oy + "px";
+      drag.card.style.left = e.clientX - drag.anchorX * drag.card.offsetWidth + "px";
+      drag.card.style.top = e.clientY - drag.anchorY * drag.card.offsetHeight + "px";
     });
 
     function endDrag(e) {
       if (resizing) {
         resizing = false;
+        resizeStartY = null;
         document.body.classList.remove("is-resizing");
+        if (!bankCollapsed) applyBoardRatio();
         saveState();
         return;
       }
       if (!drag) return;
-      const { card, ox, oy } = drag;
+      const { card, anchorX, anchorY } = drag;
       const x = e.clientX ?? lastPoint.x;
       const y = e.clientY ?? lastPoint.y;
       card.classList.remove("dragging");
       card.style.width = "";
       card.style.height = "";
       if (pointIn(board, x, y)) {
-        placeOnBoard(card, x, y, ox, oy);
+        placeOnBoard(card, x, y, anchorX, anchorY);
       } else {
         returnToBank(card);
       }
       drag = null;
+      reflowPlacedCards();
+      saveState();
+    }
+
+    function cancelDrag() {
+      if (resizing) {
+        resizing = false;
+        resizeStartY = null;
+        document.body.classList.remove("is-resizing");
+        applyBoardRatio();
+        saveState();
+      }
+      if (!drag) return;
+      const { card, origin } = drag;
+      card.classList.remove("dragging");
+      card.style.transform = "";
+      card.style.width = "";
+      card.style.height = "";
+      if (origin.type === "board") {
+        canvas.appendChild(card);
+        card.style.position = "absolute";
+        setCardLayout(card, origin.zone, origin.xRatio, origin.top);
+        ensureCanvasHeight();
+        updateZIndices();
+      } else {
+        returnToBank(card);
+      }
+      drag = null;
+      reflowPlacedCards();
+      updateBankCount();
+      saveState();
     }
 
     document.addEventListener("pointerup", endDrag);
-    document.addEventListener("pointercancel", endDrag);
+    document.addEventListener("pointercancel", cancelDrag);
+    window.addEventListener("blur", cancelDrag);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) cancelDrag();
+    });
+    window.addEventListener("resize", () => scheduleResponsiveLayout());
+    window.addEventListener("orientationchange", () => scheduleResponsiveLayout());
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", () => scheduleResponsiveLayout());
+    }
+
+    if ("ResizeObserver" in window) {
+      const layoutObserver = new ResizeObserver(() => {
+        const widthChanged = canvas.clientWidth !== lastCanvasWidth;
+        const bankHeadChanged = bankHead.offsetHeight !== lastBankHeadHeight;
+        if (widthChanged || bankHeadChanged) scheduleResponsiveLayout();
+      });
+      layoutObserver.observe(canvas);
+      layoutObserver.observe(bankHead);
+    }
 
     // Restore saved state on page load
     loadState();
+    lastCanvasWidth = canvas.clientWidth;
+    lastBankHeadHeight = bankHead.offsetHeight;
+    scheduleResponsiveLayout(false);
   </script>
 </body>
 </html>
