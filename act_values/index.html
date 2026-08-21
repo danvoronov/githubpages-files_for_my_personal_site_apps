@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сортування особистих цінностей</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f3efe6;
+      --ink: #2c281f;
+      --muted: #6d675c;
+      --line: #b7b0a3;
+      --board: #e7e1d5;
+      --zone-a: #ddd6c8;
+      --zone-b: #d4cdc0;
+      --bank: #faf7f1;
+      --card-w: 148px;
+      --card-h: 78px;
+      --label-h: 26px;
+      --board-h: 45vh;
+      --split: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: Outfit, "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #board {
+      height: var(--board-h);
+      flex: 0 0 var(--board-h);
+      min-height: 0;
+      position: relative;
+      overflow: auto;
+      background: var(--board);
+      scrollbar-gutter: stable;
+    }
+
+    #splitter {
+      flex: 0 0 var(--split);
+      height: var(--split);
+      position: relative;
+      z-index: 40;
+      cursor: row-resize;
+      touch-action: none;
+      background: #e4ddd0;
+      border-top: 1px solid #cfc7b8;
+      border-bottom: 1px solid #cfc7b8;
+    }
+
+    #splitter::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -6px;
+      bottom: -6px;
+    }
+
+    #splitter::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 44px;
+      height: 3px;
+      margin: -1.5px 0 0 -22px;
+      border-radius: 2px;
+      background: #9a9284;
+    }
+
+    #splitter:hover,
+    body.is-resizing #splitter {
+      background: #ddd5c6;
+    }
+
+    body.is-resizing,
+    body.is-resizing * {
+      cursor: row-resize !important;
+    }
+
+    .zone-labels {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: var(--label-h);
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(231, 225, 213, 0.98), rgba(231, 225, 213, 0.9) 75%, rgba(231, 225, 213, 0));
+      border-bottom: 1px solid rgba(183, 176, 163, 0.3);
+    }
+
+    .zone-labels span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2px 8px 3px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 11px;
+      font-weight: 640;
+      letter-spacing: 0.015em;
+      line-height: 1.1;
+      color: #4a453c;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .zone-labels span:first-of-type {
+      padding-left: 32px;
+    }
+
+    .zone-labels span:last-of-type {
+      padding-right: 32px;
+    }
+
+    .board-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #b7b0a3;
+      border-radius: 4px;
+      background: rgba(243, 239, 230, 0.92);
+      color: #6d675c;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+    }
+
+    .save-btn {
+      left: 6px;
+    }
+
+    .save-btn:hover {
+      background: #faf7f1;
+      border-color: #3a74a8;
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .reset-btn {
+      right: 6px;
+    }
+
+    .reset-btn:hover {
+      background: #faf7f1;
+      color: #c45c38;
+      border-color: #c45c38;
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(44, 40, 31, 0.45);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .modal-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-dialog {
+      background: #faf7f1;
+      border: 1px solid #cfc7b8;
+      border-radius: 10px;
+      padding: 20px 22px;
+      width: 90%;
+      max-width: 350px;
+      box-shadow: 0 16px 36px rgba(44, 40, 31, 0.22), 0 2px 6px rgba(44, 40, 31, 0.08);
+      transform: translateY(8px) scale(0.97);
+      transition: transform 0.18s ease;
+    }
+
+    .modal-backdrop.is-open .modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-dialog h3 {
+      margin: 0 0 6px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 17px;
+      font-weight: 640;
+      color: var(--ink);
+    }
+
+    .modal-dialog p {
+      margin: 0 0 18px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      font-family: Outfit, "Segoe UI", system-ui, sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid #c45c38;
+      outline-offset: 1px;
+    }
+
+    .btn-secondary {
+      background: #eee8dc;
+      color: #4a453c;
+      border-color: #d4cdc0;
+    }
+
+    .btn-secondary:hover {
+      background: #e4ddd0;
+      color: var(--ink);
+    }
+
+    .btn-danger {
+      background: #c45c38;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #b04e2c;
+    }
+
+    #canvas {
+      position: relative;
+      min-height: 2400px;
+      width: 100%;
+    }
+
+    .zone-bg {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .zone {
+      position: relative;
+      background-image:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 47px,
+          rgba(92, 86, 74, 0.14) 47px,
+          rgba(92, 86, 74, 0.14) 48px
+        );
+    }
+
+    .zone:nth-child(odd) { background-color: var(--zone-a); }
+    .zone:nth-child(even) { background-color: var(--zone-b); }
+
+    .zone:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--line) 0 10px,
+        transparent 10px 14px
+      );
+    }
+
+    .zone::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 7px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0 23px,
+        rgba(92, 86, 74, 0.28) 23px 24px,
+        transparent 24px 47px,
+        rgba(92, 86, 74, 0.45) 47px 48px
+      );
+      pointer-events: none;
+    }
+
+    #bank {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bank);
+    }
+
+    .bank-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px 8px;
+      border-bottom: 1px solid #e6e0d4;
+      flex-shrink: 0;
+    }
+
+    .bank-head h1 {
+      margin: 0;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 20px;
+      font-weight: 640;
+    }
+
+    .bank-head p {
+      margin: 4px 0 0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      justify-content: flex-end;
+      max-width: 58%;
+    }
+
+    .legend i {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-style: normal;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .legend i::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      background: var(--swatch);
+    }
+
+    #bank-cards {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 12px 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 8px;
+    }
+
+    .card {
+      width: var(--card-w);
+      height: var(--card-h);
+      padding: 6px 8px 6px 12px;
+      border-radius: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 1px 2px rgba(44, 40, 31, 0.08);
+      cursor: grab;
+      touch-action: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--card-accent);
+    }
+
+    .card .num {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--card-accent);
+      opacity: 0.85;
+    }
+
+    .card h2 {
+      margin: 0 18px 2px 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      word-break: break-word;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 10.5px;
+      line-height: 1.2;
+      color: #4f4a42;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card.dragging {
+      cursor: grabbing;
+      box-shadow: 0 10px 24px rgba(44, 40, 31, 0.22);
+      transform: scale(1.04) rotate(-1.2deg);
+      z-index: 1000;
+    }
+
+    #canvas .card {
+      position: absolute;
+      z-index: 5;
+    }
+
+    .group-self { --card-bg: #f8e8de; --card-border: #e4c4b2; --card-accent: #c45c38; }
+    .group-love { --card-bg: #f8e3ea; --card-border: #e5b8c6; --card-accent: #c4496a; }
+    .group-care { --card-bg: #e3f0e6; --card-border: #b5d0bc; --card-accent: #3d8a58; }
+    .group-growth { --card-bg: #e2eef8; --card-border: #b4cce0; --card-accent: #3a74a8; }
+    .group-work { --card-bg: #f6ead4; --card-border: #e0c896; --card-accent: #b57a1c; }
+    .group-adventure { --card-bg: #f6e3d4; --card-border: #e0b894; --card-accent: #d0662c; }
+    .group-joy { --card-bg: #eee4f6; --card-border: #cdb8e0; --card-accent: #7a4eab; }
+    .group-meaning { --card-bg: #e4e6f4; --card-border: #b8bcd8; --card-accent: #4d5494; }
+    .group-order { --card-bg: #e8eaed; --card-border: #c5c9d0; --card-accent: #5c6573; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section id="board" aria-label="Дошка цінностей">
+      <div class="zone-labels">
+        <button id="save-btn" class="board-btn save-btn" type="button" title="Зберегти дошку в PNG" aria-label="Зберегти дошку в PNG">💾</button>
+        <span>Не важливо для мене</span>
+        <span>Дещо важливо для мене</span>
+        <span>Важливо для мене</span>
+        <span>Дуже важливо для мене</span>
+        <span>Найважливіше для мене</span>
+        <button id="reset-btn" class="board-btn reset-btn" type="button" title="Скинути дошку" aria-label="Скинути дошку">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div id="canvas">
+        <div class="zone-bg" aria-hidden="true">
+          <div class="zone"></div>
+          <div class="zone"></div>
+          <div class="zone"></div>
+          <div class="zone"></div>
+          <div class="zone"></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="splitter" role="separator" aria-orientation="horizontal" aria-label="Змінити розмір банку цінностей"></div>
+
+    <section id="bank" aria-label="Банк цінностей">
+      <div class="bank-head">
+        <div>
+          <h1>Банк цінностей</h1>
+          <p>Перетягніть будь-яку картку на дошку. Розміщуйте та переміщуйте її вільно — колонки слугують лише фоном.</p>
+        </div>
+        <div class="legend">
+          <i style="--swatch:#c45c38">Особистість</i>
+          <i style="--swatch:#c4496a">Любов і належність</i>
+          <i style="--swatch:#3d8a58">Турбота та світ</i>
+          <i style="--swatch:#3a74a8">Розум і розвиток</i>
+          <i style="--swatch:#b57a1c">Праця та майстерність</i>
+          <i style="--swatch:#d0662c">Пригоди та життєва сила</i>
+          <i style="--swatch:#7a4eab">Радість, мистецтво та легкість</i>
+          <i style="--swatch:#4d5494">Сенс і характер</i>
+          <i style="--swatch:#5c6573">Порядок і статус</i>
+        </div>
+      </div>
+      <div id="bank-cards"></div>
+    </section>
+  </div>
+
+  <div id="reset-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <h3 id="modal-title">Скинути дошку?</h3>
+      <p>Усі картки на дошці повернуться до банку цінностей.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-reset">Скасувати</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-reset">Скинути</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GROUPS = {
+      self: "group-self",
+      love: "group-love",
+      care: "group-care",
+      growth: "group-growth",
+      work: "group-work",
+      adventure: "group-adventure",
+      joy: "group-joy",
+      meaning: "group-meaning",
+      order: "group-order"
+    };
+
+    const VALUES = [
+      { n: 1, title: "Прийняття", text: "Бути прийнятим таким, який я є.", group: "love" },
+      { n: 2, title: "Точність", text: "Бути точним у своїх думках і переконаннях.", group: "growth" },
+      { n: 3, title: "Досягнення", text: "Мати важливі досягнення.", group: "work" },
+      { n: 4, title: "Пригоди", text: "Отримувати новий і захопливий досвід.", group: "adventure" },
+      { n: 5, title: "Мистецтво", text: "Цінувати мистецтво або виражати себе в ньому.", group: "joy" },
+      { n: 6, title: "Привабливість", text: "Бути фізично привабливим.", group: "adventure" },
+      { n: 7, title: "Авторитет", text: "Керувати іншими, бути лідером.", group: "work" },
+      { n: 8, title: "Автономія", text: "Бути самостійним і незалежним.", group: "self" },
+      { n: 9, title: "Краса", text: "Цінувати красу навколо себе.", group: "joy" },
+      { n: 10, title: "Належність", text: "Відчувати приналежність, бути частиною спільноти.", group: "love" },
+      { n: 11, title: "Турбота", text: "Піклуватися про інших.", group: "care" },
+      { n: 12, title: "Виклик", text: "Братися за складні завдання та проблеми.", group: "work" },
+      { n: 13, title: "Комфорт", text: "Мати приємне й комфортне життя.", group: "joy" },
+      { n: 14, title: "Відданість", text: "Брати на себе стійкі, значущі зобов'язання.", group: "love" },
+      { n: 15, title: "Співчуття", text: "Відчувати співчуття та діяти з турботою про інших.", group: "care" },
+      { n: 16, title: "Складність", text: "Приймати всю багатогранність і тонкощі життя.", group: "growth" },
+      { n: 17, title: "Компроміс", text: "Бути готовим до взаємних поступок заради згоди.", group: "love" },
+      { n: 18, title: "Внесок", text: "Робити вагомий внесок у світ.", group: "care" },
+      { n: 19, title: "Співпраця", text: "Працювати злагоджено та спільно з іншими.", group: "love" },
+      { n: 20, title: "Мужність", text: "Бути сміливим і стійким перед обличчям труднощів.", group: "self" },
+      { n: 21, title: "Ввічливість", text: "Бути уважним, тактовним і чемним до інших.", group: "love" },
+      { n: 22, title: "Творчість", text: "Створювати нові речі або ідеї.", group: "joy" },
+      { n: 23, title: "Допитливість", text: "Шукати, досліджувати та пізнавати нове.", group: "growth" },
+      { n: 24, title: "Надійність", text: "Бути надійним і вартим довіри.", group: "work" },
+      { n: 25, title: "Старанність", text: "Бути ретельним і сумлінним у всьому, що я роблю.", group: "work" },
+      { n: 26, title: "Обов'язок", text: "Виконувати свої обов'язки та зобов'язання.", group: "work" },
+      { n: 27, title: "Екологія", text: "Жити в гармонії з довкіллям.", group: "care" },
+      { n: 28, title: "Азарт", text: "Мати життя, сповнене яскравих емоцій та драйву.", group: "adventure" },
+      { n: 29, title: "Вірність", text: "Бути вірним і відданим у стосунках.", group: "love" },
+      { n: 30, title: "Слава", text: "Бути відомим і визнаним.", group: "order" },
+      { n: 31, title: "Сім'я", text: "Мати щасливу, люблячу родину.", group: "love" },
+      { n: 32, title: "Фізична форма", text: "Бути фізично сильним і тренованим.", group: "adventure" },
+      { n: 33, title: "Гнучкість", text: "Легко пристосовуватися до нових обставин.", group: "self" },
+      { n: 34, title: "Прощення", text: "Прощати іншим їхні помилки.", group: "care" },
+      { n: 35, title: "Свобода", text: "Бути вільним від зайвих обмежень.", group: "self" },
+      { n: 36, title: "Дружба", text: "Мати близьких, вірних друзів.", group: "love" },
+      { n: 37, title: "Веселощі", text: "Гратися, розважатися й веселитися.", group: "joy" },
+      { n: 38, title: "Щедрість", text: "Ділитися тим, що маю, з іншими.", group: "care" },
+      { n: 39, title: "Автентичність", text: "Діяти щиро та бути вірним собі.", group: "self" },
+      { n: 40, title: "Божа воля", text: "Шукати та виконувати волю Божу.", group: "meaning" },
+      { n: 41, title: "Вдячність", text: "Бути вдячним і цінувати те, що є.", group: "meaning" },
+      { n: 42, title: "Розвиток", text: "Постійно змінюватися та зростати особистісно.", group: "growth" },
+      { n: 43, title: "Здоров'я", text: "Бути фізично здоровим і почуватися добре.", group: "adventure" },
+      { n: 44, title: "Чесність", text: "Бути чесним і правдивим.", group: "meaning" },
+      { n: 45, title: "Надія", text: "Зберігати позитивний та оптимістичний погляд.", group: "meaning" },
+      { n: 46, title: "Скромність", text: "Бути скромним і невибагливим.", group: "self" },
+      { n: 47, title: "Гумор", text: "Бачити смішне в собі та навколишньому світі.", group: "joy" },
+      { n: 48, title: "Уява", text: "Мріяти та бачити нові можливості.", group: "growth" },
+      { n: 49, title: "Незалежність", text: "Бути вільним від залежності від інших.", group: "self" },
+      { n: 50, title: "Працьовитість", text: "Працювати наполегливо та якісно.", group: "work" },
+      { n: 51, title: "Внутрішній спокій", text: "Відчувати душевний спокій і гармонію.", group: "meaning" },
+      { n: 52, title: "Цілісність", text: "Жити згідно зі своїми цінностями та принципами.", group: "meaning" },
+      { n: 53, title: "Інтелект", text: "Підтримувати гостроту й активність розуму.", group: "growth" },
+      { n: 54, title: "Близькість", text: "Ділитися найпотаємнішими переживаннями.", group: "love" },
+      { n: 55, title: "Справедливість", text: "Сприяти справедливому та рівному ставленню до всіх.", group: "care" },
+      { n: 56, title: "Знання", text: "Здобувати та поширювати цінні знання.", group: "growth" },
+      { n: 57, title: "Лідерство", text: "Надихати й вести за собою інших.", group: "work" },
+      { n: 58, title: "Дозвілля", text: "Знаходити час для відпочинку й насолоди.", group: "joy" },
+      { n: 59, title: "Бути коханим", text: "Відчувати любов близьких людей.", group: "love" },
+      { n: 60, title: "Дарувати любов", text: "Дарувати любов і турботу іншим.", group: "love" },
+      { n: 61, title: "Майстерність", text: "Бути компетентним у щоденній діяльності.", group: "work" },
+      { n: 62, title: "Усвідомленість", text: "Жити свідомо й бути в теперішньому моменті.", group: "meaning" },
+      { n: 63, title: "Поміркованість", text: "Уникати крайнощів і знаходити золоту середину.", group: "order" },
+      { n: 64, title: "Моногамія", text: "Мати єдині, глибокі любовні стосунки.", group: "love" },
+      { n: 65, title: "Музика", text: "Насолоджуватися музикою або створювати її.", group: "joy" },
+      { n: 66, title: "Нонконформізм", text: "Піддавати сумніву авторитети та шаблони.", group: "self" },
+      { n: 67, title: "Новизна", text: "Мати життя, повне змін і розмаїття.", group: "adventure" },
+      { n: 68, title: "Підтримка", text: "Заохочувати, надихати та підтримувати інших.", group: "care" },
+      { n: 69, title: "Відкритість", text: "Бути відкритим до нового досвіду та ідей.", group: "growth" },
+      { n: 70, title: "Порядок", text: "Мати впорядковане та організоване життя.", group: "order" },
+      { n: 71, title: "Пристрасть", text: "Мати сильні почуття до справ, ідей чи людей.", group: "adventure" },
+      { n: 72, title: "Патріотизм", text: "Любити, захищати та підтримувати свою країну.", group: "care" },
+      { n: 73, title: "Задоволення", text: "Відчувати приємні емоції та насолоду.", group: "joy" },
+      { n: 74, title: "Популярність", text: "Мати симпатію й визнання багатьох людей.", group: "order" },
+      { n: 75, title: "Влада", text: "Мати вплив і контроль над процесами.", group: "order" },
+      { n: 76, title: "Практичність", text: "Орієнтуватися на раціональне й доцільне.", group: "order" },
+      { n: 77, title: "Захист", text: "Оберігати й тримати в безпеці тих, кого люблю.", group: "care" },
+      { n: 78, title: "Забезпечення", text: "Забезпечувати та піклуватися про добробут родини.", group: "care" },
+      { n: 79, title: "Призначення", text: "Мати сенс, мету та орієнтир у житті.", group: "meaning" },
+      { n: 80, title: "Раціональність", text: "Керуватися розумом, логікою та фактами.", group: "growth" },
+      { n: 81, title: "Реалізм", text: "Бачити реальність без ілюзій і діяти прагматично.", group: "order" },
+      { n: 82, title: "Відповідальність", text: "Ухвалювати та втілювати відповідальні рішення.", group: "work" },
+      { n: 83, title: "Ризик", text: "Йти на ризик і не боятися випробувати шанс.", group: "adventure" },
+      { n: 84, title: "Романтика", text: "Мати яскраві, сповнені почуттів романтичні стосунки.", group: "love" },
+      { n: 85, title: "Безпека", text: "Бути в безпеці та відчувати захищеність.", group: "order" },
+      { n: 86, title: "Самоприйняття", text: "Приймати себе з усіма особливостями.", group: "self" },
+      { n: 87, title: "Самоконтроль", text: "Бути дисциплінованим у власних діях.", group: "meaning" },
+      { n: 88, title: "Самоповага", text: "Поважати себе та відчувати власну гідність.", group: "self" },
+      { n: 89, title: "Самопізнання", text: "Глибоко й чесно розуміти себе.", group: "self" },
+      { n: 90, title: "Служіння", text: "Бути корисним і служити іншим людям.", group: "care" },
+      { n: 91, title: "Сексуальність", text: "Мати активне та гармонійне інтимне життя.", group: "adventure" },
+      { n: 92, title: "Простота", text: "Жити просто, без надмірних потреб.", group: "order" },
+      { n: 93, title: "Усамітнення", text: "Мати власний простір і час наодинці з собою.", group: "self" },
+      { n: 94, title: "Духовність", text: "Зростати та розвиватися духовно.", group: "meaning" },
+      { n: 95, title: "Стабільність", text: "Мати надійне, передбачуване й стійке життя.", group: "order" },
+      { n: 96, title: "Толерантність", text: "Приймати та поважати тих, хто відрізняється.", group: "care" },
+      { n: 97, title: "Традиції", text: "Шанувати та продовжувати звичаї минулого.", group: "meaning" },
+      { n: 98, title: "Чеснота", text: "Жити високоморальним і гідним життям.", group: "meaning" },
+      { n: 99, title: "Багатство", text: "Мати матеріальний достаток і фінансову свободу.", group: "order" },
+      { n: 100, title: "Мир у світі", text: "Сприяти миру та злагоді у світі.", group: "care" }
+    ];
+
+    const STORAGE_KEY = "values_card_sort_state_v1";
+
+    const app = document.querySelector(".app");
+    const board = document.getElementById("board");
+    const canvas = document.getElementById("canvas");
+    const bankCards = document.getElementById("bank-cards");
+    const bank = document.getElementById("bank");
+    const splitter = document.getElementById("splitter");
+    const saveBtn = document.getElementById("save-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const resetModal = document.getElementById("reset-modal");
+    const btnCancelReset = document.getElementById("btn-cancel-reset");
+    const btnConfirmReset = document.getElementById("btn-confirm-reset");
+
+    const CARD_W = 148;
+    const CARD_H = 78;
+    const CANVAS_MIN = 2400;
+
+    VALUES.forEach((v) => {
+      const el = document.createElement("article");
+      el.className = "card " + GROUPS[v.group];
+      el.dataset.n = String(v.n);
+      el.innerHTML =
+        '<span class="num">' + v.n + "</span>" +
+        "<h2>" + v.title + "</h2>" +
+        "<p>" + v.text + "</p>";
+      bankCards.appendChild(el);
+    });
+
+    let drag = null;
+    let resizing = false;
+    let zTop = 10;
+    let lastPoint = { x: 0, y: 0 };
+    let scrollRaf = 0;
+
+    function saveState() {
+      try {
+        const cards = [];
+        const canvasCards = canvas.querySelectorAll(".card");
+        canvasCards.forEach((card) => {
+          cards.push({
+            n: Number(card.dataset.n),
+            left: card.style.left,
+            top: card.style.top,
+            zIndex: card.style.zIndex || "5"
+          });
+        });
+        const state = {
+          cards,
+          canvasMinHeight: canvas.style.minHeight || "",
+          boardH: app.style.getPropertyValue("--board-h") || ""
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn("Failed to save state to localStorage", e);
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        if (state.boardH) {
+          app.style.setProperty("--board-h", state.boardH);
+        }
+        if (state.canvasMinHeight) {
+          canvas.style.minHeight = state.canvasMinHeight;
+        }
+        if (Array.isArray(state.cards) && state.cards.length > 0) {
+          let maxZ = 10;
+          state.cards.forEach((item) => {
+            const card = bankCards.querySelector(`.card[data-n="${item.n}"]`);
+            if (card) {
+              canvas.appendChild(card);
+              card.style.position = "absolute";
+              card.style.left = item.left;
+              card.style.top = item.top;
+              const z = parseInt(item.zIndex, 10) || 10;
+              card.style.zIndex = String(z);
+              if (z > maxZ) maxZ = z;
+            }
+          });
+          zTop = Math.max(zTop, maxZ);
+        }
+      } catch (e) {
+        console.warn("Failed to load state from localStorage", e);
+      }
+    }
+
+    function setBoardHeight(clientY) {
+      const rect = app.getBoundingClientRect();
+      const split = splitter.offsetHeight || 10;
+      const minBoard = 72;
+      const minBank = 96;
+      let h = clientY - rect.top - split / 2;
+      h = Math.max(minBoard, Math.min(h, rect.height - minBank - split));
+      app.style.setProperty("--board-h", h + "px");
+    }
+
+    splitter.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      resizing = true;
+      document.body.classList.add("is-resizing");
+      splitter.setPointerCapture(e.pointerId);
+      setBoardHeight(e.clientY);
+    });
+
+    function pointIn(el, x, y) {
+      const r = el.getBoundingClientRect();
+      return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+    }
+
+    function autoScroll() {
+      if (!drag) {
+        scrollRaf = 0;
+        return;
+      }
+      const r = board.getBoundingClientRect();
+      const y = lastPoint.y;
+      const edge = 48;
+      if (y >= r.top && y <= r.bottom) {
+        if (y > r.bottom - edge) board.scrollTop += 14;
+        else if (y < r.top + edge) board.scrollTop -= 14;
+      }
+      scrollRaf = requestAnimationFrame(autoScroll);
+    }
+
+    function placeOnBoard(card, clientX, clientY, ox, oy) {
+      const canvasRect = canvas.getBoundingClientRect();
+      let x = clientX - ox - canvasRect.left;
+      let y = clientY - oy - canvasRect.top;
+      const minX = 4;
+      const maxX = Math.max(minX, canvas.clientWidth - CARD_W - 6);
+      x = Math.max(minX, Math.min(x, maxX));
+      y = Math.max(6, y);
+      const need = y + CARD_H + 80;
+      if (need > canvas.offsetHeight) {
+        canvas.style.minHeight = need + "px";
+      }
+      canvas.appendChild(card);
+      card.style.position = "absolute";
+      card.style.left = x + "px";
+      card.style.top = y + "px";
+      card.style.zIndex = String(++zTop);
+      card.style.transform = "";
+      saveState();
+    }
+
+    function returnToBank(card) {
+      card.style.position = "";
+      card.style.left = "";
+      card.style.top = "";
+      card.style.zIndex = "";
+      card.style.transform = "";
+      card.style.width = "";
+      card.style.height = "";
+
+      const num = Number(card.dataset.n);
+      const children = Array.from(bankCards.querySelectorAll(".card"));
+      const nextSibling = children.find((c) => Number(c.dataset.n) > num);
+      if (nextSibling) {
+        bankCards.insertBefore(card, nextSibling);
+      } else {
+        bankCards.appendChild(card);
+      }
+      saveState();
+    }
+
+    function resetAllCards() {
+      const placedCards = Array.from(canvas.querySelectorAll(".card"));
+      placedCards.forEach((card) => {
+        card.style.position = "";
+        card.style.left = "";
+        card.style.top = "";
+        card.style.zIndex = "";
+        card.style.transform = "";
+        card.style.width = "";
+        card.style.height = "";
+      });
+
+      const allCards = Array.from(bankCards.children).concat(placedCards);
+      allCards.sort((a, b) => Number(a.dataset.n) - Number(b.dataset.n));
+      allCards.forEach((c) => bankCards.appendChild(c));
+
+      canvas.style.minHeight = CANVAS_MIN + "px";
+      saveState();
+    }
+
+    function openResetModal() {
+      resetModal.classList.add("is-open");
+      resetModal.setAttribute("aria-hidden", "false");
+      btnCancelReset.focus();
+    }
+
+    function closeResetModal() {
+      resetModal.classList.remove("is-open");
+      resetModal.setAttribute("aria-hidden", "true");
+    }
+
+    function wrapText(ctx, text, maxWidth) {
+      const words = text.split(" ");
+      const lines = [];
+      let currentLine = "";
+
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        const testLine = currentLine ? currentLine + " " + word : word;
+        const testWidth = ctx.measureText(testLine).width;
+        if (testWidth > maxWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+      return lines;
+    }
+
+    function exportBoardToPng() {
+      const placedCards = Array.from(canvas.querySelectorAll(".card"));
+      const labelH = 28;
+      const width = Math.max(1000, canvas.clientWidth || board.clientWidth || 1200);
+
+      let maxCardBottom = 350;
+      placedCards.forEach((c) => {
+        const top = parseFloat(c.style.top) || 0;
+        const bottom = top + CARD_H + 30;
+        if (bottom > maxCardBottom) maxCardBottom = bottom;
+      });
+      const contentHeight = Math.max(board.clientHeight || 500, Math.ceil(maxCardBottom));
+      const totalHeight = contentHeight + labelH;
+
+      const dpr = 2;
+      const cvs = document.createElement("canvas");
+      cvs.width = width * dpr;
+      cvs.height = totalHeight * dpr;
+      const ctx = cvs.getContext("2d");
+      ctx.scale(dpr, dpr);
+
+      const colW = width / 5;
+
+      // 1. Draw 5 column backgrounds below the header (from y = labelH)
+      for (let i = 0; i < 5; i++) {
+        ctx.fillStyle = i % 2 === 0 ? "#ddd6c8" : "#d4cdc0";
+        ctx.fillRect(i * colW, labelH, colW, contentHeight);
+
+        // Horizontal grid lines
+        ctx.strokeStyle = "rgba(92, 86, 74, 0.14)";
+        ctx.lineWidth = 1;
+        for (let gy = labelH + 48; gy < totalHeight; gy += 48) {
+          ctx.beginPath();
+          ctx.moveTo(i * colW, gy);
+          ctx.lineTo((i + 1) * colW, gy);
+          ctx.stroke();
+        }
+
+        // Vertical column divider (dashed)
+        if (i < 4) {
+          ctx.save();
+          ctx.strokeStyle = "#b7b0a3";
+          ctx.setLineDash([10, 4]);
+          ctx.beginPath();
+          ctx.moveTo((i + 1) * colW, labelH);
+          ctx.lineTo((i + 1) * colW, totalHeight);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      // 2. Draw Cards sorted by zIndex with y offset = labelH
+      const sortedCards = [...placedCards].sort((a, b) => {
+        return (parseInt(a.style.zIndex, 10) || 0) - (parseInt(b.style.zIndex, 10) || 0);
+      });
+
+      const GROUP_STYLES = {
+        "group-self": { bg: "#f8e8de", border: "#e4c4b2", accent: "#c45c38" },
+        "group-love": { bg: "#f8e3ea", border: "#e5b8c6", accent: "#c4496a" },
+        "group-care": { bg: "#e3f0e6", border: "#b5d0bc", accent: "#3d8a58" },
+        "group-growth": { bg: "#e2eef8", border: "#b4cce0", accent: "#3a74a8" },
+        "group-work": { bg: "#f6ead4", border: "#e0c896", accent: "#b57a1c" },
+        "group-adventure": { bg: "#f6e3d4", border: "#e0b894", accent: "#d0662c" },
+        "group-joy": { bg: "#eee4f6", border: "#cdb8e0", accent: "#7a4eab" },
+        "group-meaning": { bg: "#e4e6f4", border: "#b8bcd8", accent: "#4d5494" },
+        "group-order": { bg: "#e8eaed", border: "#c5c9d0", accent: "#5c6573" }
+      };
+
+      const drawRound = (rx, ry, rw, rh, rr) => {
+        if (ctx.roundRect) {
+          ctx.beginPath();
+          ctx.roundRect(rx, ry, rw, rh, rr);
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(rx + rr, ry);
+          ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, rr);
+          ctx.arcTo(rx + rw, ry + rh, rx, ry + rh, rr);
+          ctx.arcTo(rx, ry + rh, rx, ry, rr);
+          ctx.arcTo(rx, ry, rx + rw, ry, rr);
+          ctx.closePath();
+        }
+      };
+
+      sortedCards.forEach((card) => {
+        const x = parseFloat(card.style.left) || 0;
+        const rawY = parseFloat(card.style.top) || 0;
+        const y = rawY + labelH;
+        const w = CARD_W;
+        const h = CARD_H;
+        const r = 8;
+
+        let style = { bg: "#ffffff", border: "#cccccc", accent: "#333333" };
+        for (const [cls, st] of Object.entries(GROUP_STYLES)) {
+          if (card.classList.contains(cls)) {
+            style = st;
+            break;
+          }
+        }
+
+        // Card shadow
+        ctx.save();
+        ctx.shadowColor = "rgba(44, 40, 31, 0.12)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetY = 2;
+
+        // Card background
+        ctx.fillStyle = style.bg;
+        drawRound(x, y, w, h, r);
+        ctx.fill();
+        ctx.restore();
+
+        // Card border
+        ctx.strokeStyle = style.border;
+        ctx.lineWidth = 1;
+        drawRound(x, y, w, h, r);
+        ctx.stroke();
+
+        // Accent strip (left 4px)
+        ctx.save();
+        drawRound(x, y, w, h, r);
+        ctx.clip();
+        ctx.fillStyle = style.accent;
+        ctx.fillRect(x, y, 4, h);
+        ctx.restore();
+
+        // Card number
+        const numEl = card.querySelector(".num");
+        if (numEl) {
+          ctx.fillStyle = style.accent;
+          ctx.font = "600 10px Outfit, 'Segoe UI', system-ui, sans-serif";
+          ctx.textAlign = "right";
+          ctx.textBaseline = "top";
+          ctx.fillText(numEl.textContent.trim(), x + w - 8, y + 6);
+        }
+
+        // Card title (with 2-line wrapping support for long titles)
+        const h2El = card.querySelector("h2");
+        let textStartY = y + 24;
+        if (h2El) {
+          ctx.fillStyle = "#2c281f";
+          ctx.font = "600 11px Outfit, 'Segoe UI', system-ui, sans-serif";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "top";
+          const titleLines = wrapText(ctx, h2El.textContent.trim().toUpperCase(), w - 30);
+          titleLines.slice(0, 2).forEach((tLine, tIdx) => {
+            ctx.fillText(tLine, x + 12, y + 6 + tIdx * 12);
+          });
+          textStartY = y + 8 + Math.min(2, titleLines.length) * 12;
+        }
+
+        // Card text
+        const pEl = card.querySelector("p");
+        if (pEl) {
+          ctx.fillStyle = "#4f4a42";
+          ctx.font = "400 10px Outfit, 'Segoe UI', system-ui, sans-serif";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "top";
+          const lines = wrapText(ctx, pEl.textContent.trim(), w - 20);
+          lines.slice(0, 3).forEach((line, idx) => {
+            ctx.fillText(line, x + 12, textStartY + idx * 12.5);
+          });
+        }
+      });
+
+      // 3. Draw Header bar at the top (0 to labelH)
+      ctx.fillStyle = "#e7e1d5";
+      ctx.fillRect(0, 0, width, labelH);
+      ctx.strokeStyle = "rgba(183, 176, 163, 0.5)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, labelH);
+      ctx.lineTo(width, labelH);
+      ctx.stroke();
+
+      const labels = [
+        "Не важливо для мене",
+        "Дещо важливо для мене",
+        "Важливо для мене",
+        "Дуже важливо для мене",
+        "Найважливіше для мене"
+      ];
+
+      ctx.fillStyle = "#4a453c";
+      ctx.font = "bold 11px Fraunces, Georgia, serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      labels.forEach((text, i) => {
+        const cx = i * colW + colW / 2;
+        ctx.fillText(text, cx, labelH / 2);
+      });
+
+      // 4. Download as PNG
+      cvs.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "values_board.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }, "image/png");
+    }
+
+    saveBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      exportBoardToPng();
+    });
+
+    resetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openResetModal();
+    });
+
+    btnCancelReset.addEventListener("click", closeResetModal);
+
+    btnConfirmReset.addEventListener("click", () => {
+      resetAllCards();
+      closeResetModal();
+    });
+
+    resetModal.addEventListener("click", (e) => {
+      if (e.target === resetModal) {
+        closeResetModal();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (resetModal.classList.contains("is-open")) {
+        if (e.key === "Escape") {
+          closeResetModal();
+        } else if (e.key === "Enter") {
+          if (document.activeElement === btnCancelReset) {
+            closeResetModal();
+          } else {
+            resetAllCards();
+            closeResetModal();
+          }
+        }
+      }
+    });
+
+    document.addEventListener("pointerdown", (e) => {
+      if (
+        resizing ||
+        e.target.closest("#splitter") ||
+        e.target.closest("#save-btn") ||
+        e.target.closest("#reset-btn") ||
+        e.target.closest("#reset-modal")
+      ) {
+        return;
+      }
+      const card = e.target.closest(".card");
+      if (!card) return;
+      e.preventDefault();
+      const rect = card.getBoundingClientRect();
+      drag = {
+        card,
+        ox: e.clientX - rect.left,
+        oy: e.clientY - rect.top
+      };
+      lastPoint = { x: e.clientX, y: e.clientY };
+      card.classList.add("dragging");
+      document.body.appendChild(card);
+      card.style.position = "fixed";
+      card.style.left = rect.left + "px";
+      card.style.top = rect.top + "px";
+      card.style.width = CARD_W + "px";
+      card.style.height = CARD_H + "px";
+      card.style.zIndex = "2000";
+      card.setPointerCapture(e.pointerId);
+      if (!scrollRaf) scrollRaf = requestAnimationFrame(autoScroll);
+    });
+
+    document.addEventListener("pointermove", (e) => {
+      if (resizing) {
+        setBoardHeight(e.clientY);
+        return;
+      }
+      if (!drag) return;
+      lastPoint = { x: e.clientX, y: e.clientY };
+      drag.card.style.left = e.clientX - drag.ox + "px";
+      drag.card.style.top = e.clientY - drag.oy + "px";
+    });
+
+    function endDrag(e) {
+      if (resizing) {
+        resizing = false;
+        document.body.classList.remove("is-resizing");
+        saveState();
+        return;
+      }
+      if (!drag) return;
+      const { card, ox, oy } = drag;
+      const x = e.clientX ?? lastPoint.x;
+      const y = e.clientY ?? lastPoint.y;
+      card.classList.remove("dragging");
+      card.style.width = "";
+      card.style.height = "";
+      if (pointIn(board, x, y)) {
+        placeOnBoard(card, x, y, ox, oy);
+      } else {
+        returnToBank(card);
+      }
+      drag = null;
+    }
+
+    document.addEventListener("pointerup", endDrag);
+    document.addEventListener("pointercancel", endDrag);
+
+    // Restore saved state on page load
+    loadState();
+  </script>
+</body>
+</html>
