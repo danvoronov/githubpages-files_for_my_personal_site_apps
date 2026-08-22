@@ -42,23 +42,29 @@
     <section id="bank" aria-label="Банк цінностей">
       <div class="bank-head">
         <div class="bank-head-top">
-          <h1>
-            Банк цінностей
+          <div class="bank-head-left">
+            <h1>Банк цінностей</h1>
             <span id="bank-count" class="bank-count">(100/100)</span>
             <button id="reset-btn" class="bank-reset-btn" type="button" title="Скинути всі картки до банку">Скинути</button>
-          </h1>
-          <p>Перетягніть будь-яку картку на дошку. Розміщуйте та переміщуйте її вільно — колонки слугують лише фоном.</p>
-        </div>
-        <div class="legend">
-          <i style="--swatch:#c45c38">Особистість</i>
-          <i style="--swatch:#c4496a">Любов і належність</i>
-          <i style="--swatch:#3d8a58">Турбота та світ</i>
-          <i style="--swatch:#3a74a8">Розум і розвиток</i>
-          <i style="--swatch:#b57a1c">Праця та майстерність</i>
-          <i style="--swatch:#d0662c">Пригоди та життєва сила</i>
-          <i style="--swatch:#7a4eab">Радість, мистецтво та легкість</i>
-          <i style="--swatch:#4d5494">Сенс і характер</i>
-          <i style="--swatch:#5c6573">Порядок і статус</i>
+          </div>
+          <p class="bank-head-desc">Перетягніть будь-яку картку на дошку. Розміщуйте та переміщуйте її вільно — колонки слугують лише фоном.</p>
+          <div class="legend-trigger" tabindex="0" role="button" aria-haspopup="true" aria-label="Показати легенду категорій">
+            <span class="legend-link">легенда</span>
+            <div class="legend-popover" role="tooltip">
+              <div class="legend-title">Категорії цінностей</div>
+              <div class="legend-items">
+                <div class="legend-item"><i style="--swatch:#c45c38"></i><span>Особистість</span></div>
+                <div class="legend-item"><i style="--swatch:#c4496a"></i><span>Любов і належність</span></div>
+                <div class="legend-item"><i style="--swatch:#3d8a58"></i><span>Турбота та світ</span></div>
+                <div class="legend-item"><i style="--swatch:#3a74a8"></i><span>Розум і розвиток</span></div>
+                <div class="legend-item"><i style="--swatch:#b57a1c"></i><span>Праця та майстерність</span></div>
+                <div class="legend-item"><i style="--swatch:#d0662c"></i><span>Пригоди та життєва сила</span></div>
+                <div class="legend-item"><i style="--swatch:#7a4eab"></i><span>Радість, мистецтво та легкість</span></div>
+                <div class="legend-item"><i style="--swatch:#4d5494"></i><span>Сенс і характер</span></div>
+                <div class="legend-item"><i style="--swatch:#5c6573"></i><span>Порядок і статус</span></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div id="bank-cards"></div>

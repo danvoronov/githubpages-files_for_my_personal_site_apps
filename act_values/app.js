@@ -130,6 +130,7 @@ const bankHead = bank ? bank.querySelector(".bank-head") : null;
 
 const CARD_W = 148;
 const CARD_H = 78;
+const BOARD_CARD_H = 36;
 const CANVAS_MIN = 2400;
 const COLUMN_COUNT = 5;
 const BOARD_INSET = 4;
@@ -145,7 +146,11 @@ VALUES.forEach((v) => {
   el.innerHTML =
     '<span class="num">' + v.n + "</span>" +
     "<h2>" + v.title + "</h2>" +
-    "<p>" + v.text + "</p>";
+    "<p>" + v.text + "</p>" +
+    '<div class="card-tooltip" aria-hidden="true">' +
+      '<div class="tooltip-num">#' + v.n + "</div>" +
+      '<div class="tooltip-text">' + v.text + "</div>" +
+    "</div>";
   bankCards.appendChild(el);
 });
 
@@ -171,9 +176,10 @@ function finiteNumber(value, fallback) {
 }
 
 function cardSize(card) {
+  const isBoard = card.parentElement === canvas;
   return {
     width: card.offsetWidth || CARD_W,
-    height: card.offsetHeight || CARD_H
+    height: card.offsetHeight || (isBoard ? BOARD_CARD_H : CARD_H)
   };
 }
 
@@ -202,6 +208,7 @@ function setCardLayout(card, zone, xRatio, top) {
 
   card.dataset.zone = String(safeZone);
   card.dataset.xRatio = String(safeRatio);
+  card.dataset.tooltipPos = safeTop < 50 ? "below" : "above";
   card.style.left = left + "px";
   card.style.top = safeTop + "px";
 }
@@ -381,6 +388,7 @@ function loadState() {
         if (!Number.isInteger(itemNumber) || itemNumber < 1 || itemNumber > VALUES.length) return;
         const card = bankCards.querySelector(`.card[data-n="${itemNumber}"]`);
         if (card) {
+          card.classList.add("on-board");
           canvas.appendChild(card);
           card.style.position = "absolute";
           const oldLeft = finiteNumber(item.left, BOARD_INSET);
@@ -490,6 +498,7 @@ function autoScroll() {
 
 function placeOnBoard(card, clientX, clientY, anchorX, anchorY) {
   const canvasRect = canvas.getBoundingClientRect();
+  card.classList.add("on-board");
   canvas.appendChild(card);
   card.style.position = "absolute";
   card.style.transform = "";
@@ -507,6 +516,7 @@ function placeOnBoard(card, clientX, clientY, anchorX, anchorY) {
 }
 
 function returnToBank(card) {
+  card.classList.remove("on-board");
   card.style.position = "";
   card.style.left = "";
   card.style.top = "";
@@ -516,6 +526,7 @@ function returnToBank(card) {
   card.style.height = "";
   delete card.dataset.zone;
   delete card.dataset.xRatio;
+  delete card.dataset.tooltipPos;
 
   const num = Number(card.dataset.n);
   const children = Array.from(bankCards.querySelectorAll(".card"));
@@ -538,6 +549,7 @@ function resetAllCards() {
   }
   const placedCards = Array.from(canvas.querySelectorAll(".card"));
   placedCards.forEach((card) => {
+    card.classList.remove("on-board");
     card.style.position = "";
     card.style.left = "";
     card.style.top = "";
@@ -547,6 +559,7 @@ function resetAllCards() {
     card.style.height = "";
     delete card.dataset.zone;
     delete card.dataset.xRatio;
+    delete card.dataset.tooltipPos;
   });
 
   const allCards = Array.from(bankCards.children).concat(placedCards);
@@ -601,7 +614,7 @@ function exportBoardToPng() {
   let maxCardBottom = 350;
   placedCards.forEach((c) => {
     const top = parseFloat(c.style.top) || 0;
-    const bottom = top + CARD_H + 30;
+    const bottom = top + BOARD_CARD_H + 30;
     if (bottom > maxCardBottom) maxCardBottom = bottom;
   });
   const contentHeight = Math.max(board.clientHeight || 500, Math.ceil(maxCardBottom));
@@ -689,8 +702,8 @@ function exportBoardToPng() {
     const rawY = parseFloat(card.style.top) || 0;
     const y = rawY + labelH;
     const w = CARD_W;
-    const h = CARD_H;
-    const r = 8;
+    const h = BOARD_CARD_H;
+    const r = 6;
 
     let style = { bg: "#ffffff", border: "#cccccc", accent: "#333333" };
     for (const [cls, st] of Object.entries(GROUP_STYLES)) {
@@ -718,50 +731,21 @@ function exportBoardToPng() {
     drawRound(x, y, w, h, r);
     ctx.stroke();
 
-    // Accent strip (left 4px)
-    ctx.save();
-    drawRound(x, y, w, h, r);
-    ctx.clip();
-    ctx.fillStyle = style.accent;
-    ctx.fillRect(x, y, 4, h);
-    ctx.restore();
-
-    // Card number
-    const numEl = card.querySelector(".num");
-    if (numEl) {
-      ctx.fillStyle = style.accent;
-      ctx.font = "600 10px Outfit, 'Segoe UI', system-ui, sans-serif";
-      ctx.textAlign = "right";
-      ctx.textBaseline = "top";
-      ctx.fillText(numEl.textContent.trim(), x + w - 8, y + 6);
-    }
-
-    // Card title (with 2-line wrapping support for long titles)
+    // Card title (centered horizontally and vertically in compact card)
     const h2El = card.querySelector("h2");
-    let textStartY = y + 24;
     if (h2El) {
       ctx.fillStyle = "#2c281f";
-      ctx.font = "600 11px Outfit, 'Segoe UI', system-ui, sans-serif";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-      const titleLines = wrapText(ctx, h2El.textContent.trim().toUpperCase(), w - 30);
-      titleLines.slice(0, 2).forEach((tLine, tIdx) => {
-        ctx.fillText(tLine, x + 12, y + 6 + tIdx * 12);
-      });
-      textStartY = y + 8 + Math.min(2, titleLines.length) * 12;
-    }
-
-    // Card text
-    const pEl = card.querySelector("p");
-    if (pEl) {
-      ctx.fillStyle = "#4f4a42";
-      ctx.font = "400 10px Outfit, 'Segoe UI', system-ui, sans-serif";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-      const lines = wrapText(ctx, pEl.textContent.trim(), w - 20);
-      lines.slice(0, 3).forEach((line, idx) => {
-        ctx.fillText(line, x + 12, textStartY + idx * 12.5);
-      });
+      ctx.font = "600 10.5px Outfit, 'Segoe UI', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const titleLines = wrapText(ctx, h2El.textContent.trim().toUpperCase(), w - 16);
+      const textX = x + w / 2;
+      if (titleLines.length <= 1) {
+        ctx.fillText(titleLines[0] || "", textX, y + h / 2);
+      } else {
+        ctx.fillText(titleLines[0], textX, y + 12);
+        ctx.fillText(titleLines[1], textX, y + 24);
+      }
     }
   });
 
@@ -869,7 +853,12 @@ document.addEventListener("pointerdown", (e) => {
   if (!card) return;
   e.preventDefault();
   const rect = card.getBoundingClientRect();
-  const fromBoard = card.parentElement === canvas;
+  const fromBoard = card.parentElement === canvas || card.classList.contains("on-board");
+  if (fromBoard) {
+    card.classList.add("on-board");
+  } else {
+    card.classList.remove("on-board");
+  }
   drag = {
     card,
     anchorX: clamp((e.clientX - rect.left) / Math.max(1, rect.width), 0, 1),
@@ -949,6 +938,7 @@ function cancelDrag() {
   card.style.width = "";
   card.style.height = "";
   if (origin.type === "board") {
+    card.classList.add("on-board");
     canvas.appendChild(card);
     card.style.position = "absolute";
     setCardLayout(card, origin.zone, origin.xRatio, origin.top);
